@@ -1,0 +1,21 @@
+div
+{
+    text-align: center;
+}
+
+#instaLogo
+{
+    width: 300px;
+}
+
+.userpassword
+{
+    width: 250px;
+    height: 30px;
+    font-size: 10px;
+
+    background-color: rgb(246, 245, 244);
+    border: 1.5px solid rgb(228, 228, 237);
+
+    margin-bottom: 7px;
+}
