@@ -1,4 +1,87 @@
-img{
-    width: 100px;
-    height: 100px;
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.sidebar-left {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* Ensures space between top and bottom sections */
+    height: 100vh;
+    width: 195px;
+    background-color: #fff;
+    border-right: 1px solid #dbdbdb;
+    padding: 20px;
+    left: 0;
+}
+
+.sidebar-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px; /* Pushes the bottom items to the bottom of the sidebar */
+}
+
+.sidebar-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 95%;
+    padding:10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-hoverable:hover {
+    background-color: #e3e3e383;
+}
+
+.sidebar-item img {
+    width: 25px;
+    height: 25px;
+   cursor: pointer;
+
+}
+
+
+#pfp {
+    width: 30px;
+    height: 30px;
+}
+
+#lftlogo {
+    height: 42px;
+    width: 115px;
+    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#lftlogo:hover{
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* Optional: Adjust size of bottom icons */
+.sidebar-bottom img {
+    width: 25px;
+    height: 25px;
+}
+
+/* Optional: Add margins for the bottom items to have more space from the top section */
+.sidebar-bottom .sidebar-item {
+    margin-top: 12px;
 }
