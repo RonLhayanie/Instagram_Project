@@ -1,59 +1,168 @@
 .maindiv
 {
+
     text-align: center;
+    border: 1.5px solid rgb(228, 228, 237);
+    width: 350px; 
+    margin: 10px auto;
+
 }
 
 #instaLogo
 {
-    width: 300px;
+    margin-top: 30px;
+
+    width: 200px;
+
 }
 
 .userpassword
 {
-    width: 250px;
-    height: 30px;
-    font-size: 10px;
 
-    background-color: rgb(246, 245, 244);
+    width: 270px;
+    height: 35px;
+    font-size: 13px;
+
+    background-color: rgb(252, 249, 249);
     border: 1.5px solid rgb(228, 228, 237);
 
     margin-bottom: 7px;
+
 }
 
 #LogIn
 {
+
     margin-top: 5px;
 
-    width: 250px;
-    height: 30px;
+    width: 270px;
+    height: 32px;
 
     background-color: deepskyblue;
     border: 1px solid deepskyblue;
     border-radius: 7px;
     
     color: white;
+    cursor: pointer;
+
 }
 
 .hrdiv
 {
-    width: 300px;
+
+    width: 310px;
     display: flex;
     align-items: center;
     margin: auto;
+
 }
 
 .line
 {
+
     align-items: center;
-    width: 100px;
+    width: 300px;
     border: none;
     border-top: 1px solid #ccc;
     margin: 0 20px;
+
 }
 
 .hrdiv span
 {
+
     color: #999;
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: 550;
     white-space: nowrap;
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+#loginWithFacebook
+{
+
+    font-size: 15px;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 10px 20px;
+    color: rgb(59, 158, 251);
+
+    background-color: white;
+    border: none;
+
+    cursor: pointer;
+
+}
+#loginWithFacebook:hover
+{
+
+    color: rgb(19, 17, 97);
+
+}
+#facebookLogo
+{
+
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+
+}
+
+
+#forgotPassword
+{
+
+    margin-top: 10px;
+    margin-bottom: 15px;;
+    border: none;
+    background-color: white;
+    color: rgb(8, 8, 51);
+    cursor: pointer;
+
+}
+
+
+
+
+
+
+#signUp
+{
+    border: none;
+    background-color: white;
+    color: rgb(59, 158, 251);
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+}
+#haveAccount
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 17px;
+}
+
+
+
+
+
+
+
+
+
+
+#shopButton
+{
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+#googleNmicrosoft
+{
+    height: 45px;
+    width: 110px;
+    cursor: pointer;
 }
