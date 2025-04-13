@@ -9,12 +9,13 @@
 
 <body>
 
-    <div class="maindiv">
+    <!-- 1st block - Instagram logo, username & password textboxes, "Log in" button and Facebook -->
+    <div class="main-div">       
         <img id="instaLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png">
 
         <br> <br>
 
-        <div>
+        <div> <!-- username & password textboxes and "Log in" button: -->
             <input type="text" class="userpassword" placeholder=" Phone number, username, or email">
             <br>
             <input type="password" class="userpassword" placeholder=" password">
@@ -22,18 +23,22 @@
             <button id="LogIn"> <b> Log in </b> </button>
         </div>
 
+
         <br> 
 
-        <div class="hrdiv">
+
+        <!-- dividing line with "Or" -->
+        <div class="sp-div">
             <div class="line"></div>
                 <span> OR </span>
             <div class="line"></div>
         </div>
 
+
         <br> 
 
+        <!-- "Login with facebook" and "forgot password" buttons -->
         <button id="loginWithFacebook">  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1024px-Facebook_Logo_%282019%29.png" id="facebookLogo"> Log in with Facebook </button>
-        
         <br>
         <button id="forgotPassword"> Forgot password? </button>
         
@@ -41,15 +46,17 @@
 
     
 
-    <div class="maindiv">
-        
+    <!-- 2nd block - "don't have an account" button -->
+    <div class="main-div">
         <p id="haveAccount">
             Don't have an account? <button id="signUp"> Sign up </button>
         </p>
     </div>
 
     
-    <div id="shopButton">
+
+    <!-- 3rd block - "google play" and "microsoft" logo buttons -->
+    <div id="shopButton-div">
         <p id="getTheApp">
             Get the app.
             <br> <br>
@@ -57,5 +64,89 @@
             <img id="googleNmicrosoft" src="https://cdn.discordapp.com/attachments/1338092393240465450/1359950916198990045/153.png?ex=67f9587d&is=67f806fd&hm=8cd3b289b23900e75c844786f1d4c405c147ccff2a3e7ded83abae22f0c61c6b&">
         </p>
     </div>
+
+
+
+    <br> <br> <br>
+
+
+
+    <!-- 4th block - bottom word bar -->
+    <div id="wordsBar-div">
+        <button class="Word"> Meta </button>
+        <button class="Word"> About </button>
+        <button class="Word"> Blog </button>
+        <button class="Word"> Jobs </button>
+        <button class="Word"> Help </button>
+        <button class="Word"> API </button>
+        <button class="Word"> Privacy </button>
+        <button class="Word"> Terms </button>
+        <button class="Word"> Locations </button>
+        <button class="Word"> Instagram Lite </button>
+        <button class="Word"> Threads </button>
+        <button class="Word"> Contact Uploading & Non-Users </button>
+        <button class="Word"> Meta verified </button>
+        <button class="Word"> Settlement Agreements </button>
+    
+    </div>
+
+
+
+    <!-- 5th block - translate downdrop -->
+    <div id="lang-div">
+        
+        <select id="language">
+            <option value="african"> African </option>
+            <option value="arabic"> Arabic </option>
+            <option value="bengali"> Bengali </option>
+            <option value="bulgarian"> Bulgarian </option>
+            <option value="chinese"> Chinese </option>
+            <option value="chinese(HK)"> Chinese(Hong Kong) </option>
+            <option value="czech"> Czech </option>
+            <option value="croatian"> Croatian </option>
+            <option value="danish"> Danish </option>
+            <option value="dutch"> Dutch </option>
+            <option value="english" selected> English </option>
+            <option value="englishUK"> English(UK) </option>
+            <option value="filipino"> Filipino </option>
+            <option value="finnish"> Finnish </option>
+            <option value="french"> French </option>
+            <option value="german"> German </option>
+            <option value="greek"> Greek </option>
+            <option value="hebrew"> Hebrew </option>
+            <option value="hindi"> Hindi </option>
+            <option value="hungarian"> Hungarian </option>
+            <option value="indonesian"> Indonesian </option>
+            <option value="italian"> Italian </option>
+            <option value="japanese"> Japanese </option>
+            <option value="korean"> Korean </option>
+            <option value="malay"> Malay </option>
+            <option value="malayalam"> Malayalam </option>
+            <option value="marathi"> Marathi </option>
+            <option value="nepali"> Nepali </option>
+            <option value="norwegian"> Norwegian </option>
+            <option value="persian"> Persian </option>
+            <option value="polish"> Polish </option>
+            <option value="portuguese(BRZ)"> Portuguese(Brazil) </option>
+            <option value="portuguese(PRT)"> Portuguese(Portugal) </option>
+            <option value="serbian"> Serbian </option>
+            <option value="sinhala"> Sinhala </option>
+            <option value="slovak"> Slovak </option>
+            <option value="russian"> Russian </option>
+            <option value="spanish"> Spanish </option>
+            <option value="spanishSP"> Spanish(Spain) </option>
+            <option value="swedish"> Swedish </option>
+            <option value="thai"> Thai </option>
+            <option value="turkish"> Turkish </option>
+            <option value="tamil"> Tamil </option>
+            <option value="telugu"> Telugu </option>
+            <option value="ukrainian"> Ukrainian </option>
+            <option value="vietnamese"> Vietnamese </option>
+        </select>
+
+        <p id="instaFromMeta"> © 2025 Instagram from Meta </p>
+    </div>
+
+
 </body>
 </html>

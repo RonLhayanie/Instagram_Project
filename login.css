@@ -1,168 +1,216 @@
-.maindiv
+.main-div        /*1st block*/
 {
-
     text-align: center;
     border: 1.5px solid rgb(228, 228, 237);
-    width: 350px; 
     margin: 10px auto;
-
+    width: 350px; 
 }
 
-#instaLogo
+#instaLogo      /*Instagram logo*/
 {
     margin-top: 30px;
-
     width: 200px;
-
 }
 
-.userpassword
+.userpassword       /*username and password input*/
 {
+    border: 1.5px solid rgb(228, 228, 237);
+    margin-bottom: 7px;
+    background-color: rgb(252, 249, 249);
 
     width: 270px;
     height: 35px;
-    font-size: 13px;
+    font-size: 12px;
 
-    background-color: rgb(252, 249, 249);
-    border: 1.5px solid rgb(228, 228, 237);
-
-    margin-bottom: 7px;
-
+    transition: border-color 0.3s ease;
 }
 
-#LogIn
+#LogIn      /*login button*/
 {
-
+    border: 1px solid deepskyblue;
+    border-radius: 7px;
     margin-top: 5px;
+    background-color: deepskyblue;
 
     width: 270px;
     height: 32px;
-
-    background-color: deepskyblue;
-    border: 1px solid deepskyblue;
-    border-radius: 7px;
-    
     color: white;
+
     cursor: pointer;
 
 }
 
-.hrdiv
-{
 
-    width: 310px;
-    display: flex;
+.sp-div      /*dividing line with "or"*/
+{
     align-items: center;
     margin: auto;
 
+    width: 310px;
+    display: flex;
 }
 
-.line
+.line       /*dividing line*/
 {
-
     align-items: center;
-    width: 300px;
     border: none;
     border-top: 1px solid #ccc;
     margin: 0 20px;
 
+    width: 300px;
 }
 
-.hrdiv span
+.sp-div span     /*"or" text inside the line*/
 {
-
-    color: #999;
+    font-family:Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: 550;
-    white-space: nowrap;
-    font-family:Arial, Helvetica, sans-serif;
 
+    color: #999;
+
+    white-space: nowrap;
 }
 
 
-#loginWithFacebook
+#loginWithFacebook      /*"login with facebook" button*/
 {
-
-    font-size: 15px;
+    align-items: center;
+    border: none;
+    padding: 10px 20px;
+    background-color: white;
 
     display: inline-flex;
-    align-items: center;
-
-    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
     color: rgb(59, 158, 251);
 
-    background-color: white;
-    border: none;
-
     cursor: pointer;
-
 }
 #loginWithFacebook:hover
 {
-
     color: rgb(19, 17, 97);
-
 }
-#facebookLogo
+
+#facebookLogo       /*facebook logo*/
 {
+    margin-right: 5px;
 
     width: 15px;
     height: 15px;
-    margin-right: 5px;
-
 }
 
 
-#forgotPassword
+#forgotPassword        /*"forgot password?" button*/
 {
-
+    border: none;
     margin-top: 10px;
     margin-bottom: 15px;;
-    border: none;
     background-color: white;
-    color: rgb(8, 8, 51);
-    cursor: pointer;
 
+    color: rgb(8, 8, 51);
+
+    cursor: pointer;
 }
 
 
 
 
-
-
-#signUp
+#signUp       /*2nd block*/
 {
     border: none;
     background-color: white;
-    color: rgb(59, 158, 251);
+
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
+    color: rgb(59, 158, 251);
+
     cursor: pointer;
 }
+
 #haveAccount
 {
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 17px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
 }
 
 
 
 
-
-
-
-
-
-
-#shopButton
+#shopButton-div         /*3rd block*/
 {
-    font-family:Arial, Helvetica, sans-serif;
     text-align: center;
+
+    font-family:Arial, Helvetica, sans-serif;
 }
-#googleNmicrosoft
+
+#googleNmicrosoft       /*google play and microsoft logo*/
 {
-    height: 45px;
-    width: 110px;
+    width: 115px;
+    height: 40px;
+
     cursor: pointer;
+}
+
+
+
+
+#wordsBar-div       /*4th block*/
+{
+    text-align: center;
+    padding: 20px;
+
+    font-size: 4px;
+}
+
+.Word
+{
+    border: none;
+    margin: 0 1px;
+    background-color: white;
+
+    color: #767676;
+
+    cursor: pointer;
+}
+.Word:hover
+{
+    text-decoration: underline;
+}
+
+
+
+
+#lang-div       /*5th block*/
+{
+    align-items: center; 
+    justify-content: center;
+    gap: 16px; 
+
+    display: flex;
+    font-family: sans-serif;
+    direction: ltr; 
+}
+
+#language       /*choice button*/
+{
+    text-align: right;
+    border: none;
+    padding: 6px;
+    background-color:white;
+
+    color: #767676;
+
+    cursor: pointer;
+}
+
+#instaFromMeta      /*a text*/
+{
+    margin: 0;
+
+    font-size: 12px;
+    color: #767676;
 }
