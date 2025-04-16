@@ -1,47 +1,82 @@
-.main-div        /*1st block*/
+.main-div
 {
     text-align: center;
-    border: 1.5px solid rgb(228, 228, 237);
+    border: 1.5px solid rgba(219,219,219,255);
     margin: 10px auto;
+
     width: 350px; 
+    
 }
 
-#instaLogo      /*Instagram logo*/
+#instaLogo
 {
     margin-top: 30px;
     width: 200px;
 }
 
-.userpassword       /*username and password input*/
+
+
+.userpassword       
 {
     border: 1.5px solid rgb(228, 228, 237);
+    border-radius: 2.5px;
     margin-bottom: 7px;
-    background-color: rgb(252, 249, 249);
+    background-color: rgba(250,250,250,255);
 
-    width: 270px;
+    width: 257px;
     height: 35px;
     font-size: 12px;
 
     transition: border-color 0.3s ease;
 }
+.userpassword:focus
+{
+    border-color:#828181d8;
+    outline: none; 
+}
 
-#LogIn      /*login button*/
+input[type="text"], input[type="password"]     
+{
+    padding-left: 10px;
+    position: relative;
+}
+input::placeholder      
+{
+    transition: 0.3s ease;
+}
+input:focus::placeholder        /* moving the placeholder */
+{
+    position: absolute;
+    font-size: smaller;
+    transform: translateY(-10px);
+}
+
+
+
+
+#LogIn      
 {
     border: 1px solid deepskyblue;
     border-radius: 7px;
     margin-top: 5px;
-    background-color: deepskyblue;
+    margin-bottom: 5px;
+    background-color: rgba(76,181,249,255);
 
     width: 270px;
     height: 32px;
-    color: white;
+    color:white;
 
     cursor: pointer;
 
 }
+#LogIn:active       /* animation while pressing */
+{
+    transform: scale(0.995);
+}
 
 
-.sp-div      /*dividing line with "or"*/
+
+.sp-div      
 {
     align-items: center;
     margin: auto;
@@ -50,17 +85,17 @@
     display: flex;
 }
 
-.line       /*dividing line*/
+.line       
 {
     align-items: center;
     border: none;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid rgba(219,219,219,255);
     margin: 0 20px;
 
     width: 300px;
 }
 
-.sp-div span     /*"or" text inside the line*/
+.sp-div span     
 {
     font-family:Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -72,7 +107,9 @@
 }
 
 
-#loginWithFacebook      /*"login with facebook" button*/
+
+
+#loginWithFacebook   
 {
     align-items: center;
     border: none;
@@ -80,9 +117,9 @@
     background-color: white;
 
     display: inline-flex;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
-    color: rgb(59, 158, 251);
+    color: rgba(69,165,251,255);
 
     cursor: pointer;
 }
@@ -91,31 +128,39 @@
     color: rgb(19, 17, 97);
 }
 
-#facebookLogo       /*facebook logo*/
+#facebookLogo      
 {
-    margin-right: 5px;
+    margin-right: 7px;
 
-    width: 15px;
-    height: 15px;
+    width: 21px;
+    height: 20px;
 }
 
 
-#forgotPassword        /*"forgot password?" button*/
+#forgotPassword    
 {
     border: none;
     margin-top: 10px;
-    margin-bottom: 15px;;
+    margin-bottom: 20px;;
     background-color: white;
 
-    color: rgb(8, 8, 51);
+    color: rgba(0,55,107,255);
 
     cursor: pointer;
 }
 
 
 
+.second-div    
+{
+    text-align: center;
+    border: 1.5px solid rgba(219,219,219,255);
+    margin: 10px auto;
 
-#signUp       /*2nd block*/
+    width: 350px; 
+    
+}
+#signUp       
 {
     border: none;
     background-color: white;
@@ -128,26 +173,26 @@
     cursor: pointer;
 }
 
-#haveAccount
+#haveAccount        
 {
     margin-top: 20px;
     margin-bottom: 20px;
 
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 
 
 
-#shopButton-div         /*3rd block*/
+#shopButton-div        
 {
     text-align: center;
 
     font-family:Arial, Helvetica, sans-serif;
 }
 
-#googleNmicrosoft       /*google play and microsoft logo*/
+#googleNmicrosoft      
 {
     width: 115px;
     height: 40px;
@@ -158,7 +203,7 @@
 
 
 
-#wordsBar-div       /*4th block*/
+#wordsBar-div       
 {
     text-align: center;
     padding: 20px;
@@ -166,13 +211,15 @@
     font-size: 4px;
 }
 
-.Word
+.Word    
 {
     border: none;
     margin: 0 1px;
     background-color: white;
 
+    font-size: 12px;
     color: #767676;
+    margin-right: 2px;
 
     cursor: pointer;
 }
@@ -184,7 +231,7 @@
 
 
 
-#lang-div       /*5th block*/
+#lang-div     
 {
     align-items: center; 
     justify-content: center;
@@ -195,19 +242,20 @@
     direction: ltr; 
 }
 
-#language       /*choice button*/
+#language      
 {
     text-align: right;
     border: none;
     padding: 6px;
     background-color:white;
 
+    width: 105px;
     color: #767676;
 
     cursor: pointer;
 }
 
-#instaFromMeta      /*a text*/
+#instaFromMeta    
 {
     margin: 0;
 
