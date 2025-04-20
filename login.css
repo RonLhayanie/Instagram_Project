@@ -44,7 +44,7 @@ input::placeholder
 {
     transition: 0.3s ease;
 }
-input:focus::placeholder        /* moving the placeholder */
+input:focus::placeholder        
 {
     position: absolute;
     font-size: smaller;
