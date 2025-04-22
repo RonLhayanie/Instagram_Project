@@ -1,15 +1,58 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-
-}
-
-/*       left side bar       */
-
-.sidebar-left {
+    }
+    
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* ביטול גלילה רגילה */
+    }
+    
+    /* פס גרירה קטן בצד העליון */
+    .scrollbar-grabber {
+        position: fixed;
+        top: 20px;  /* ממקם את פס הגרירה 20px מהחלק העליון של הדף (ניתן לשנות בנפרד) */
+        right: 3px;  /* ממקם אותו בצד ימין של הדף (ניתן לשנות בנפרד) */
+        width: 9px;  /* רוחב פס הגרירה */
+        height: 70px; /* גובה פס הגרירה (קצר יותר) */
+        background-color: #818181; /* צבע בהיר יותר לפס הגרירה */
+        border-radius: 50px;  /* מעגל את הקצוות */
+        cursor: pointer;  /* מצביע על כך שזה ניתן לגרירה */
+        z-index: 9999;  /* שיבטיח שהוא תמיד יהיה מעל */
+    }
+    
+    /* חץ למעלה שממוקם ישירות למעלה */
+    .scrollbar-grabber::before {
+        content: '▲';  /* חץ למעלה */
+        position: absolute;
+        right: -0.5;
+        margin-top: 5;
+        top: -23px;  /* מרחק מלמעלה של החץ (כדי להפריד אותו מהפס) */
+        font-size: 12px;
+        color: #818181;  /* צבע זהה לפס הגרירה */
+        display: block;
+        text-align: center;
+        margin-bottom: 5px;  /* רווח קטן בין החץ לפס הגרירה */
+    }
+    
+    /* צבע כהה יותר במעבר עכבר */
+    .scrollbar-grabber:hover {
+        background-color: #636363;  /* גוון כהה יותר כשמעלים את העכבר */
+    }
+    
+    /* צבע כהה יותר של החץ במעבר עכבר */
+    .scrollbar-grabber:hover::before {
+        color: #636363;  /* החץ יהיה כהה יותר במעבר עכבר */
+    }
+ 
+    /* left side bar */
+    
+    .sidebar-left {
     position: fixed;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;  /* Ensures space between top and bottom sections */
+    justify-content: space-between; /* Ensures space between top and bottom sections */
     height: 100vh;
     width: 195px;
     background-color: #fff;
@@ -17,27 +60,27 @@ body {
     padding: 20px;
     left: 0;
     top: 0;
-}
-
-.sidebar-items {
+    }
+    
+    .sidebar-items {
     display: flex;
     flex-direction: column;
     gap: 20px;
-}
-
-.sidebar-top {
+    }
+    
+    .sidebar-top {
     display: flex;
     flex-direction: column;
     gap: 12px;
-}
-
-.sidebar-bottom {
+    }
+    
+    .sidebar-bottom {
     display: flex;
     flex-direction: column;
     margin-top: 40px; /* Pushes the bottom items to the bottom of the sidebar */
-}
-
-.sidebar-item {
+    }
+    
+    .sidebar-item {
     width: 100%;
     display: flex;
     align-items: center;
@@ -47,174 +90,200 @@ body {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.sidebar-hoverable:hover {
+    }
+    
+    .sidebar-hoverable:hover {
     background-color: #e3e3e383;
-}
-
-.sidebar-item img {
+    }
+    
+    .sidebar-item img {
     width: 25px;
     height: 25px;
-   cursor: pointer;
-
-}
-
-
-#pfp-l {
+    cursor: pointer;
+    }
+    
+    #pfp-l {
     width: 30px;
     height: 30px;
-}
-
-
-#lftlogo {
+    }
+    
+    #lftlogo {
     height: 42px;
     width: 115px;
     display: block;
     display: flex;
     flex-direction: column;
     gap: 12px;
-}
-#lftlogo:hover{
+    }
+    
+    #lftlogo:hover {
     background-color: transparent;
     box-shadow: none;
-}
-
-/* Optional: Adjust size of bottom icons */
-.sidebar-bottom img {
+    }
+    
+    /* Optional: Adjust size of bottom icons */
+    .sidebar-bottom img {
     width: 25px;
     height: 25px;
-}
-
-/* Optional: Add margins for the bottom items to have more space from the top section */
-.sidebar-bottom .sidebar-item {
+    }
+    
+    /* Optional: Add margins for the bottom items to have more space from the top section */
+    .sidebar-bottom .sidebar-item {
     margin-top: 12px;
-}
-
-
-
-/*       right side bar       */
-
-
-
-.sidebar-right{
+    }
+    
+    
+    /* right side bar */
+    
+    .sidebar-right {
     position: fixed;
     right: 15;
     top: 17;
     width: 410px;
     height: 100vh;
     padding: 20px;
-    background-color:#fff ;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    gap:30px;
-}
-
-.right-pfp{
+    gap: 25px;
+    }
+    
+    .right-pfp {
     display: flex;
     align-items: center;
-    gap: 15px;
-}
-
-.right-pfp img{
+    gap: 10px;
+    }
+    
+    .right-pfp img {
     width: 45px;
     height: 45px;
     border-radius: 50%;
     cursor: pointer;
-}
-
-.right-pfp-name .username {
+    }
+    
+    .right-pfp-name .username {
     font-size: 14px;
     cursor: pointer;
-}
-
-.right-pfp-name .name {
+    font-weight: 600;
+    }
+    
+    .right-pfp-name .name {
     font-size: 14px;
     color: gray;
-}
-
-.switch-link {
-    margin-left:20%;
-    font-size: 12px;
-    color: #0095f6;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.switch-link:hover {
+    }
+    
+    .switch-link {
+        font-size: 12px;
+        color: #0095f6;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        margin-left: 95;
+    }
+    
+    .switch-link:hover {
     color: #005289;
+    }
     
-}
-
-
-
-.suggested-section {
+    
+    .suggested-section {
     margin-bottom: 10px;
     font-weight: 600;
+    }
     
-}
-
-.suggested-header {
+    .suggested-header {
     display: flex;
-    justify-content: space-between;
     font-size: 14px;
-    color: #8e8e8e;
-    margin-bottom: 10px;
+    color: #747474;
+    margin-bottom: 20px;
+    }
     
-}
-
-.suggested-header a {
+    .suggested-header a {
     font-size: 12px;
     color: #000000;
     text-decoration: none;
     font-weight: 600;
-}
-
-.suggested-header a:hover{
-color: #8e8e8e;
-}
-
-.suggested-user {
+    margin-left: 130;
+    align-self: center;
+    }
+    
+    .suggested-header a:hover {
+    color: #8e8e8e;
+    }
+    
+    /* updated layout for suggested users */
+    .suggested-user {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-    margin-top: 15px;;
-}
-
-.suggested-user img {
+    margin-top: 15px;
+    }
+    
+    .suggested-user-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+    
+    .suggested-user img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-right: 10px;
-    gap: 10px;
-}
-
-.user-info {
+    }
+    
+    .user-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    flex: 0.6;
-}
-
-.user-info .username {
+    }
+    
+    .user-info .username {
     font-weight: 600;
     font-size: 14px;
     display: block;
-}
-
-.user-info .relation {
+    }
+    
+    .user-info .relation {
     font-size: 12px;
     color: #8e8e8e;
-}
-
-.follow-btn {
+    font-weight: 400;
+    }
+    
+    .follow-btn{
     font-size: 12px;
     color: #0095f6;
     text-decoration: none;
     font-weight: 600;
+    cursor: pointer;
+    margin-left: 136;
+    
+}
+    .follow-btn:hover {
+    color: #005289;
+    }
+
+    .profile-picture {
+        width: 40px; /* או 45px או מה שמתאים לך */
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .verified-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
 }
 
-.follow-btn:hover{
-    color: #005289;
+#insta-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 117;
+}
+
+#insta-follow:hover {
+color: #005289;
 }
