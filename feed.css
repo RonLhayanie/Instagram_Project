@@ -165,6 +165,7 @@ body {
     font-size: 14px;
     cursor: pointer;
     font-weight: 600;
+
     }
     
     .right-pfp-name .name {
@@ -226,8 +227,8 @@ body {
     }
     
     .suggested-user img {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     }
     
@@ -281,7 +282,7 @@ body {
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 20;
+    margin-left: 18;
 }
 
 #insta-follow:hover {
@@ -293,7 +294,7 @@ color: #005289;
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 16;
+    margin-left: 11;
 }
 
 #ziv-follow{
@@ -302,7 +303,7 @@ color: #005289;
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 12;
+    margin-left: 8;
 }
 
 #kim-follow{
@@ -311,7 +312,7 @@ color: #005289;
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 12;
+    margin-left: 11;
 }
 #ari-follow{
     font-size: 12px;
@@ -319,7 +320,7 @@ color: #005289;
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 11;
+    margin-left: 10;
 }
 #or-follow:hover,#ziv-follow:hover,#kim-follow:hover,#ari-follow:hover{
 color: #005289;
@@ -401,7 +402,7 @@ color: #005289;
     border-radius: 50%; /* עיגול של התמונה */
     object-fit: cover; /* מוודא שהתמונה תתמלא בצורה נכונה */
     border: 4px solid white; /* גבול לבן קטן בין התמונה למסגרת */
-    background-image: linear-gradient(to right, #ff9900, #ff66b2); /* מגדיר את הגרדיאנט של המסגרת */
+    background-image: linear-gradient(to top, #ffd900, #ff9900,  #ff66b2,  #ff66b2 ); /* מגדיר את הגרדיאנט של המסגרת */
     padding: 3px; /* מוסיף רווח בין התמונה למסגרת */
     border-radius: 50%; /* שומר על העיגול */
     transition: background-image 0.3s ease; /* אפקט מעבר */
@@ -467,8 +468,8 @@ color: #005289;
     margin: 20px auto;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     padding: 15px;
+    transform: translateX(-80px); /* מזיז את הפוסט שמאלה */
   }
   
   /* כותרת הפוסט (שם משתמש) */
@@ -478,29 +479,52 @@ color: #005289;
     align-items: center;
     margin-bottom: 10px;
   }
-  
+
   .post-user {
     display: flex;
     align-items: center;
   }
   
-  .user-avatar {
-    width: 40px;
-    height: 40px;
+  .avatar-wrapper {
+    background-image: linear-gradient(to top, #ffd900, #ff9900,  #ff66b2,  #ff66b2 );
+    padding: 3px; /* זה מה שיוצר את עובי המסגרת */
     border-radius: 50%;
-    margin-right: 10px;
+    display: inline-block;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: block;
+    background-color: white; /* חשוב - מספק ניגוד ברור למסגרת */
+    
+  }
+  
+  .user-avatar:hover{
+    cursor: pointer;
   }
   
   .user-name {
     font-size: 14px;
-    font-weight: bold;
+    margin-left: 10px; /* מזיז את השם ימינה */
+    font-weight: 500;
+    color: #000000;
+  }
+  .user-name:hover{
+    cursor: pointer;
   }
   
   .more-options {
     background: none;
     border: none;
-    font-size: 20px;
+    padding: 0;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .more-options svg {
+    display: block;
   }
   
   /* תמונת הפוסט */
@@ -511,34 +535,205 @@ color: #005289;
     object-fit: cover;
   }
   
-  /* כפתורים לפעולות */
   .post-actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
+    padding: 0 5px;
   }
   
-  .like-button,
-  .comment-button,
-  .share-button {
-    background: none;
-    border: none;
-    font-size: 18px;
+  .post-actions .left-actions {
+    display: flex;
+    gap: 15px; /* מרווח בין האייקונים */
+  }
+  
+  .post-actions img {
+    width: 24px;
+    height: 24px;
     cursor: pointer;
   }
   
   /* תיאור הפוסט */
   .post-description {
+    gap: 0px; /* קרבתי את כל האלמנטים בתוך post-description */
+    display: flex;
+    flex-direction: column; /* נוודא שהאלמנטים יהיו טור אחד */
     margin-top: 10px;
+    color: #000000; /* שים כאן את הצבע שאתה רוצה */
   }
   
   .likes-count {
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 500;
+    margin-left: 5px;
   }
   
   .post-text {
     font-size: 14px;
-    color: #555;
+    color: #000000;
+    margin-bottom: 0;
   }
   
+  .feed {
+    overflow-y: auto;
+    height: 100vh;
+  }
+  
+  .user-details {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #737373;
+  }
+  
+  .dot {
+    font-size: 14px;
+    color: #737373;
+  }
+  
+  .time {
+    color: #737373;
+    font-size: 14px;
+  }
+  
+  .time:hover {
+    cursor: pointer;
+  }
+  
+  /* שורה אחת עבור המיני תמונות וכמות הלייקים */
+  .likes-row {
+    display: flex;
+    align-items: center; /* יישור האלמנטים במרכז אנכית */
+    gap: 8px; /* רווח בין המיני תמונות ללייקים */
+  }
+  
+  /* הצגת המיני תמונות בצורה של שורה */
+  .mini-images {
+    display: inline-block; /* מאפשר למיני תמונות להיות על אותה שורה */
+    position: relative;
+    width: 22px; /* תלוי כמה חפיפה אתה רוצה */
+    height: 14px;
+  }
+  
+  .more {
+    color: #737373; /* צבע אפור לכפתור MORE */
+    cursor: pointer;
+    display: inline-block;
+  }
+  .view-comments {
+    margin-top: 5px; /* הסרת רווחים לפני ה-view-comments */
+    margin-bottom: 5px;
+    color: #737373;  /* צבע ברירת המחדל */
+    font-size: 14px;
+    cursor: default;  /* אין קורסור על כל השורה */
+    margin-bottom: 0;
+  }
+  
+  .view-comments-text {
+    cursor: pointer; /* קורסור של אצבע רק על הטקסט */
+  }
+
+
+  .mini-image {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid white;
+    object-fit: cover;
+    transition: filter 0.2s; /* מעבר חלק לצבע */
+  }
+  
+  .mini-image:hover {
+    filter: brightness(0.8); /* עמעום קל כשעוברים עם העכבר */
+    cursor: pointer;
+  }
+  
+  .mini-image:nth-child(1) {
+    left: 0;
+    z-index: 2; /* תמונה אחת על השנייה */
+  }
+  
+  .mini-image:nth-child(2) {
+    left: 8px; /* כמה חפיפה אתה רוצה */
+    z-index: 1;
+  }
+  
+  #descript-username {
+    font-weight: 500;
+    margin-right: 5px;
+    margin-left: 0px; /* לא צריך להזיז ימינה */
+    font-size: 14px;
+  }
+
+  .comment-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .view-comments-text {
+    color: #737373;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .comment-row {
+    display: flex;
+    align-items: center; /* מוודא שכל האלמנטים במרכז */
+    width: 100%; /* מאפשר לתיבה למלא את כל רוחב האב */
+}
+
+.add-comment-box {
+    font-family: inherit;
+    flex: 1;
+    border: none;
+    background-color: white;
+    resize: none;
+    font-size: 14px;
+    padding: 8px 0;
+    color: #737373;
+}
+
+.add-comment-box:focus {
+    outline: none;
+}
+
+.emoji {
+    font-size: 18px;
+    color: #737373;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: filter 0.2s;
+    margin-top: -18px;
+}
+
+.emoji:hover {
+    filter: brightness(0.5);
+}
+
+.post-button {
+    font-size: 14px;
+    color:#0095f6;
+    font-weight: 500;
+    cursor: pointer;
+    opacity: 0;
+    margin-left: 10px;
+    margin-top: -20px;
+}
+
+.post-button:hover{
+    color: #005289;
+
+}
+
+.add-comment-box:not(:placeholder-shown) ~ .post-button {
+    opacity: 1;
+}
+
+.add-comment-box:placeholder-shown ~ .post-button {
+    opacity: 0;
+    pointer-events: none;
+}
