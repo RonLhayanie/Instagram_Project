@@ -281,9 +281,91 @@ body {
     text-decoration: none;
     font-weight: 600;
     cursor: pointer;
-    margin-left: 117;
+    margin-left: 20;
 }
 
 #insta-follow:hover {
 color: #005289;
+}
+#or-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 16;
+}
+
+#ziv-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 12;
+}
+
+#kim-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 12;
+}
+#ari-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 11;
+}
+#or-follow:hover,#ziv-follow:hover,#kim-follow:hover,#ari-follow:hover{
+color: #005289;
+}
+.footer-links {
+    font-size: 12px; /* טיפה יותר קטן */
+    color: #aaa;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px; /* רווחים קטנים יותר */
+    line-height: 1.3;
+    padding-top: 5px;
+}
+
+.footer-links a {
+    color: #c0c0c0;
+    text-decoration: none;
+    position: relative;
+    padding-right: 6px; /* פחות רווח מימין */
+}
+
+.footer-links a::after {
+    content: '.';
+    position: absolute;
+    right: 0;
+    color: #ccc;
+    font-weight: bold; /* שתיראה יותר כמו נקודה */
+    font-size: 10px; /* טיפה בולטת אבל לא ענקית */
+    top: -2.px; /* מרכז אותה לגובה הטקסט */
+}
+
+.footer-links a:last-of-type::after {
+    content: ''; /* לא להוסיף נקודה בסוף */
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-links .copyright {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #C7C7C7;
+    text-align: start;
+}
+.footer-links a.break-line {
+    flex-basis: 100%; /* שובר שורה */
 }
