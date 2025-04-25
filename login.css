@@ -11,12 +11,18 @@
 #instaLogo
 {
     margin-top: 30px;
+    margin-bottom: 10px;
     width: 200px;
 }
 
 
+.input-div
+{
+    text-align: center;
+    position: relative;
+}
 
-.userpassword       
+.userpassword       /* username and password input */       
 {
     border: 1.5px solid rgb(228, 228, 237);
     border-radius: 2.5px;
@@ -40,21 +46,65 @@ input[type="text"], input[type="password"]
     padding-left: 10px;
     position: relative;
 }
-input::placeholder      
+
+.labels
 {
-    transition: 0.3s ease;
+    left: 45px;
+    padding: 0 4px;
+    background: none;
+    color: #767676;
+    transition: 0.2s ease all;
+    pointer-events: none;
+    position: absolute;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11.5px;
+
 }
-input:focus::placeholder        
+#userlabel
+{
+    top: 13px;
+}
+#passlabel
+{
+    top: 58.5px;
+}
+input:not(:placeholder-shown) + label
 {
     position: absolute;
-    font-size: smaller;
+    font-size: 9.5px;
     transform: translateY(-10px);
 }
 
+.showButton
+{
+    position: absolute;
+    top: 55px;
+    right: 45px;
+
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: black;
+    cursor: pointer;
+    display: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+.showButton:hover
+{
+    color: #767676;
+}
+input:not(:placeholder-shown) ~ .showButton
+{
+    display: block;
+}
 
 
 
-#LogIn      
+
+
+#LogIn      /* login button */      
 {
     border: 1px solid deepskyblue;
     border-radius: 7px;
@@ -76,7 +126,7 @@ input:focus::placeholder
 
 
 
-.sp-div      
+.sp-div     /* dividing line with "or" */     
 {
     align-items: center;
     margin: auto;
@@ -109,7 +159,7 @@ input:focus::placeholder
 
 
 
-#loginWithFacebook   
+#loginWithFacebook      /* Facebook button */   
 {
     align-items: center;
     border: none;
@@ -132,12 +182,12 @@ input:focus::placeholder
 {
     margin-right: 7px;
 
-    width: 21px;
+    width: 20px;
     height: 20px;
 }
 
 
-#forgotPassword    
+#forgotPassword       /* forgot password button */
 {
     border: none;
     margin-top: 10px;
@@ -160,7 +210,7 @@ input:focus::placeholder
     width: 350px; 
     
 }
-#signUp       
+#signUp     /* sign up button */  
 {
     border: none;
     background-color: white;
@@ -173,7 +223,7 @@ input:focus::placeholder
     cursor: pointer;
 }
 
-#haveAccount        
+#haveAccount     /* dont have an account button*/   
 {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -185,7 +235,7 @@ input:focus::placeholder
 
 
 
-#shopButton-div        
+#shopButton-div     /* Microsoft and Google Play logos */      
 {
     text-align: center;
 
@@ -194,7 +244,7 @@ input:focus::placeholder
 
 #googleNmicrosoft      
 {
-    width: 115px;
+    width: 120px;
     height: 40px;
 
     cursor: pointer;
@@ -211,7 +261,7 @@ input:focus::placeholder
     font-size: 4px;
 }
 
-.Word    
+.Word       /* bottom wordbar */
 {
     border: none;
     margin: 0 1px;
@@ -231,7 +281,7 @@ input:focus::placeholder
 
 
 
-#lang-div     
+#lang-div     /* change language button */
 {
     align-items: center; 
     justify-content: center;

@@ -1,10 +1,13 @@
+<!-- ron-lhayanie-329681662-or-benshoshan-333173045 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="login.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login page</title>
+    <title>Login &bull; Instagram </title>
+    <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1024px-Instagram_logo_2022.svg.png">
 </head>
 
 <body>
@@ -14,17 +17,22 @@
 
         <br> <br> 
 
-        <div> 
-            <input type="text" class="userpassword" placeholder=" Phone number, username, or email">
+        <div class="input-div">
+
+            <input type="text" id="user" class="userpassword" placeholder="">
+            <label id="userlabel" class="labels" for="user"> Phone number, username or email </label>
+
             <br>
-            <input type="password" class="userpassword" placeholder=" password">
+
+            <input type="password" id="pass" class="userpassword" placeholder="">
+            <label id="passlabel" class="labels" for="pass"> Password </label>
+            <button type="button" class="showButton"> Show </button>
+
             <br>
             <button id="LogIn"> <b> Log in </b> </button>
         </div>
         
         <br> 
-
-
 
         <div class="sp-div">
             <div class="line"></div>
@@ -32,19 +40,15 @@
             <div class="line"></div>
         </div>
 
-
         <br> 
 
-
-        <button id="loginWithFacebook">  <img src="https://cdn.discordapp.com/attachments/1338092393240465450/1362129929826734345/168.png?ex=680145da&is=67fff45a&hm=03aba876cef3d679da32fb7e75eece3d2d6ce7a0a8d6c26ed488a7df5824366b&" id="facebookLogo"> Log in with Facebook </button>
+        <button id="loginWithFacebook">  <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" id="facebookLogo"> Log in with Facebook </button>
         <br>
         <button id="forgotPassword"> Forgot password? </button>
         
     </div>
 
     
-
-
     <div class="second-div">
         <p id="haveAccount">
             Don't have an account? <button id="signUp"> Sign up </button>
@@ -52,20 +56,16 @@
     </div>
 
     
-
-    
     <div id="shopButton-div">
         <p id="getTheApp">
             Get the app.
             <br> <br>
-            <img id="googleNmicrosoft" src="https://cdn.discordapp.com/attachments/1338092393240465450/1359950916446584914/154.png?ex=67f9587d&is=67f806fd&hm=0750010fd83609e2e9d9332a7abb89c1ebae3da1f188b7fc8a8f73638dfbf0d2&">
-            <img id="googleNmicrosoft" src="https://cdn.discordapp.com/attachments/1338092393240465450/1359950916198990045/153.png?ex=67f9587d&is=67f806fd&hm=8cd3b289b23900e75c844786f1d4c405c147ccff2a3e7ded83abae22f0c61c6b&">
+            <img id="googleNmicrosoft" src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png">
+            <img id="googleNmicrosoft" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png">
         </p>
     </div>
 
-
     <br> <br> <br>
-
 
     <div id="wordsBar-div">
         <button class="Word"> Meta </button>
@@ -84,8 +84,6 @@
         <button class="Word"> Settlement Agreements </button>
     
     </div>
-
-
 
 
     <div id="lang-div">
@@ -141,7 +139,5 @@
     </div>
 
     <br> <br>
-
-
 </body>
 </html>
