@@ -17,7 +17,8 @@
 
         <br> <br> 
 
-        <div class="input-div">
+        <!-- username, password and login button -->
+        <div class="input-div">     
 
             <input type="text" id="user" class="userpassword" placeholder="">
             <label id="userlabel" class="labels" for="user"> Phone number, username or email </label>
@@ -34,6 +35,7 @@
         
         <br> 
 
+        <!-- dividing line with "or" -->
         <div class="sp-div">
             <div class="line"></div>
                 <span> OR </span>
@@ -42,13 +44,15 @@
 
         <br> 
 
-        <button id="loginWithFacebook">  <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" id="facebookLogo"> Log in with Facebook </button>
+        <!-- login with facebook, forgot password -->
+        <button id="loginWithFacebook" class="facebook">  <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" id="facebookLogo"> Log in with Facebook </button>
         <br>
-        <button id="forgotPassword"> Forgot password? </button>
+        <button id="forgotPassword" class="facebook"> Forgot password? </button>
         
     </div>
 
     
+
     <div class="second-div">
         <p id="haveAccount">
             Don't have an account? <button id="signUp"> Sign up </button>
@@ -56,38 +60,46 @@
     </div>
 
     
+
     <div id="shopButton-div">
+        <!-- Google Play and Microsoft buttons -->
         <p id="getTheApp">
             Get the app.
             <br> <br>
-            <img id="googleNmicrosoft" src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png">
-            <img id="googleNmicrosoft" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png">
+            <button class="shopButtons"> <img src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png" class="shopLogos" id="googlePlay"> </button>
+            <button class="shopButtons"> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png" class="shopLogos" id="microsoft"> </button>
+            
         </p>
     </div>
 
-    <br> <br> <br>
+    <br> <br>
 
-    <div id="wordsBar-div">
-        <button class="Word"> Meta </button>
-        <button class="Word"> About </button>
-        <button class="Word"> Blog </button>
-        <button class="Word"> Jobs </button>
-        <button class="Word"> Help </button>
-        <button class="Word"> API </button>
-        <button class="Word"> Privacy </button>
-        <button class="Word"> Terms </button>
-        <button class="Word"> Locations </button>
-        <button class="Word"> Instagram Lite </button>
-        <button class="Word"> Threads </button>
-        <button class="Word"> Contact Uploading & Non-Users </button>
-        <button class="Word"> Meta verified </button>
-        <button class="Word"> Settlement Agreements </button>
+
+
+    <!-- bottom links bar -->
+    <div id="linksBar-div">
+        <button class="link"> Meta </button>
+        <button class="link"> About </button>
+        <button class="link"> Blog </button>
+        <button class="link"> Jobs </button>
+        <button class="link"> Help </button>
+        <button class="link"> API </button>
+        <button class="link"> Privacy </button>
+        <button class="link"> Terms </button>
+        <button class="link"> Locations </button>
+        <button class="link"> Instagram Lite </button>
+        <button class="link"> Threads </button>
+        <button class="link"> Contact Uploading & Non-Users </button>
+        <button class="link"> Meta verified </button>
+        <button class="link"> Settlement Agreements </button>
     
     </div>
 
 
+
     <div id="lang-div">
         
+        <!-- change language -->
         <select id="language">
             <option value="african"> African </option>
             <option value="arabic"> Arabic </option>
@@ -134,7 +146,8 @@
             <option value="vietnamese"> Vietnamese </option>
         </select>
 
-        <p id="instaFromMeta"> © 2025 Instagram from Meta </p>
+        <!-- copyright -->
+        <p id="copyright"> © 2025 Instagram from Meta </p>  
 
     </div>
 
