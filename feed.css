@@ -9,47 +9,11 @@ body {
         overflow: hidden; /* ביטול גלילה רגילה */
     }
     
-    /* פס גרירה קטן בצד העליון */
-    .scrollbar-grabber {
-        position: fixed;
-        top: 20px;  /* ממקם את פס הגרירה 20px מהחלק העליון של הדף (ניתן לשנות בנפרד) */
-        right: 3px;  /* ממקם אותו בצד ימין של הדף (ניתן לשנות בנפרד) */
-        width: 9px;  /* רוחב פס הגרירה */
-        height: 70px; /* גובה פס הגרירה (קצר יותר) */
-        background-color: #818181; /* צבע בהיר יותר לפס הגרירה */
-        border-radius: 50px;  /* מעגל את הקצוות */
-        cursor: pointer;  /* מצביע על כך שזה ניתן לגרירה */
-        z-index: 9999;  /* שיבטיח שהוא תמיד יהיה מעל */
-    }
-    
-    /* חץ למעלה שממוקם ישירות למעלה */
-    .scrollbar-grabber::before {
-        content: '▲';  /* חץ למעלה */
-        position: absolute;
-        right: -0.5;
-        margin-top: 5;
-        top: -23px;  /* מרחק מלמעלה של החץ (כדי להפריד אותו מהפס) */
-        font-size: 12px;
-        color: #818181;  /* צבע זהה לפס הגרירה */
-        display: block;
-        text-align: center;
-        margin-bottom: 5px;  /* רווח קטן בין החץ לפס הגרירה */
-    }
-    
-    /* צבע כהה יותר במעבר עכבר */
-    .scrollbar-grabber:hover {
-        background-color: #636363;  /* גוון כהה יותר כשמעלים את העכבר */
-    }
-    
-    /* צבע כהה יותר של החץ במעבר עכבר */
-    .scrollbar-grabber:hover::before {
-        color: #636363;  /* החץ יהיה כהה יותר במעבר עכבר */
-    }
- 
+
     /* left side bar */
     
     .sidebar-left {
-    position: fixed;
+      position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Ensures space between top and bottom sections */
@@ -77,7 +41,7 @@ body {
     .sidebar-bottom {
     display: flex;
     flex-direction: column;
-    margin-top: 40px; /* Pushes the bottom items to the bottom of the sidebar */
+    margin-bottom: 40px;
     }
     
     .sidebar-item {
@@ -136,9 +100,9 @@ body {
     /* right side bar */
     
     .sidebar-right {
-    position: fixed;
-    right: 15;
-    top: 17;
+    position: relative;
+    right: -1070;
+    top: -1490 ;
     width: 410px;
     height: 100vh;
     padding: 20px;
@@ -198,6 +162,7 @@ body {
     color: #747474;
     margin-bottom: 20px;
     }
+
     
     .suggested-header a {
     font-size: 12px;
@@ -231,6 +196,10 @@ body {
     height: 44px;
     border-radius: 50%;
     }
+
+    .suggested-user img:hover{
+    cursor: pointer;
+    }
     
     .user-info {
     display: flex;
@@ -242,6 +211,10 @@ body {
     font-weight: 600;
     font-size: 14px;
     display: block;
+    }
+
+    .user-info .username{
+        cursor: pointer;
     }
     
     .user-info .relation {
