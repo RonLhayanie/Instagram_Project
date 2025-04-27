@@ -102,7 +102,7 @@ body {
     .sidebar-right {
     position: relative;
     right: -1070;
-    top: -1490 ;
+    top: -2050 ;
     width: 410px;
     height: 100vh;
     padding: 20px;
@@ -437,12 +437,14 @@ color: #005289;
 
 /* סגנון לפוסט */
 .post {
+  margin-left: -500;
     width: 500px;
     margin: 20px auto;
     background-color: #fff;
     border-radius: 10px;
     padding: 15px;
     transform: translateX(-80px); /* מזיז את הפוסט שמאלה */
+
   }
   
   /* כותרת הפוסט (שם משתמש) */
@@ -526,7 +528,12 @@ color: #005289;
     height: 24px;
     cursor: pointer;
   }
+
+  .post-actions img:hover {
+    opacity: 0.5;
+  }
   
+
   /* תיאור הפוסט */
   .post-description {
     gap: 0px; /* קרבתי את כל האלמנטים בתוך post-description */
@@ -541,6 +548,12 @@ color: #005289;
     font-weight: 500;
     margin-left: 5px;
   }
+
+  .likes-count:hover {
+    cursor: pointer;
+  }
+
+
   
   .post-text {
     font-size: 14px;
@@ -709,4 +722,23 @@ color: #005289;
 .add-comment-box:placeholder-shown ~ .post-button {
     opacity: 0;
     pointer-events: none;
+}
+
+#post3{
+  position: relative;
+  margin: 65;
+  margin-top: 20px ;
+  border-radius: 0%;
+  border-top: 1px solid #d0d0d0 ;
+}
+
+
+#post1{
+  border-bottom: 1px solid #d0d0d0 ;
+  border-radius: 0%;
+}
+
+
+.end-of-page {
+  height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 }
