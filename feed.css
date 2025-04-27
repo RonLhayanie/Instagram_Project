@@ -1,4 +1,744 @@
-img{
-    width: 100px;
-    height: 100px;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* ביטול גלילה רגילה */
+    }
+    
+
+    /* left side bar */
+    
+    .sidebar-left {
+      position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures space between top and bottom sections */
+    height: 100vh;
+    width: 210px;
+    background-color: #fff;
+    border-right: 1px solid #dbdbdb;
+    padding: 20px;
+    left: -5;
+    top: 0;
+    }
+    
+    .sidebar-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    }
+    
+    .sidebar-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    }
+    
+    .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    }
+    
+    .sidebar-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 95%;
+    padding:10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+    
+    .sidebar-hoverable:hover {
+    background-color: #e3e3e383;
+    }
+    
+    .sidebar-item img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    }
+    
+    #pfp-l {
+    width: 30px;
+    height: 30px;
+    }
+    
+    #lftlogo {
+    height: 42px;
+    width: 115px;
+    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    }
+    
+    #lftlogo:hover {
+    background-color: transparent;
+    box-shadow: none;
+    }
+    
+    /* Optional: Adjust size of bottom icons */
+    .sidebar-bottom img {
+    width: 25px;
+    height: 25px;
+    }
+    
+    /* Optional: Add margins for the bottom items to have more space from the top section */
+    .sidebar-bottom .sidebar-item {
+    margin-top: 12px;
+    }
+    
+    
+    /* right side bar */
+    
+    .sidebar-right {
+    position: relative;
+    right: -1070;
+    top: -2050 ;
+    width: 410px;
+    height: 100vh;
+    padding: 20px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    }
+    
+    .right-pfp {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+    
+    .right-pfp img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    }
+    
+    .right-pfp-name .username {
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
+
+    }
+    
+    .right-pfp-name .name {
+    font-size: 14px;
+    color: gray;
+    }
+    
+    .switch-link {
+        font-size: 12px;
+        color: #0095f6;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        margin-left: 95;
+    }
+    
+    .switch-link:hover {
+    color: #005289;
+    }
+    
+    
+    .suggested-section {
+    margin-bottom: 10px;
+    font-weight: 600;
+    }
+    
+    .suggested-header {
+    display: flex;
+    font-size: 14px;
+    color: #747474;
+    margin-bottom: 20px;
+    }
+
+    
+    .suggested-header a {
+    font-size: 12px;
+    color: #000000;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 130;
+    align-self: center;
+    }
+    
+    .suggested-header a:hover {
+    color: #8e8e8e;
+    }
+    
+    /* updated layout for suggested users */
+    .suggested-user {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    }
+    
+    .suggested-user-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+    
+    .suggested-user img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    }
+
+    .suggested-user img:hover{
+    cursor: pointer;
+    }
+    
+    .user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    }
+    
+    .user-info .username {
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    }
+
+    .user-info .username{
+        cursor: pointer;
+    }
+    
+    .user-info .relation {
+    font-size: 12px;
+    color: #8e8e8e;
+    font-weight: 400;
+    }
+    
+    .follow-btn{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 136;
+    
+}
+    .follow-btn:hover {
+    color: #005289;
+    }
+
+    .profile-picture {
+        width: 40px; /* או 45px או מה שמתאים לך */
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .verified-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+#insta-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 18;
+}
+
+#insta-follow:hover {
+color: #005289;
+}
+#or-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 11;
+}
+
+#ziv-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 8;
+}
+
+#kim-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 11;
+}
+#ari-follow{
+    font-size: 12px;
+    color: #0095f6;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 10;
+}
+#or-follow:hover,#ziv-follow:hover,#kim-follow:hover,#ari-follow:hover{
+color: #005289;
+}
+.footer-links {
+    font-size: 12px; /* טיפה יותר קטן */
+    color: #aaa;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px; /* רווחים קטנים יותר */
+    line-height: 1.3;
+    padding-top: 5px;
+}
+
+.footer-links a {
+    color: #c0c0c0;
+    text-decoration: none;
+    position: relative;
+    padding-right: 6px; /* פחות רווח מימין */
+}
+
+.footer-links a::after {
+    content: '.';
+    position: absolute;
+    right: 0;
+    color: #ccc;
+    font-weight: bold; /* שתיראה יותר כמו נקודה */
+    font-size: 10px; /* טיפה בולטת אבל לא ענקית */
+    top: -2.px; /* מרכז אותה לגובה הטקסט */
+}
+
+.footer-links a:last-of-type::after {
+    content: ''; /* לא להוסיף נקודה בסוף */
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-links .copyright {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #C7C7C7;
+    text-align: start;
+}
+.footer-links a.break-line {
+    flex-basis: 100%; /* שובר שורה */
+}
+
+
+/* main feed */
+/* עוטף של שורת הסטוריז */
+.stories-container {
+    position: relative;
+    display: flex;
+    justify-content: center; /* ממקם את הסטוריז במרכז */
+    gap: 10px; /* נותן רווחים בין הסטוריז */
+    padding: 20px 0;
+    width: 100%;
+    margin-left: 365px; /* מזיז את הסטוריז מעט שמאלה (פחות מ-20px) */
+    max-width: 650px; /* מוודא שהסטוריז לא יגלשו */
+}
+
+/* כל אלמנט סטורי */
+.story {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: #262626;
+    text-align: center; /* מבטיח שהשם יהיה ממרכז */
+}
+
+/* עיגול של התמונה */
+.story img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%; /* עיגול של התמונה */
+    object-fit: cover; /* מוודא שהתמונה תתמלא בצורה נכונה */
+    border: 4px solid white; /* גבול לבן קטן בין התמונה למסגרת */
+    background-image: linear-gradient(to top, #ffd900, #ff9900,  #ff66b2,  #ff66b2 ); /* מגדיר את הגרדיאנט של המסגרת */
+    padding: 3px; /* מוסיף רווח בין התמונה למסגרת */
+    border-radius: 50%; /* שומר על העיגול */
+    transition: background-image 0.3s ease; /* אפקט מעבר */
+}
+
+/* אפקט של הובר על התמונה */
+.story img:hover {
+    cursor: pointer;
+}
+
+/* שם משתמש */
+.story-name {
+    color: #333; /* צבע כהה יותר לשם */
+    font-size: 12px; /* גודל טקסט לשם */
+}
+.story-name:hover{
+ cursor: pointer;
+}
+
+
+.story-image-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.story-image-wrapper img {
+    display: block;
+}
+
+/* סגנון לכפתור הגלילה */
+.scroll-button {
+    position: absolute;
+    top: 55%;
+    left: 60%; /* מזיז טיפה ימינה */
+    transform: translate(-50%, -50%);
+    width: 23px;
+    height: 23px;
+    border-radius: 50%; /* עיגול סביב הכפתור */
+    background-color: #ffffff; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    color: rgb(100, 100, 100);
+}
+
+
+/* הוספת חץ svg */
+.scroll-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* post */
+
+/* סגנון לפוסט */
+.post {
+  margin-left: -500;
+    width: 500px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    transform: translateX(-80px); /* מזיז את הפוסט שמאלה */
+
+  }
+  
+  /* כותרת הפוסט (שם משתמש) */
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .post-user {
+    display: flex;
+    align-items: center;
+  }
+  
+  .avatar-wrapper {
+    background-image: linear-gradient(to top, #ffd900, #ff9900,  #ff66b2,  #ff66b2 );
+    padding: 3px; /* זה מה שיוצר את עובי המסגרת */
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: block;
+    background-color: white; /* חשוב - מספק ניגוד ברור למסגרת */
+    
+  }
+  
+  .user-avatar:hover{
+    cursor: pointer;
+  }
+  
+  .user-name {
+    font-size: 14px;
+    margin-left: 10px; /* מזיז את השם ימינה */
+    font-weight: 500;
+    color: #000000;
+  }
+  .user-name:hover{
+    cursor: pointer;
+  }
+  
+  .more-options {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .more-options svg {
+    display: block;
+  }
+  
+  /* תמונת הפוסט */
+  .post-image img {
+    width: 100%;
+    border-radius: 10px;
+    max-height: 400px;
+    object-fit: cover;
+  }
+  
+  .post-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding: 0 5px;
+  }
+  
+  .post-actions .left-actions {
+    display: flex;
+    gap: 15px; /* מרווח בין האייקונים */
+  }
+  
+  .post-actions img {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .post-actions img:hover {
+    opacity: 0.5;
+  }
+  
+
+  /* תיאור הפוסט */
+  .post-description {
+    gap: 0px; /* קרבתי את כל האלמנטים בתוך post-description */
+    display: flex;
+    flex-direction: column; /* נוודא שהאלמנטים יהיו טור אחד */
+    margin-top: 10px;
+    color: #000000; /* שים כאן את הצבע שאתה רוצה */
+  }
+  
+  .likes-count {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+  }
+
+  .likes-count:hover {
+    cursor: pointer;
+  }
+
+
+  
+  .post-text {
+    font-size: 14px;
+    color: #000000;
+    margin-bottom: 0;
+  }
+  
+  .feed {
+    overflow-y: auto;
+    height: 100vh;
+  }
+  
+  .user-details {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    color: #737373;
+  }
+  
+  .dot {
+    font-size: 14px;
+    color: #737373;
+  }
+  
+  .time {
+    color: #737373;
+    font-size: 14px;
+  }
+  
+  .time:hover {
+    cursor: pointer;
+  }
+  
+  /* שורה אחת עבור המיני תמונות וכמות הלייקים */
+  .likes-row {
+    display: flex;
+    align-items: center; /* יישור האלמנטים במרכז אנכית */
+    gap: 8px; /* רווח בין המיני תמונות ללייקים */
+  }
+  
+  /* הצגת המיני תמונות בצורה של שורה */
+  .mini-images {
+    display: inline-block; /* מאפשר למיני תמונות להיות על אותה שורה */
+    position: relative;
+    width: 22px; /* תלוי כמה חפיפה אתה רוצה */
+    height: 14px;
+  }
+  
+  .more {
+    color: #737373; /* צבע אפור לכפתור MORE */
+    cursor: pointer;
+    display: inline-block;
+  }
+  .view-comments {
+    margin-top: 5px; /* הסרת רווחים לפני ה-view-comments */
+    margin-bottom: 5px;
+    color: #737373;  /* צבע ברירת המחדל */
+    font-size: 14px;
+    cursor: default;  /* אין קורסור על כל השורה */
+    margin-bottom: 0;
+  }
+  
+  .view-comments-text {
+    cursor: pointer; /* קורסור של אצבע רק על הטקסט */
+  }
+
+
+  .mini-image {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid white;
+    object-fit: cover;
+    transition: filter 0.2s; /* מעבר חלק לצבע */
+  }
+  
+  .mini-image:hover {
+    filter: brightness(0.8); /* עמעום קל כשעוברים עם העכבר */
+    cursor: pointer;
+  }
+  
+  .mini-image:nth-child(1) {
+    left: 0;
+    z-index: 2; /* תמונה אחת על השנייה */
+  }
+  
+  .mini-image:nth-child(2) {
+    left: 8px; /* כמה חפיפה אתה רוצה */
+    z-index: 1;
+  }
+  
+  #descript-username {
+    font-weight: 500;
+    margin-right: 5px;
+    margin-left: 0px; /* לא צריך להזיז ימינה */
+    font-size: 14px;
+  }
+
+  .comment-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .view-comments-text {
+    color: #737373;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .comment-row {
+    display: flex;
+    align-items: center; /* מוודא שכל האלמנטים במרכז */
+    width: 100%; /* מאפשר לתיבה למלא את כל רוחב האב */
+}
+
+.add-comment-box {
+    font-family: inherit;
+    flex: 1;
+    border: none;
+    background-color: white;
+    resize: none;
+    font-size: 14px;
+    padding: 8px 0;
+    color: #737373;
+}
+
+.add-comment-box:focus {
+    outline: none;
+}
+
+.emoji {
+    font-size: 18px;
+    color: #737373;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: filter 0.2s;
+    margin-top: -18px;
+}
+
+.emoji:hover {
+    filter: brightness(0.5);
+}
+
+.post-button {
+    font-size: 14px;
+    color:#0095f6;
+    font-weight: 500;
+    cursor: pointer;
+    opacity: 0;
+    margin-left: 10px;
+    margin-top: -20px;
+}
+
+.post-button:hover{
+    color: #005289;
+
+}
+
+.add-comment-box:not(:placeholder-shown) ~ .post-button {
+    opacity: 1;
+}
+
+.add-comment-box:placeholder-shown ~ .post-button {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#post3{
+  position: relative;
+  margin: 65;
+  margin-top: 20px ;
+  border-radius: 0%;
+  border-top: 1px solid #d0d0d0 ;
+}
+
+
+#post1{
+  border-bottom: 1px solid #d0d0d0 ;
+  border-radius: 0%;
+}
+
+
+.end-of-page {
+  height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 }
