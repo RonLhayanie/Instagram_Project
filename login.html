@@ -15,7 +15,7 @@
     <div class="main-div">       
         <img id="instaLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png">
 
-        <br> <br> 
+        
 
         <!-- username, password and login button -->
         <div class="input-div">     
@@ -27,14 +27,14 @@
 
             <input type="password" id="pass" class="userpassword" placeholder="">
             <label id="passlabel" class="labels" for="pass"> Password </label>
-            <button type="button" class="showButton"> Show </button>
+            <button type="button" class="showButton" onclick="show()"> Show </button>
 
             <br>
-            <button id="LogIn"> <b> Log in </b> </button>
+            <button id="LogIn" onclick="verification()"> <b> Log in </b> </button>
         </div>
         
         <br> 
-
+ 
         <!-- dividing line with "or" -->
         <div class="sp-div">
             <div class="line"></div>
@@ -46,8 +46,10 @@
 
         <!-- login with facebook, forgot password -->
         <button id="loginWithFacebook" class="facebook">  <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png" id="facebookLogo"> Log in with Facebook </button>
+        <span id="verificationAlert"></span>
         <br>
         <button id="forgotPassword" class="facebook"> Forgot password? </button>
+
         
     </div>
 
@@ -152,5 +154,7 @@
     </div>
 
     <br> <br>
+    <script src="login.js"> </script>
 </body>
+
 </html>
