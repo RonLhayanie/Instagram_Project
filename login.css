@@ -206,7 +206,7 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 }
 
 
-#forgotPassword       /* forgot password button */
+#forgotPassword        /* forgot password button */
 {
     border: none;
     margin-top: 10px;

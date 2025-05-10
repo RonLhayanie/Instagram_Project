@@ -72,7 +72,6 @@ function verification()
         errorMsg.style.display = "block";
         errorMsg.innerHTML = "Username must be a real Email, Phone, or not to contain spaces/any spacial characters";
     }
-
 }
 
 
