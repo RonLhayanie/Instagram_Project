@@ -78,7 +78,7 @@ function verification()
 
 
 
-/* "show" button in password */
+/* "show" button in password */ 
 function show()
 {
     var passInput = document.getElementById("pass");
