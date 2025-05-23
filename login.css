@@ -1,21 +1,20 @@
 .main-div
 {
     text-align: center;
-    border: 1.5px solid rgba(219,219,219,255);
+    border: 1px solid rgba(219,219,219,255);
     margin: 10px auto;
-    margin-top: 80px;
 
     width: 350px; 
+    height: 60%;
     
 }
 
 #instaLogo
 {
-    margin-top: 30px;
-    margin-bottom: 10px;
-    width: 200px;
+    margin-top: 10%;
+    margin-bottom: 5%;
+    width: 50%;
 }
-
 
 .input-div
 {
@@ -26,17 +25,21 @@
 .userpassword       /* username and password input */       
 {
     position: relative;
-    border: 1.5px solid rgb(228, 228, 237);
+    border: 1px solid rgb(228, 228, 237);
     border-radius: 2.5px;
-    margin-bottom: 7px;
+    margin-bottom: 2%;
     background-color: rgba(250,250,250,255);
-    padding-left: 10px;
+    padding-left: 1.7%;
+    box-sizing: border-box;
 
-    width: 257px;
+    width: 77%;
     height: 35px;
-    font-size: 12px;
+    font-size: 10px;
+    letter-spacing: 20%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
     transition: border-color 0.3s ease;
+    transition: font-size 0.3s;
 }
 .userpassword:focus
 {
@@ -45,13 +48,12 @@
 }
 
 
-
 .labels     /* "placeholders" for input */
 {
     position: absolute;
     padding: 0 4px;
     background: none;
-    left: 46px;
+    left: 12.3%;
 
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11.5px;
@@ -63,18 +65,23 @@
 }
 #userlabel
 {
-    top: 13px;
+    top: 9%;
 }
 #passlabel
 {
-    top: 58.5px;
+    top: 42.5%;
 }
 input:not(:placeholder-shown) + label       /* moving the labels when the user start to write */
 {
     position: absolute;
     font-size: 9px;
-    transform: translateY(-10px);
+    transform: translateY(-55%);
     letter-spacing: 0.4px;
+}
+input:not(:placeholder-shown)   /* moving and reducing the font of the text when the user start to write */
+{
+    padding-top: 15px;
+    font-size: 70%;
 }
 
 
@@ -82,8 +89,8 @@ input:not(:placeholder-shown) + label       /* moving the labels when the user s
 {
     position: absolute;
     border: none;
-    top: 55px;
-    right: 45px;
+    top: 38%;
+    right: 12%;
     background: none;
 
     display: none;
@@ -107,10 +114,9 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 
 
 
-
 #LogIn      /* login button */      
 {
-    border: 1px solid deepskyblue;
+    border: 1px solid rgba(76,181,249,255);
     border-radius: 7px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -127,7 +133,6 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 {
     transform: scale(0.995);
 }
-
 
 
 .sp-div     /* dividing line with "or" */     
@@ -162,7 +167,6 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 
 
 
-
 #loginWithFacebook      /* Facebook button */   
 {
     align-items: center;
@@ -172,7 +176,7 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
     
 
     display: inline-flex;
-    font-size: 13px;
+    font-size: 80%;
     font-weight: 600;
     color: rgba(69,165,251,255);
 
@@ -205,7 +209,6 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
     
 }
 
-
 #forgotPassword        /* forgot password button */
 {
     border: none;
@@ -223,14 +226,14 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 }
 
 
-
 .second-div    
 {
     text-align: center;
-    border: 1.5px solid rgba(219,219,219,255);
+    border: 1px solid rgba(219,219,219,255);
     margin: 10px auto;
 
     width: 350px; 
+    height: 60%;
     
 }
 #signUp     /* sign up button */  
@@ -258,7 +261,6 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
 }
-
 
 
 
@@ -305,7 +307,6 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 
 
 
-
 #linksBar-div       /* bottom wordbar */
 {
     text-align: center;
@@ -334,7 +335,6 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 {
     color: rgba(216,216,216,255);
 }
-
 
 
 
@@ -369,3 +369,4 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
     font-size: 12px;
     color: #767676;
 }
+

@@ -7,7 +7,7 @@ function UsernameVerification()     /* check if the username is valid */
     
     var PatternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;     
     var PatternPhone = /^05\d{8}$/;
-    var PatternUsername = /^[^ %&$@()!?]{1,30}$/;
+    var PatternUsername = /^(?=\S{6,}$)(?=.*\d)(?=.*[^A-Za-z0-9])/;
 
     if(PatternEmail.test(usernameInput) == true)
     {
@@ -60,7 +60,7 @@ function verification()
     else if(isUsernameValid == false && isPasswordValid == false)
     {
         errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Username must be a real Email, Phone, or not to contain spaces/any spacial characters. <br> Password must contain at least 6 characters, and without spaces.";
+        errorMsg.innerHTML = "Username must be a real Email, Phone, or valid username. <br> Password must contain at least 6 characters, and without spaces.";
     }
     else if(isUsernameValid == true && isPasswordValid == false)
     {
@@ -70,7 +70,7 @@ function verification()
     else if(isUsernameValid == false && isPasswordValid == true)
     {
         errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Username must be a real Email, Phone, or not to contain spaces/any spacial characters";
+        errorMsg.innerHTML = "Username must be a real Email, Phone, or valid username";
     }
 }
 
@@ -96,3 +96,4 @@ function show()
 
 
 }
+
