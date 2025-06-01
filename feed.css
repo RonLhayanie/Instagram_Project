@@ -7,8 +7,13 @@ body {
       margin: 0;
       padding: 0;
       overflow: hidden; /* ביטול גלילה רגילה */
+
   }
   
+  .container{
+  justify-content: space-between;
+  align-items: flex-start; /* כדי ששניהם יהיו למעלה */
+  }
 
   /* left side bar */
   
@@ -103,19 +108,17 @@ body {
   
   /* right side bar */
   
-  .sidebar-right {
-  position: relative;
-  right: -1300;
-  top: -2050 ;
+.sidebar-right {
   width: 410px;
-  height: 100vh;
-  padding: 20px;
-  background-color: #fff;
   display: flex;
   flex-direction: column;
   gap: 25px;
-  }
-  
+  /* אין top ואין transform */
+  margin-left: 72%;
+  margin-top: -2050;
+  margin-bottom: -100%;
+
+}
   .right-pfp {
   display: flex;
   align-items: center;
@@ -351,14 +354,21 @@ color: #005289;
 /* main feed */
 /* עוטף של שורת הסטוריז */
 .stories-container {
-  position: relative;
   display: flex;
-  justify-content: center; /* ממקם את הסטוריז במרכז */
-  gap: 10px; /* נותן רווחים בין הסטוריז */
-  padding: 20px 0;
-  width: 100%;
-  margin-left: 530px; /* מזיז את הסטוריז מעט שמאלה (פחות מ-20px) */
-  max-width: 650px; /* מוודא שהסטוריז לא יגלשו */
+  justify-content: center; /* מרכז אופקי */
+  gap: 12px; /* רווח בין הסטוריז */
+  padding: 15px 10px;
+  width: 100%; /* תופס כל רוחב */
+  max-width: 650px; /* רוחב מקסימלי */
+  margin: 0 auto 20px auto; /* אוטומטי במרכז, מרווח מלמטה לפיד */
+  position: relative; /* אפשרי אם צריך */
+  z-index: 10; /* תמיד מעל הפוסטים */
+  box-sizing: border-box;
+  flex-wrap: nowrap; /* לא יעטפו לשורה חדשה */
+  overflow-x: auto; /* אופציונלי - רק אם יש יותר מדי סטוריז */
+  scrollbar-width: none; /* מסתיר סרגל גלילה ב-Firefox */
+  min-height: 100px; /* או כל גובה מתאים */
+  transform: translateX(-70px);
 }
 
 /* כל אלמנט סטורי */
@@ -382,6 +392,7 @@ color: #005289;
   padding: 3px; /* מוסיף רווח בין התמונה למסגרת */
   border-radius: 50%; /* שומר על העיגול */
   transition: background-image 0.3s ease; /* אפקט מעבר */
+
 }
 
 /* אפקט של הובר על התמונה */
@@ -405,6 +416,17 @@ cursor: pointer;
 
 .story-image-wrapper img {
   display: block;
+}
+
+@media (max-width: 480px) {
+  .story img {
+    width: 48px;
+    height: 48px;
+  }
+  .story-name {
+    max-width: 50px;
+    font-size: 10px;
+  }
 }
 
 /* סגנון לכפתור הגלילה */
@@ -436,16 +458,17 @@ cursor: pointer;
 /* post */
 
 /* סגנון לפוסט */
-.post {
-margin-left: -500;
-  width: 500px;
-  margin: 20px auto;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 15px;
-  transform: translateX(-80px); /* מזיז את הפוסט שמאלה */
+  .post {
+    
+  margin-left: -500;
+    width: 500px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    transform: translateX(-80px); /* מזיז את הפוסט שמאלה */
 
-}
+  }
 
 /* כותרת הפוסט (שם משתמש) */
 .post-header {
@@ -567,6 +590,9 @@ margin-left: -500;
 .feed {
   overflow-y: auto;
   height: 100vh;
+    display: flex;
+  flex-direction: column;
+  
 }
 
 .user-details {
