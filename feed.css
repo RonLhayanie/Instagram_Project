@@ -576,6 +576,21 @@ cursor: pointer;
   margin-left: 5px;
 }
 
+.like.pop{
+  transition: transform 0.2s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.like.pop {
+  animation: pop 0.4s ease;
+}
+
+
 .likes-count:hover {
   cursor: pointer;
 }
@@ -768,3 +783,4 @@ border-radius: 0%;
 .end-of-page {
 height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 }
+
