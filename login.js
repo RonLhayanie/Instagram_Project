@@ -7,7 +7,7 @@ function UsernameVerification()     /* check if the username is valid */
     
     var PatternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;     
     var PatternPhone = /^05\d{8}$/;
-    var PatternUsername = /^(?=\S{6,}$)(?=.*\d)(?=.*[^A-Za-z0-9])/;
+    var PatternUsername = /^(?=\S{1,}$)(?=.*\d)(?=.*[^A-Za-z0-9])/;
 
     if(PatternEmail.test(usernameInput) == true)
     {
@@ -97,3 +97,27 @@ function show()
 
 }
 
+
+const userInput = document.getElementById("user");
+const passInput = document.getElementById("pass");
+const button = document.getElementById("LogIn");
+userInput.addEventListener('input', ChangeLoginButton());
+passInput.addEventListener('input', ChangeLoginButton());
+
+function ChangeLoginButton()
+{
+    const IsUserFilled = userInput.value !== '';
+    const IsPassFilled = passInput.value !== '';
+
+    if (IsUserFilled && IsPassFilled)
+    {
+        button.classList.add('active');
+    }
+    else
+    {
+        button.classList.remove('active');
+    }
+
+}
+userInput.addEventListener('input', ChangeLoginButton());
+passInput.addEventListener('input', ChangeLoginButton());
