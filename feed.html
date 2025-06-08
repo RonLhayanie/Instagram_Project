@@ -24,10 +24,33 @@
           <span><b>Home</b></span>
         </div>
     
-        <div class="sidebar-item sidebar-hoverable">
+        <div id="search-toggle" class="sidebar-item sidebar-hoverable">
           <img src="https://cdn-icons-png.flaticon.com/256/54/54481.png" alt="searchbar">
           <span>Search</span>
         </div>
+
+              <div id="search-modal" class="search-modal">
+        <div class="search-header">
+          <h3>Search</h3>
+          <span id="close-search" class="close-btn">&times;</span>
+        </div>
+        <input type="text" class="search-input" placeholder="Search" />
+        <div class="recent-section">
+          <div class="recent-header">
+            <span>Recent</span>
+            <a href="#">Clear all</a>
+          </div>
+          <div class="recent-item">
+            <img src="https://randomuser.me/api/portraits/men/1.jpg" />
+            <div class="recent-text">
+              <span class="username">amit_ben_giat</span>
+              <span class="name">Amit Ben-Giat</span>
+            </div>
+            <span class="remove">✕</span>
+          </div>
+          <!-- תוכל לשכפל עוד recent-item כאלה -->
+        </div>
+      </div>
     
         <div class="sidebar-item sidebar-hoverable">
           <img src="https://www.svgrepo.com/show/26523/explore-tool.svg" alt="explore">

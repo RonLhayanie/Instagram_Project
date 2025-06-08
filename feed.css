@@ -69,6 +69,8 @@ body {
   width: 25px;
   height: 25px;
   cursor: pointer;
+  object-fit: contain;
+
   }
   
   #pfp-l {
@@ -784,3 +786,108 @@ border-radius: 0%;
 height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 }
 
+.search-modal {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  padding: 20px;
+  display: none;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-header h3 {
+  margin: 0;
+}
+
+.close-btn {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.search-input {
+  margin: 15px 0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+}
+
+.recent-section {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.recent-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.recent-item img {
+  width: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.recent-text {
+  flex-grow: 1;
+}
+
+.username {
+  font-weight: bold;
+  display: block;
+}
+
+.name {
+  font-size: 14px;
+  color: gray;
+}
+
+.remove {
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+}
+
+.sidebar-left.sidebar--collapsed .sidebar-item span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: 0.3s ease;
+}
+
+.sidebar-left .sidebar-item span {
+  transition: 0.3s ease;
+}
+
+#logo-img {
+  transition: opacity 0.3s ease;
+}
+.fade-out {
+  opacity: 0;
+}
