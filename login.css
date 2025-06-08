@@ -116,7 +116,7 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 
 #LogIn      /* login button */      
 {
-    border: 1px solid rgba(76,181,249,255);
+    border: 1px solid;
     border-radius: 7px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -125,13 +125,13 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
     width: 270px;
     height: 32px;
     color:white;
-    cursor:default;
 
+    cursor: pointer;
 
 }
-#Login.active
+#Login:active
 {
-    cursor: pointer;
+    transform: scale(0.995);
 }
 
 
