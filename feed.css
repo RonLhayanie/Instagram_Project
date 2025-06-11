@@ -72,6 +72,7 @@ body {
   object-fit: contain;
 
   }
+
   
   #pfp-l {
   width: 30px;
@@ -788,17 +789,25 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 
 .search-modal {
   position: fixed;
-  right: 0;
   top: 0;
+  left: 72px; /* ליד הסיידבר המצומצם */
   width: 400px;
   height: 100%;
   background: #fff;
   box-shadow: -2px 0 10px rgba(0,0,0,0.1);
-  z-index: 1000;
+  z-index: 9999;
   padding: 20px;
   display: none;
   flex-direction: column;
-  animation: slideIn 0.3s ease-in-out;
+  overflow-y: auto;
+  transform: translateX(-10px);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.search-modal.active {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 @keyframes slideIn {
@@ -879,6 +888,55 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   overflow: hidden;
   pointer-events: none;
   transition: 0.3s ease;
+  
+}
+
+.logo-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#logo-img-full,
+#logo-img-small {
+  position: absolute;
+  left: 10px;
+  margin-bottom: 15px;
+  transition: opacity 0.3s ease;
+}
+
+#logo-img-full {
+  height: 120px;
+  width: 120px;
+  opacity: 1;
+}
+
+#logo-img-small {
+  width: 22px;
+  opacity: 0;
+}
+
+/* כשמצמצמים סיידבר – להסתיר את הלוגו הגדול ולהציג הקטן */
+.sidebar--collapsed #logo-img-full {
+  opacity: 0;
+}
+
+.sidebar--collapsed #logo-img-small {
+  opacity: 1;
+}
+
+.sidebar-left.sidebar--collapsed {
+  width: 72px;
+    transition: width 0.3s ease;
+}
+
+.sidebar-left.sidebar--collapsed #lftlogo {
+  width: 22px;
+  margin-left: 3px;
+
 }
 
 .sidebar-left .sidebar-item span {

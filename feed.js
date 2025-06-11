@@ -65,7 +65,7 @@ saveButtons.forEach(function(btn) {
     const post = btn.closest(".post-actions").nextElementSibling; 
 
     if (btn.src.includes("https://cdn-icons-png.flaticon.com/256/3082/3082331.png")) { // empty save
-      btn.src = "https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvMTUzMjgvMTUzMjgzMzkucG5n&ts=1749345561&sig=2686ae3e55d63b9a15327b473f15a62c44ff5a9af80002517c0bf7499d1ce453"; // full save
+      btn.src = "https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvMTUzMjgvMTUzMjgzMzkucG5n&ts=1749665856&sig=a92e6f131b52b5e32899457722f0a9c896eff32037ee4f131e41bdd32ac6e65f"; // full save
 
     } else {
       btn.src = "https://cdn-icons-png.flaticon.com/256/3082/3082331.png"; // empty save
@@ -75,17 +75,27 @@ saveButtons.forEach(function(btn) {
  
 
 /// search function
-
 const toggleBtn = document.getElementById("search-toggle");
 const modal = document.getElementById("search-modal");
 const closeBtn = document.getElementById("close-search");
+const sidebarLeft = document.querySelector(".sidebar-left");
 
 toggleBtn.addEventListener("click", () => {
+  sidebarLeft.classList.add("sidebar--collapsed");
+  modal.classList.add("active");
   modal.style.display = "flex";
 });
 
 closeBtn.addEventListener("click", () => {
-  modal.style.display = "none";
+  sidebarLeft.classList.remove("sidebar--collapsed");
+  modal.classList.remove("active");
+
+  // מחכה שהאנימציה תסתיים לפני הסתרה מוחלטת
+  setTimeout(() => {
+    if (!modal.classList.contains("active")) {
+      modal.style.display = "none";
+    }
+  }, 300); // חייב להתאים ל-transition ב-CSS
 });
 
 ///hide sidebar-left spans
@@ -99,7 +109,8 @@ closeBtn.addEventListener("click", () => {
   searchToggle.addEventListener("click", () => {
     searchModal.style.display = "flex";
     sidebar.classList.add("sidebar--collapsed");
-    logoImg.src="https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvNzE3LzcxNzM5Mi5wbmc=&ts=1749347398&sig=4eefc2ee820fc804f911ac1f3910430db5093f80b1a0efdbcb624024b9af3f1d"
+    logoImg.classList.add("searchMode");
+    logoImg.src="https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvMTM4NC8xMzg0MDMxLnBuZw==&ts=1749666069&sig=150c3c7fcf870f9fd23836d52ce204889d1632b16d097eb384acae74dab3f1b6"
   });
 
   closeSearch.addEventListener("click", () => {
