@@ -11,13 +11,29 @@
 
   <body>
 
+    
+  <label class="switch-toggle">
+    <input type="checkbox" id="darkModeToggle" />
+    <span class="slider">
+      <span class="circle">
+        <img src="https://static.thenounproject.com/png/2540391-200.png" alt="Sun" class="icon sun" />
+        <img src="https://static.thenounproject.com/png/765894-200.png" alt="Moon" class="icon moon" />
+      </span>
+    </span>
+    <span class="label-text">Dark Mode</span>
+  </label>
+
+
+
   <div class="container">
     <aside class="sidebar-left">
 
+
       <div class="sidebar-top">
+        
       <div class="sidebar-item logo-container">
         <img id="logo-img-full" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png" alt="Instagram Logo">
-        <img id="logo-img-small" src="https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvMTM4NC8xMzg0MDMxLnBuZw==&ts=1749666069&sig=150c3c7fcf870f9fd23836d52ce204889d1632b16d097eb384acae74dab3f1b6" alt="Instagram Small Logo">
+        <img id="logo-img-small" src="https://www.svgrepo.com/show/506668/instagram.svg" alt="Instagram Small Logo">
       </div>
     
         <div class="sidebar-item sidebar-hoverable">
@@ -30,28 +46,168 @@
           <span>Search</span>
         </div>
 
-              <div id="search-modal" class="search-modal">
-        <div class="search-header">
-          <h3>Search</h3>
-          <span id="close-search" class="close-btn">&times;</span>
-        </div>
-        <input type="text" class="search-input" placeholder="Search" />
-        <div class="recent-section">
-          <div class="recent-header">
-            <span>Recent</span>
-            <a href="#">Clear all</a>
-          </div>
-          <div class="recent-item">
-            <img src="https://randomuser.me/api/portraits/men/1.jpg" />
-            <div class="recent-text">
-              <span class="username">amit_ben_giat</span>
-              <span class="name">Amit Ben-Giat</span>
-            </div>
-            <span class="remove">✕</span>
-          </div>
-          <!-- תוכל לשכפל עוד recent-item כאלה -->
-        </div>
+<div id="search-modal" class="search-modal">
+  <div class="search-header">
+    <h3>Search</h3>
+    <span id="close-search" class="close-btn">&times;</span>
+  </div>
+
+<div class="search-filter" >
+  <label>
+    <input type="radio" name="filter" value="username" checked>
+    Search username
+  </label>
+  <label style="margin-left: 15px;">
+    <input type="radio" name="filter" value="description">
+    Search post description
+  </label>
+</div>
+
+  <input type="text" class="search-input" placeholder="Search" />
+  <div class="recent-section">
+    <div class="recent-header">
+      <span id="Recent">Recent</span>
+      <a id="clearAll" href="#">Clear all</a>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/1.jpg" />
+      <div class="recent-text">
+        <span class="m_username">amit_ben_giat</span>
+        <span class="m_name">Amit Ben-Giat</span>
       </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/2.jpg" />
+      <div class="recent-text">
+        <span class="m_username">liron_cohen</span>
+        <span class="m_name">Liron Cohen</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/3.jpg" />
+      <div class="recent-text">
+        <span class="m_username">yonatan_d</span>
+        <span class="m_name">Yonatan Dahan</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/4.jpg" />
+      <div class="recent-text">
+        <span class="m_username">noga_levi</span>
+        <span class="m_name">Noga Levi</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/5.jpg" />
+      <div class="recent-text">
+        <span class="m_username">david_shapira</span>
+        <span class="m_name">David Shapira</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/6.jpg" />
+      <div class="recent-text">
+        <span class="m_username">talya_m</span>
+        <span class="m_name">Talya M.</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/7.jpg" />
+      <div class="recent-text">
+        <span class="m_username">shai_gil</span>
+        <span class="m_name">Shai Gil</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/8.jpg" />
+      <div class="recent-text">
+        <span class="m_username">orly_p</span>
+        <span class="m_name">Orly Peretz</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/9.jpg" />
+      <div class="recent-text">
+        <span class="m_username">ron_lhayanie</span>
+        <span class="m_name">Ron Lhayanie</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" />
+      <div class="recent-text">
+        <span class="m_username">aya_katz</span>
+        <span class="m_name">Aya Katz</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/11.jpg" />
+      <div class="recent-text">
+        <span class="m_username">dani_lev</span>
+        <span class="m_name">Dani Lev</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/12.jpg" />
+      <div class="recent-text">
+        <span class="m_username">moran_s</span>
+        <span class="m_name">Moran Shaked</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/13.jpg" />
+      <div class="recent-text">
+        <span class="m_username">erez_b</span>
+        <span class="m_name">Erez Barak</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/14.jpg" />
+      <div class="recent-text">
+        <span class="m_username">shira_cohen</span>
+        <span class="m_name">Shira Cohen</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/15.jpg" />
+      <div class="recent-text">
+        <span class="m_username">yossi_t</span>
+        <span class="m_name">Yossi Tamir</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+  </div>
+</div>
+
     
         <div class="sidebar-item sidebar-hoverable">
           <img src="https://www.svgrepo.com/show/26523/explore-tool.svg" alt="explore">
@@ -96,7 +252,7 @@
         </div>
       </div>
     
-    </aside>
+    </aside>  
 
   <main class="feed">
       <div class="stories-container">
@@ -176,7 +332,7 @@
             <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
             <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
           </div>
-          <img class="save" src="https://cdn-icons-png.flaticon.com/256/3082/3082331.png" alt="savebtn" title="Save">
+          <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
         </div>
 
         <div class="post-description">
@@ -241,7 +397,7 @@
           <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
           <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
         </div>
-        <img class="save" src="https://cdn-icons-png.flaticon.com/256/3082/3082331.png" alt="savebtn" title="Save">
+        <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
       </div>
 
       <div class="post-description">
@@ -302,7 +458,7 @@
               <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
               <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
             </div>
-            <img class="save" src="https://cdn-icons-png.flaticon.com/256/3082/3082331.png" alt="savebtn" title="Save">
+            <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
           </div>
     
           <div class="post-description">
@@ -333,8 +489,10 @@
               </div>
         </div>
         </div>
-    
           
+
+
+
   <!--
 
   /* right side bar */
@@ -355,7 +513,7 @@
         <div class="suggested-section">
         <div class="suggested-header">
         <span>Suggested for you</span>
-        <a href="#" class="a">See All</a>
+        <a href="#" class="SeeAll">See All</a>
         </div>
         
         <div class="suggested-user">
@@ -441,8 +599,15 @@
             <div class="copyright">© 2025 INSTAGRAM FROM META</div>
           </div>
         </aside>
-  </div>>
+        </main>
 
+          <button id="scrollToTopBtn" title="Back to Top">
+    <img src="https://ps.w.org/wpfront-scroll-top/assets/icon.svg?rev=1534312" alt="Scroll to Top" />
+  </button>
+
+  </div>>
+  
+  
   <script src="feed.js"></script>
   </body>
   </html>

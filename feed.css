@@ -1,23 +1,253 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
-  
-  html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden; /* ביטול גלילה רגילה */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* ביטול גלילה רגילה */
+    }
+    
+    .container{
+    justify-content: space-between;
+    align-items: flex-start; /* כדי ששניהם יהיו למעלה */
+    z-index: 10;
+    }
 
+    #scrollToTopBtn {
+      position: fixed;
+      bottom: 10px;
+      right: 180px;
+      background: #ffffff;
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 9999;
+      display: block;
+    }
+
+    #scrollToTopBtn img {
+      width: 30px;
+      height: 30px;
+    }
+
+body.dark-mode #scrollToTopBtn {
+  background: #000000;
+}
+
+body.dark-mode #scrollToTopBtn img {
+  filter: invert(1); /* שחור בדארק */
+}
+    
+    body.dark-mode .sidebar-left ,
+      body.dark-mode ,  body.dark-mode .post
+      , body.dark-mode .add-comment-box
+      , body.dark-mode .seeAll, body.dark-mode .story-name
+    , body.dark-mode .post-text
+      , body.dark-mode .likes-count
+      , body.dark-mode .user-name
+        , body.dark-mode .more-options
+        , body.dark-mode .search-modal
+        , body.dark-mode .search-input
+      {
+    background-color: #000;
+    color: white;
+    fill: white;
   }
-  
-  .container{
-  justify-content: space-between;
-  align-items: flex-start; /* כדי ששניהם יהיו למעלה */
+
+
+  body.dark-mode .stories-container img {
+    border: 4px solid black;
+  }
+
+  /* הופך תמונות רק בתוך הסיידבר השמאלי */
+  body.dark-mode .sidebar-left img,
+  body.dark-mode .post-actions img{
+    filter: invert(1);
+  }
+
+  body.dark-mode img.like.liked {
+    filter: none !important;
+  }
+
+  body.dark-mode .search-modal .recent-item img {
+    filter: none !important;
+  }
+
+  body.dark-mode .recent-item:hover {
+    background-color: #2c2c2c; /* אפור כהה */
+  }
+  body.dark-mode .search-modal {
+    border-left: 1px solid black;
+  }
+  body.dark-mode .search-modal .search-input::placeholder {
+    color: #aaaaaa;
+  }
+  body.dark-mode .search-modal .search-input {
+    background-color: #262626;       /* מעט בהיר מהרקע הראשי */
+    color: #fff;}
+
+  body.dark-mode .search-modal {
+    scrollbar-width: thin;                  /* לפיירפוקס */
+    scrollbar-color: #bbbbbb #2f2f2f;          /* thumb (בהיר), track (כהה) */
+  }
+    body.dark-mode {
+    scrollbar-width:thin;                  /* לפיירפוקס */
+    scrollbar-color: #bbbbbb #2f2f2f;          /* thumb (בהיר), track (כהה) */
+  }
+
+  body.dark-mode .search-modal::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  body.dark-mode .search-modal::-webkit-scrollbar-track {
+    background: #2a2a2a;                    /* רקע פס הגלילה – כהה */
+  }
+
+
+
+  body.dark-mode .search-modal::-webkit-scrollbar-button:single-button:vertical:decrement {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="8" width="8" xmlns="http://www.w3.org/2000/svg"><polygon points="0,6 4,2 8,6"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 10px;
+    display: block;
+  }
+
+  body.dark-mode .search-modal::-webkit-scrollbar-button:single-button:vertical:increment {
+    display: none; /* אין חץ למטה */
+  }
+
+
+
+  body.dark-mode ::-webkit-scrollbar-button {
+    display: block;
+    height: 12px;
+    background-color: #333;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-button:vertical:decrement {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24'><path d='M7 14l5-5 5 5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-button:vertical:increment {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  body.dark-mode .sidebar-left {
+    border-right: 1px solid #282828 !important; 
+  }
+  body.dark-mode .recent-section{
+    border-top: 1px solid #282828;
+  }
+  body.dark-mode #post3{
+    border-top: 1px solid #282828;
+  }
+    body.dark-mode #post1{
+    border-bottom: 1px solid #282828;
+  }
+
+  /* כפתור מתג Dark Mode קבוע למעלה */
+
+
+  .switch-toggle {
+    position: fixed;;
+    bottom: 20px;
+    right: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+    transition: color 0.3s ease;
+  }
+
+
+  body.dark-mode .switch-toggle {
+    color: white;
+  }
+
+  .switch-toggle input {
+    display: none;
+  }
+
+  .slider {
+    position: relative;
+    width: 55px;
+    height: 26px;
+    background-color: #ccc; /* רקע אפור בהתחלה */
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: inset 0 0 5px #aaa;
+  }
+
+  body.dark-mode .slider {
+    background-color: #fff; /* רקע לבן בדארק */
+  }
+
+  .circle {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: white; /* עיגול לבן בהתחלה */
+    border-radius: 50%;
+    transition: left 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  body.dark-mode .circle {
+    left: 33px;
+    background-color: black; /* עיגול שחור בדארק */
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+
+  .sun {
+    opacity: 1;
+  }
+
+  .moon {
+    opacity: 0;
+    filter: invert(1);
+  }
+
+  body.dark-mode .sun {
+    opacity: 0;
+  }
+
+  body.dark-mode .moon {
+    opacity: 1;
   }
 
   /* left side bar */
   
   .sidebar-left {
+    z-index: 9999999;
     position: fixed;
   display: flex;
   flex-direction: column;
@@ -34,7 +264,7 @@ body {
   .sidebar-items {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap:20px;
   }
   
   .sidebar-top {
@@ -405,7 +635,7 @@ color: #005289;
 
 /* שם משתמש */
 .story-name {
-  color: #333; /* צבע כהה יותר לשם */
+  color: #000000; /* צבע כהה יותר לשם */
   font-size: 12px; /* גודל טקסט לשם */
 }
 .story-name:hover{
@@ -790,89 +1020,172 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 .search-modal {
   position: fixed;
   top: 0;
-  left: 72px; /* ליד הסיידבר המצומצם */
+  left: 72px;
   width: 400px;
   height: 100%;
   background: #fff;
-  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  border-top-right-radius: 3%;
+  box-shadow: 3px 0 5px rgba(0,0,0,0.1);
+  border-left: 1px solid #f3f3f3;
   z-index: 9999;
-  padding: 20px;
   display: none;
   flex-direction: column;
   overflow-y: auto;
-  transform: translateX(-10px);
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateX(-10px);
+  transition: transform 0.5s ease, opacity 0.5s ease; 
+  pointer-events: none;
+}
+
+.search-filter{
+margin-bottom: 10px;
+margin-left: 20px;
 }
 
 .search-modal.active {
-  transform: translateX(0);
+  display: flex; 
   opacity: 1;
+  pointer-events: auto;
+  animation: slideIn 0.5s ease forwards;
+
 }
 
+.search-modal.closing {
+  animation: slideOut 0.5s ease forwards;
+  opacity: 0;
+  pointer-events: none;
+
+}
+
+
 @keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
+  from { transform: translateX(-100%); opacity: 0; }
   to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
 }
 
 .search-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: 5px;
+  padding: 20px;
+}
+
+.search-input::placeholder {
+  font-weight: 100; /* מוריד הדגשה */
+  color: #888;          /* אפור נעים לעין */
+  opacity: 1;  
 }
 
 .search-header h3 {
   margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .close-btn {
   font-size: 24px;
   cursor: pointer;
+  margin-bottom: 30px;
+
 }
 
 .search-input {
   margin: 15px 0;
-  padding: 10px;
+  padding: 12px;
   width: 100%;
-  border-radius: 12px;
-  border: 1px solid #ccc;
+  border-radius: 7px;
+  border:none;
+  background-color: #f1f1f1;
+  font-size:16px ;
+  direction: auto;
+  unicode-bidi: plaintext; /* זהו הקסם שמזהה נכון את כיוון השפה */
+  margin: 0 20px;         /* ריווח חיצוני מהצדדים של המודל */
+  width: calc(100% - 40px); /* כדי שהשדה לא יגלוש מהקונטיינר */
+  margin-bottom: 15;
+}
+
+.search-input:focus {
+  outline: none;          
+  border-color: #ccc;      
+  box-shadow: none;        
 }
 
 .recent-section {
   overflow-y: auto;
   flex-grow: 1;
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.search-modal, .recent-section {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; 
 }
 
 .recent-header {
   display: flex;
   justify-content: space-between;
   font-weight: bold;
-  margin-bottom: 10px;
+  padding: 20;
 }
 
 .recent-item {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  padding: 10px;
+  box-sizing: border-box; 
+  width: 100%;
+}
+
+.recent-item:hover{
+  background-color: #f1f1f1;
+  cursor: pointer;
 }
 
 .recent-item img {
-  width: 40px;
+  width: 45px;
   border-radius: 50%;
   margin-right: 10px;
+  margin-left: 10px;
 }
 
 .recent-text {
   flex-grow: 1;
+font-weight: normal;
 }
 
-.username {
-  font-weight: bold;
+#clearALL{
+text-decoration: none;
+font-weight: 600;
+font-size:15px ;
+color: #3143E3;
+}
+
+#clearALL:hover{
+text-decoration: underline;
+}
+
+#Recent{
+font-weight: 600;
+
+}
+
+.m_username {
   display: block;
+  font-size: 15px;
+  font-weight: 600;
 }
 
-.name {
-  font-size: 14px;
+.m_name {
+  font-size: 15px;
   color: gray;
 }
 
@@ -903,19 +1216,21 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 #logo-img-full,
 #logo-img-small {
   position: absolute;
-  left: 10px;
-  margin-bottom: 15px;
+  left: 6px;
+  margin-bottom: 14px;
   transition: opacity 0.3s ease;
 }
 
 #logo-img-full {
-  height: 120px;
+  height: auto;
   width: 120px;
+
   opacity: 1;
 }
 
 #logo-img-small {
-  width: 22px;
+  width: 32px;
+  height: auto;
   opacity: 0;
 }
 
@@ -929,7 +1244,7 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
 }
 
 .sidebar-left.sidebar--collapsed {
-  width: 72px;
+  width: 40px;
     transition: width 0.3s ease;
 }
 

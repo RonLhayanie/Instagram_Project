@@ -1,34 +1,55 @@
-///like pop and update likes
+// toggle dark mode
+  const toggle = document.getElementById('darkModeToggle');
+  toggle.addEventListener('change', () => {
+    document.body.classList.toggle('dark-mode', toggle.checked);
+    });
+
+    /// scroll to top button
+  const feed = document.querySelector("main.feed");
+  const scrollBtn = document.getElementById("scrollToTopBtn");
+
+  feed.addEventListener("scroll", () => {
+    if (feed.scrollTop > 50) {
+      scrollBtn.style.display = "block";
+    } else {
+      scrollBtn.style.display = "none";
+    }
+  });
+
+  scrollBtn.addEventListener("click", () => {
+    feed.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+
+// like pop
 
 const likeButtons = document.querySelectorAll(".like");
 
 likeButtons.forEach(function(btn) {
   btn.addEventListener("click", function() {
-
     const post = btn.closest(".post-actions").nextElementSibling; 
     const likesCountSpan = post.querySelector(".likes-count");
-
     let currentLikes = parseInt(likesCountSpan.textContent.replace(/,/g, ''));
 
-    if (btn.src.includes("https://cdn-icons-png.flaticon.com/256/130/130195.png")) { // empty heart
-      btn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"; // full heart
-      likesCountSpan.textContent = (currentLikes + 1).toLocaleString() + " likes";
+    const isLiked = btn.src.includes("2107845.png"); // full heart
 
-              btn.classList.add("pop");
-  setTimeout(() => {
-    btn.classList.remove("pop");
-  }, 400);
-  
+    if (!isLiked) {
+      btn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"; // full heart
+      btn.classList.add("liked");
+      likesCountSpan.textContent = (currentLikes + 1).toLocaleString() + " likes";
     } else {
       btn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png"; // empty heart
+      btn.classList.remove("liked");
       likesCountSpan.textContent = Math.max(0, currentLikes - 1).toLocaleString() + " likes";
-
-        btn.classList.add("pop");
-  setTimeout(() => {
-    btn.classList.remove("pop");
-  }, 400);
-
     }
+
+    // POP animation
+    btn.classList.add("pop");
+    setTimeout(() => {
+      btn.classList.remove("pop");
+    }, 400);
   });
 });
  
@@ -64,39 +85,105 @@ saveButtons.forEach(function(btn) {
 
     const post = btn.closest(".post-actions").nextElementSibling; 
 
-    if (btn.src.includes("https://cdn-icons-png.flaticon.com/256/3082/3082331.png")) { // empty save
-      btn.src = "https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvMTUzMjgvMTUzMjgzMzkucG5n&ts=1749665856&sig=a92e6f131b52b5e32899457722f0a9c896eff32037ee4f131e41bdd32ac6e65f"; // full save
+    if (btn.src.includes("https://static.thenounproject.com/png/bookmark-icon-809338-512.png")) { // empty save
+      btn.src="https://static.thenounproject.com/png/bookmark-icon-809340-512.png"; // full save
 
     } else {
-      btn.src = "https://cdn-icons-png.flaticon.com/256/3082/3082331.png"; // empty save
+      btn.src = "https://static.thenounproject.com/png/bookmark-icon-809338-512.png"; // empty save
     }
   });
 });
  
 
 /// search function
+
 const toggleBtn = document.getElementById("search-toggle");
 const modal = document.getElementById("search-modal");
 const closeBtn = document.getElementById("close-search");
 const sidebarLeft = document.querySelector(".sidebar-left");
 
+const animationDuration = 500; // זמן האנימציה במילישניות (0.5 שניות)
+
 toggleBtn.addEventListener("click", () => {
   sidebarLeft.classList.add("sidebar--collapsed");
-  modal.classList.add("active");
-  modal.style.display = "flex";
+
+  modal.classList.remove("closing");
+  modal.style.display = "flex";  // חשוב להציג קודם
+  requestAnimationFrame(() => {
+    modal.classList.add("active");
+  });
 });
 
 closeBtn.addEventListener("click", () => {
   sidebarLeft.classList.remove("sidebar--collapsed");
-  modal.classList.remove("active");
 
-  // מחכה שהאנימציה תסתיים לפני הסתרה מוחלטת
+  modal.classList.remove("active");
+  modal.classList.add("closing");
+
   setTimeout(() => {
-    if (!modal.classList.contains("active")) {
-      modal.style.display = "none";
-    }
-  }, 300); // חייב להתאים ל-transition ב-CSS
+    modal.classList.remove("closing");
+    modal.style.display = "none";  // להסתיר רק אחרי האנימציה
+  }, animationDuration);
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const clearAllBtn = document.getElementById('clearAll');
+  const recentSection = modal.querySelector('.recent-section');
+  const searchInput = modal.querySelector('.search-input');
+  const filterRadios = modal.querySelectorAll('input[name="filter"]');
+
+  // מחיקת פריט ספציפי - עם עצירת התפשטות האירוע
+  recentSection.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove')) {
+      e.stopPropagation();
+      const item = e.target.closest('.recent-item');
+      if (item) item.remove();
+    }
+  });
+
+  clearAllBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const items = recentSection.querySelectorAll('.recent-item');
+    items.forEach(item => item.remove());
+  });
+
+  //// חיפוש לפי פילטר
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase().trim();
+  const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value || 'username';
+
+  // --- חיפוש במשתמשים (recent-item)
+  const items = recentSection.querySelectorAll('.recent-item');
+  items.forEach(item => {
+    if (selectedFilter === 'username') {
+      const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
+      const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
+      const textToSearch = username + ' ' + name;
+
+      item.style.display = textToSearch.includes(query) ? "" : "none";
+    } else {
+      item.style.display = "";
+    }
+  });
+
+  const posts = document.querySelectorAll('.post');
+  console.log("Number of posts found:", posts.length);
+  posts.forEach((post) => {
+  if (selectedFilter === 'description') {
+    const shortText = post.querySelector('.short-text')?.textContent.toLowerCase() || "";
+    const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
+    const description = shortText + " " + fullText;
+  console.log("בדיקה לפוסט:", post.id, "| טקסט:", description);
+    post.style.display = description.includes(query) ? "block" : "none";
+  } else {
+    post.style.display = "";
+  }
+});
+});
+});
+
+
 
 ///hide sidebar-left spans
 
@@ -104,13 +191,14 @@ closeBtn.addEventListener("click", () => {
   const searchModal = document.getElementById("search-modal");
   const closeSearch = document.getElementById("close-search");
   const sidebar = document.querySelector(".sidebar-left");
-  const logoImg = document.getElementById("lftlogo");
+  const logoImg = document.getElementById("logo-img-full");
+
+
 
   searchToggle.addEventListener("click", () => {
     searchModal.style.display = "flex";
     sidebar.classList.add("sidebar--collapsed");
     logoImg.classList.add("searchMode");
-    logoImg.src="https://i.pinimgproxy.com/?url=aHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS8yNTYvMTM4NC8xMzg0MDMxLnBuZw==&ts=1749666069&sig=150c3c7fcf870f9fd23836d52ce204889d1632b16d097eb384acae74dab3f1b6"
   });
 
   closeSearch.addEventListener("click", () => {
@@ -119,4 +207,18 @@ closeBtn.addEventListener("click", () => {
     logoImg.src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png"
   });
 
+  document.addEventListener("click", (event) => {
+    const isClickInside =
+      searchModal.contains(event.target) ||
+      searchToggle.contains(event.target) ||
+      sidebar.contains(event.target);
+
+    if (!isClickInside && searchModal.style.display === "flex") {
+      searchModal.style.display = "none";
+      sidebar.classList.remove("sidebar--collapsed");
+      logoImg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";
+    }
+  });
   
+
+
