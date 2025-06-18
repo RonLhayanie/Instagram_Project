@@ -9,7 +9,7 @@
   const scrollBtn = document.getElementById("scrollToTopBtn");
 
   feed.addEventListener("scroll", () => {
-    if (feed.scrollTop > 50) {
+    if (feed.scrollTop > 100) {
       scrollBtn.style.display = "block";
     } else {
       scrollBtn.style.display = "none";
@@ -167,19 +167,43 @@ searchInput.addEventListener('input', () => {
     }
   });
 
-  const posts = document.querySelectorAll('.post');
-  console.log("Number of posts found:", posts.length);
-  posts.forEach((post) => {
+const posts = document.querySelectorAll('.posts-wrapper .post');
+const sidebar = document.querySelector('.sidebar-right');
+let anyVisible = false;
+let hiddenCount = 0;
+
+posts.forEach((post) => {
+  const shortText = post.querySelector('.short-text')?.textContent.toLowerCase() || "";
+  const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
+  const description = shortText + " " + fullText;
+
   if (selectedFilter === 'description') {
-    const shortText = post.querySelector('.short-text')?.textContent.toLowerCase() || "";
-    const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
-    const description = shortText + " " + fullText;
-  console.log("בדיקה לפוסט:", post.id, "| טקסט:", description);
-    post.style.display = description.includes(query) ? "block" : "none";
+    const isMatch = description.includes(query);
+    post.style.display = isMatch ? "block" : "none";
+    if (isMatch) anyVisible = true;
+    else hiddenCount++;
   } else {
     post.style.display = "";
+    anyVisible = true;
   }
 });
+
+// עדכון קלאסים לפי מספר ההסתרות
+sidebar.classList.remove('hide-1', 'hide-2', 'hide-3plus');
+
+if (hiddenCount === 1) {
+  sidebar.classList.add('hide-1');
+} else if (hiddenCount === 2) {
+  sidebar.classList.add('hide-2');
+} else if (hiddenCount >= 3) {
+  sidebar.classList.add('hide-3plus');
+}else if (hiddenCount === 0) {
+  sidebar.classList.add('hide-0');
+}
+
+// הודעה אם אין בכלל פוסטים
+const noPostsMessage = document.getElementById('no-posts-message');
+noPostsMessage.style.display = anyVisible ? 'none' : 'block';
 });
 });
 
@@ -220,5 +244,6 @@ searchInput.addEventListener('input', () => {
     }
   });
   
+
 
 
