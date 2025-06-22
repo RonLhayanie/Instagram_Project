@@ -77,6 +77,10 @@ body.dark-mode #scrollToTopBtn {
   
     body.dark-mode .modal-username
     ,body.dark-mode .modal-post-description
+    ,body.dark-mode .comment-username
+    ,body.dark-mode .comment-text
+
+
     {
     color: white;
     }
@@ -97,6 +101,7 @@ body.dark-mode #scrollToTopBtn img {
         , body.dark-mode .more-options
         , body.dark-mode .search-modal
         , body.dark-mode .search-input
+        
       {
     background-color: #000;
     color: white;
