@@ -354,7 +354,10 @@
           </p>
           <div class="comment-section">
               <p class="view-comments"><span class="view-comments-text">View all 24 comments</span></p>
-              
+               <div class="comments-list">
+              <!-- שדה מצב כתיבה -->
+
+                </div>
               <div class="comment-row">
                   <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
                   <span class="post-button">Post</span>
@@ -364,6 +367,7 @@
                 </div>
             </div>
             </div>
+            
       </div>
       
 
@@ -419,7 +423,18 @@
         </p>
         <div class="comment-section">
             <p class="view-comments"><span class="view-comments-text">View all 67 comments</span></p>
-            
+             <div class="comments-list">
+                                <!-- תגובות קיימות של משתמשים -->
+              <!-- תגובות נוספות... -->
+              <!-- שדה מצב כתיבה -->
+              <div class="comment writing" style="display: none;">
+                <img src="MY_AVATAR_URL" alt="Me" class="comment-avatar">
+                <div class="comment-content">
+                  <span class="comment-username">my_username</span>
+                  <span class="comment-text text-gray">is writing a comment...</span>
+                </div>
+              </div>
+                </div>
             <div class="comment-row">
                 <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
                 <span class="post-button">Post</span>
@@ -482,7 +497,18 @@
             </p>
             <div class="comment-section">
                 <p class="view-comments"><span class="view-comments-text">View all 92 comments</span></p>
-                
+                <div class="comments-list">
+                                <!-- תגובות קיימות של משתמשים -->
+              <!-- תגובות נוספות... -->
+              <!-- שדה מצב כתיבה -->
+              <div class="comment writing" style="display: none;">
+                <img src="MY_AVATAR_URL" alt="Me" class="comment-avatar">
+                <div class="comment-content">
+                  <span class="comment-username">my_username</span>
+                  <span class="comment-text text-gray">is writing a comment...</span>
+                </div>
+              </div>
+                </div>
                 <div class="comment-row">
                     <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
                     <span class="post-button">Post</span>
@@ -598,21 +624,195 @@
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
         <a href="#" class="break-line"></a>
-            <a href="#">Locations</a>
+            <a id="loc" href="#">Locations</a>
             <a href="#">Language</a>
             <a href="#">Meta Verified</a>
             <div class="copyright">© 2025 INSTAGRAM FROM META</div>
           </div>
         </aside>
+        
          </main>
 
           <button id="scrollToTopBtn" title="Back to Top" style="display: none;">
     <img src="https://ps.w.org/wpfront-scroll-top/assets/icon.svg?rev=1534312" alt="Scroll to Top" />
   </button>
+  
+<div class="comment-modal" style="display:none;">
+  <div class="modal-content">
+    
+    <div class="modal-left">
+      <img src="POST_IMAGE_URL" alt="Post Image" class="modal-post-image">
+    </div>
 
-  </div>>
-  
-  
+    <div class="modal-right">
+      <div class="modal-header">
+        <div class="modal-user-info">
+          <img src="" alt="User" class="modal-user-avatar">
+          <span class="modal-username"></span>
+        </div>
+        <button class="modal-options">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <circle cx="6" cy="12" r="1.5"/>
+            <circle cx="12" cy="12" r="1.5"/>
+            <circle cx="18" cy="12" r="1.5"/>
+          </svg>
+        </button>
+        <button class="modal-close" aria-label="Close">&times;</button>
+      </div>
+
+      <!-- תיאור -->
+      <div class="modal-user-info modal-summary-row">
+        <div class="typing-indicator" style="display:none; color:gray; font-style:italic; padding: 0 16px;"></div>
+        <img src="" alt="User" class="modal-user-avatar">
+        <span class="modal-username"></span>
+        <span class="modal-post-description"></span>
+      </div>
+
+      <!-- תגובות נגללות -->
+       <div class="modal-scrollable-comments-wrapper">
+      <div class="comments-list">
+            <div class="comment-item writing" style="display: none;" id="writing-indicator">
+      <img src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="Me" class="comment-avatar" />
+      <div id="isWritingContent" class="comment-content">
+        <span id="IWusername" class="comment-username">_ron_lhayanie</span>
+        <span id="IWtext" class="comment-text text-gray">is writing a comment...</span>
+      </div>
+    </div>
+
+      </div>
+      </div>
+
+
+      <!-- אזור סטטי: כפתורים, לייקים ותאריך -->
+      <div class="modal-footer-static">
+        <div class="modal-post-actions">
+          <div class="left-actions">
+            <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn" title="Like">
+            <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
+            <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
+          </div>
+          <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
+        </div>
+
+        <div class="modal-likes-date">
+          <div class="modal-likes-count">0 likes</div>
+          <div class="modal-post-date">June 19, 2025</div>
+        </div>
+      </div>
+
+      <!-- כתיבת תגובה -->
+      <div class="comment-input">
+        <button type="button" class="emoji-button" aria-label="Open emoji picker">
+          <svg aria-label="Emoji" class="emoji" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24">
+            <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"/>
+          </svg>
+        </button>
+        <textarea placeholder="Add a comment..."></textarea>
+        <button class="send-comment">Post</button>
+      </div>
+      
+    </div>
+
+</div>
+  </div>
+
+
+          <!-- מיכל תפריט האימוג'ים, נסתר בהתחלה -->
+    <div id="emoji-picker" class="emoji-picker" style="display:none; position:absolute;  padding:10px; max-width:250px; max-height:150px; overflow:auto; z-index:1000;">
+      <!-- כאן נטעין אימוג'ים דוגמא, אפשר להרחיב -->
+<span class="emoji-item">😀</span>
+<span class="emoji-item">😃</span>
+<span class="emoji-item">😄</span>
+<span class="emoji-item">😁</span>
+<span class="emoji-item">😆</span>
+<span class="emoji-item">😂</span>
+<span class="emoji-item">🤣</span>
+<span class="emoji-item">😊</span>
+<span class="emoji-item">😍</span>
+<span class="emoji-item">😘</span>
+<span class="emoji-item">🥰</span>
+<span class="emoji-item">😎</span>
+<span class="emoji-item">🤔</span>
+<span class="emoji-item">😢</span>
+<span class="emoji-item">😭</span>
+<span class="emoji-item">😡</span>
+<span class="emoji-item">😱</span>
+
+<!-- מחוות ידיים -->
+<span class="emoji-item">👍</span>
+<span class="emoji-item">👎</span>
+<span class="emoji-item">👌</span>
+<span class="emoji-item">✌️</span>
+<span class="emoji-item">🙏</span>
+<span class="emoji-item">👏</span>
+<span class="emoji-item">💪</span>
+<span class="emoji-item">🖐️</span>
+<span class="emoji-item">🤝</span>
+
+<!-- לבבות ואהבה -->
+<span class="emoji-item">❤️</span>
+<span class="emoji-item">🧡</span>
+<span class="emoji-item">💛</span>
+<span class="emoji-item">💚</span>
+<span class="emoji-item">💙</span>
+<span class="emoji-item">💜</span>
+<span class="emoji-item">🖤</span>
+<span class="emoji-item">💔</span>
+<span class="emoji-item">💖</span>
+<span class="emoji-item">💕</span>
+<span class="emoji-item">💞</span>
+
+<!-- אש, חגיגות, מזל -->
+<span class="emoji-item">🔥</span>
+<span class="emoji-item">🎉</span>
+<span class="emoji-item">🎊</span>
+<span class="emoji-item">✨</span>
+<span class="emoji-item">🌟</span>
+<span class="emoji-item">💫</span>
+<span class="emoji-item">🍀</span>
+
+<!-- אוכל ושתייה -->
+<span class="emoji-item">🍕</span>
+<span class="emoji-item">🍔</span>
+<span class="emoji-item">🍟</span>
+<span class="emoji-item">🌮</span>
+<span class="emoji-item">🍩</span>
+<span class="emoji-item">🍦</span>
+<span class="emoji-item">🍎</span>
+<span class="emoji-item">🍉</span>
+<span class="emoji-item">🍫</span>
+<span class="emoji-item">☕</span>
+<span class="emoji-item">🥤</span>
+
+<!-- סמלים וכוכבים -->
+<span class="emoji-item">✔️</span>
+<span class="emoji-item">❌</span>
+<span class="emoji-item">⚠️</span>
+<span class="emoji-item">🔔</span>
+<span class="emoji-item">⭐</span>
+<span class="emoji-item">🌈</span>
+<span class="emoji-item">☀️</span>
+<span class="emoji-item">🌙</span>
+<span class="emoji-item">❄️</span>
+<span class="emoji-item">💤</span>
+
+<!-- חיות חמודות -->
+<span class="emoji-item">🐶</span>
+<span class="emoji-item">🐱</span>
+<span class="emoji-item">🐻</span>
+<span class="emoji-item">🐼</span>
+<span class="emoji-item">🦊</span>
+<span class="emoji-item">🐨</span>
+<span class="emoji-item">🐸</span>
+<span class="emoji-item">🐧</span>
+<span class="emoji-item">🐥</span>
+<span class="emoji-item">🦄</span>
+      <!-- הוסף עוד לפי הצורך -->
+    </div>
+
+
+    </div>
+  </div>> 
   <script src="feed.js"></script>
   </body>
-  </html>
+  </html> 
