@@ -401,16 +401,19 @@ document.querySelectorAll('.view-comments-text').forEach(viewBtn => {
 
 
 function openCommentModal() {
+    const sidebar = document.querySelector('.sidebar-left');
+  const scrollBtn = document.querySelector('#scrollToTopBtn');
+
+
   const modal = document.querySelector('.comment-modal');
   modal.style.display = 'flex';
     setTimeout(() => {
     modal.classList.add('active');
+      if (sidebar) sidebar.classList.add('dimmable', 'dimmed');
+      if (scrollBtn) scrollBtn.classList.add('dimmable', 'dimmed');
   }, 10);
 
-  const sidebar = document.querySelector('.sidebar-left');
-  const scrollBtn = document.querySelector('#scrollToTopBtn');
-  if (sidebar) sidebar.classList.add('disable-interactions');
-  if (scrollBtn) scrollBtn.classList.add('disable-interactions');
+
     setupModalSaveListener();
 
 }
@@ -424,8 +427,8 @@ function closeCommentModal() {
 
   const sidebar = document.querySelector('.sidebar-left');
   const scrollBtn = document.querySelector('#scrollToTopBtn');
-  if (sidebar) sidebar.classList.remove('disable-interactions');
-  if (scrollBtn) scrollBtn.classList.remove('disable-interactions');
+  if (sidebar) sidebar.classList.remove('dimmed');
+  if (scrollBtn) scrollBtn.classList.remove('dimmed');
 }
 
 // מאזין ללחיצות על אייקוני תגובה
@@ -823,6 +826,16 @@ modalTextarea1.addEventListener('input', () => {
   }
 });
 
+function showToast(toastElement) {
+  toastElement.classList.remove('toast-hidden');
+  toastElement.classList.add('toast-show');
+
+  setTimeout(() => {
+    toastElement.classList.remove('toast-show');
+    toastElement.classList.add('toast-hidden');
+  }, 1500);
+}
+
 document.querySelectorAll('.send-comment').forEach(button => {
   button.addEventListener('click', () => {
     const commentInput = button.closest('.comment-input');
@@ -878,7 +891,8 @@ if (viewComments) {
   viewComments.textContent = `View all ${total} comments`;
 }
 
-
+    const toastComment = document.getElementById('toast-comment');
+    showToast(toastComment);
   });
 });
 
@@ -922,9 +936,197 @@ document.querySelectorAll('.post-button').forEach(postBtn => {
       const total = currentCount + 1;
       viewComments.textContent = `View all ${total} comments`;
     }
+        const toastComment = document.getElementById('toast-comment');
+    showToast(toastComment);
   });
 
 
 
+});
+
+/// Share modal
+
+const shareBtns = document.querySelectorAll('.share');   // e.g. icon under each post
+const FROMSHAREsidebarLeft = document.querySelector('.sidebar-left');
+const FROMSHAREscrollToTopBtn = document.querySelector('#scrollToTopBtn');
+// 1.2  CORE MODAL ELEMENTS
+const sharemodal       = document.querySelector('.share-modal');
+const shareoverlay      = document.querySelector('.share-overlay');
+const sharecloseBtn    = sharemodal.querySelector('.close-share-modal');
+const bottomMenu  = sharemodal.querySelector('.share-bottom-menu');
+const sendBox     = sharemodal.querySelector('.send-box');
+const users       = sharemodal.querySelectorAll('.user-item');
+
+// 1.3  **UNIQUE SHARE-ACTION BUTTONS INSIDE THE BOTTOM MENU**
+const copyBtn      = document.getElementById('share-copy');
+const facebookBtn  = document.getElementById('share-facebook');
+const messengerBtn = document.getElementById('share-messenger');
+const whatsappBtn  = document.getElementById('share-whatsapp');
+const emailBtn     = document.getElementById('share-email');
+const xBtn         = document.getElementById('share-x');
+
+/* ===== 2. MODAL OPEN / CLOSE ===== */
+
+function opensharemodal() {
+  // מציג את האובראליי ומאפס שקיפות
+  shareoverlay.style.display = 'flex';
+  shareoverlay.style.opacity = '0';
+  shareoverlay.style.pointerEvents = 'none';
+
+  // מוודא שהאובראליי יתאנמץ בשקיפות חלקה
+  setTimeout(() => {
+    shareoverlay.style.opacity = '1';
+    shareoverlay.style.pointerEvents = 'auto';
+      FROMSHAREsidebarLeft?.classList.add('dimmable', 'dimmed');
+  FROMSHAREscrollToTopBtn?.classList.add('dimmable', 'dimmed');
+  }, 10);
+
+  // מוסיף מחלקות להחשכה חלקה של האלמנטים
+
+
+  // תצוגת הממשק במודל
+  bottomMenu.style.display = 'flex';
+  sendBox.style.display = 'none';
+  users.forEach(u => u.classList.remove('selected'));
+}
+
+// האזנה לפתיחת המודל
+shareBtns.forEach(btn => btn.addEventListener('click', opensharemodal));
+
+
+
+// סגירת המודל והסרת החשכה
+sharecloseBtn.addEventListener('click', () => {
+  // שקיפות יורדת
+  shareoverlay.style.opacity = '0';
+  shareoverlay.style.pointerEvents = 'none';
+
+  // מחכה לסיום האנימציה ואז מסתיר
+  setTimeout(() => {
+    shareoverlay.style.display = 'none';
+
+  }, 150); // תואם ל-transition ב-CSS
+
+      FROMSHAREsidebarLeft?.classList.remove('dimmed');
+  FROMSHAREscrollToTopBtn?.classList.remove('dimmed');
+
+  
+
+});
+
+shareoverlay.addEventListener('click', (e) => {
+  if (e.target === shareoverlay) {
+    // מבצע סגירה כמו כפתור ה-X
+    shareoverlay.style.opacity = '0';
+    shareoverlay.style.pointerEvents = 'none';
+
+    setTimeout(() => {
+      shareoverlay.style.display = 'none';
+    }, 150);
+
+    FROMSHAREsidebarLeft?.classList.remove('dimmed');
+    FROMSHAREscrollToTopBtn?.classList.remove('dimmed');
+  }
+});
+
+/* ===== 3. USER SELECTION TOGGLE ===== */
+
+users.forEach(user => {
+  user.addEventListener('click', () => {
+    // exclusive selection (click again to unselect)
+    if (user.classList.contains('selected')) {
+      user.classList.remove('selected');
+    } else {
+      users.forEach(u => u.classList.remove('selected'));
+      user.classList.add('selected');
+    }
+
+    const anySelected = [...users].some(u => u.classList.contains('selected'));
+    bottomMenu.style.display = anySelected ? 'none'  : 'flex';
+    sendBox.style.display    = anySelected ? 'flex'  : 'none';
+  });
+});
+
+
+const shareSearchInput = document.querySelector('#shareUserSearch');
+const userGrid = document.querySelector('.user-grid');
+const userItems = userGrid.querySelectorAll('.user-item');
+const noResults = document.querySelector('.no-results'); // עדיף לוודא שזה לא בתוך user-grid
+
+shareSearchInput.addEventListener('input', () => {
+  const searchTerm = shareSearchInput.value.toLowerCase().trim();
+  let visibleCount = 0;
+
+  userItems.forEach(user => {
+    const username = user.dataset.username?.toLowerCase() || '';
+    const isVisible = username.includes(searchTerm);
+    user.style.display = isVisible ? '' : 'none'; // ריק = ברירת מחדל, אין צורך ב-'flex'/'block'
+    if (isVisible) visibleCount++;
+  });
+
+  noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+});
+
+const sharesendBox = document.querySelector('.send-box');
+const sharesendButton = document.querySelector('.send-button');
+const sharecheckmarks = document.querySelectorAll('.checkmark');
+const shareBottomMenu = document.querySelector('.share-bottom-menu');
+const shareuserItems = document.querySelectorAll('.user-item');
+const toastMessage = document.getElementById('toast-message');
+
+function updateSendBoxVisibility() {
+  const anyChecked = Array.from(sharecheckmarks).some(mark => mark.style.display === 'block');
+
+  if (anyChecked) {
+    sharesendBox.style.display = 'flex';
+    shareBottomMenu.style.display = 'none';
+  } else {
+    sharesendBox.style.display = 'none';
+    shareBottomMenu.style.display = 'flex';
+  }
+}
+
+shareuserItems.forEach(user => {
+  user.addEventListener('click', () => {
+    const checkmark = user.querySelector('.checkmark');
+    if (checkmark.style.display === 'block') {
+      checkmark.style.display = 'none';
+    } else {
+      checkmark.style.display = 'block';
+    }
+    updateSendBoxVisibility();
+  });
+});
+
+// הגדרת מצב התחלתי
+updateSendBoxVisibility();
+
+sharesendButton.addEventListener('click', () => {
+  // ניקוי תוכן הטקסטאריאה
+  sharesendBox.querySelector('textarea').value = '';
+
+  // הסתרת תיבת השליחה
+  sharesendBox.style.display = 'none';
+
+  // הצגת התפריט התחתון
+  shareBottomMenu.style.display = 'flex';
+
+  // הסרת כל הצ'קמרקים
+  sharecheckmarks.forEach(mark => {
+    mark.style.display = 'none';
+  });
+
+  // עדכון תצוגת תיבת השליחה / תפריט תחתון
+  updateSendBoxVisibility();
+
+  // הצגת הודעת האישור החיצונית - toast
+  toastMessage.classList.remove('toast-hidden');
+  toastMessage.classList.add('toast-show');
+
+  // הסתרת ההודעה לאחר 1.5 שניות
+  setTimeout(() => {
+    toastMessage.classList.remove('toast-show');
+    toastMessage.classList.add('toast-hidden');
+  }, 1500);
 });
 

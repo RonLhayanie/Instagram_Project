@@ -26,7 +26,7 @@
 
 
   <div class="container">
-    <aside class="sidebar-left">
+    <aside class="sidebar-left dimmable">
 
 
       <div class="sidebar-top">
@@ -63,7 +63,9 @@
   </label>
 </div>
 
+  
   <input type="text" class="search-input" placeholder="Search" />
+  
   <div class="recent-section">
     <div class="recent-header">
       <span id="Recent">Recent</span>
@@ -633,7 +635,7 @@
         
          </main>
 
-          <button id="scrollToTopBtn" title="Back to Top" style="display: none;">
+          <button id="scrollToTopBtn" class="dimmable" title="Back to Top" style="display: none;">
     <img src="https://ps.w.org/wpfront-scroll-top/assets/icon.svg?rev=1534312" alt="Scroll to Top" />
   </button>
   
@@ -810,7 +812,112 @@
       <!-- הוסף עוד לפי הצורך -->
     </div>
 
+    
+      <!-- Share Modal -->
+       <div class="share-overlay" style="display: none;">
+  <div class="share-modal" >
+    <div class="share-modal-content">
 
+      
+      <div class="share-modal-header">
+        <h3>Share</h3>
+        <button class="close-share-modal">&times;</button>
+      </div>
+
+  <div class="share-search-wrapper">
+  <div class="search-box">
+    <img src="https://img.icons8.com/ios-glyphs/30/999999/search--v1.png" class="search-icon" alt="Search">
+    <input type="text" id="shareUserSearch" placeholder="Search">
+  </div>
+</div>  
+
+      <!-- User List -->
+  <!-- User List -->
+   <div class="share-scrollable">
+      <div class="user-grid">
+  <!-- 20 random users -->
+  <div class="user-item" data-username="alex_92"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/11.jpg" alt="alex_92"><div class="checkmark">&#10003;</div></div><span class="username">alex_92</span></div>
+  <div class="user-item" data-username="bella.k"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/12.jpg" alt="bella.k"><div class="checkmark">&#10003;</div></div><span class="username">bella.k</span></div>
+  <div class="user-item" data-username="chris07"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/13.jpg" alt="chris07"><div class="checkmark">&#10003;</div></div><span class="username">chris07</span></div>
+  <div class="user-item" data-username="dana23"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/14.jpg" alt="dana23"><div class="checkmark">&#10003;</div></div><span class="username">dana23</span></div>
+  <div class="user-item" data-username="elliot_j"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="elliot_j"><div class="checkmark">&#10003;</div></div><span class="username">elliot_j</span></div>
+  <div class="user-item" data-username="fiona88"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/16.jpg" alt="fiona88"><div class="checkmark">&#10003;</div></div><span class="username">fiona88</span></div>
+  <div class="user-item" data-username="gabriel_v"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/17.jpg" alt="gabriel_v"><div class="checkmark">&#10003;</div></div><span class="username">gabriel_v</span></div>
+  <div class="user-item" data-username="helen.m"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/18.jpg" alt="helen.m"><div class="checkmark">&#10003;</div></div><span class="username">helen.m</span></div>
+  <div class="user-item" data-username="ivan_x"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/19.jpg" alt="ivan_x"><div class="checkmark">&#10003;</div></div><span class="username">ivan_x</span></div>
+  <div class="user-item" data-username="julia09"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/20.jpg" alt="julia09"><div class="checkmark">&#10003;</div></div><span class="username">julia09</span></div>
+  <div class="user-item" data-username="kevin_l"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/21.jpg" alt="kevin_l"><div class="checkmark">&#10003;</div></div><span class="username">kevin_l</span></div>
+  <div class="user-item" data-username="lara_s"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/22.jpg" alt="lara_s"><div class="checkmark">&#10003;</div></div><span class="username">lara_s</span></div>
+  <div class="user-item" data-username="marco.t"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/23.jpg" alt="marco.t"><div class="checkmark">&#10003;</div></div><span class="username">marco.t</span></div>
+  <div class="user-item" data-username="nina_b"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/24.jpg" alt="nina_b"><div class="checkmark">&#10003;</div></div><span class="username">nina_b</span></div>
+  <div class="user-item" data-username="oliver.c"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/25.jpg" alt="oliver.c"><div class="checkmark">&#10003;</div></div><span class="username">oliver.c</span></div>
+  <div class="user-item" data-username="paula_d"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/26.jpg" alt="paula_d"><div class="checkmark">&#10003;</div></div><span class="username">paula_d</span></div>
+  <div class="user-item" data-username="quinn_e"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/27.jpg" alt="quinn_e"><div class="checkmark">&#10003;</div></div><span class="username">quinn_e</span></div>
+  <div class="user-item" data-username="rachel_f"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/28.jpg" alt="rachel_f"><div class="checkmark">&#10003;</div></div><span class="username">rachel_f</span></div>
+  <div class="user-item" data-username="samuel_g"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/men/29.jpg" alt="samuel_g"><div class="checkmark">&#10003;</div></div><span class="username">samuel_g</span></div>
+  <div class="user-item" data-username="tamara_h"><div class="share-avatar-wrapper"><img src="https://randomuser.me/api/portraits/women/30.jpg" alt="tamara_h"><div class="checkmark">&#10003;</div></div><span class="username">tamara_h</span></div>
+  </div>
+  </div>
+  <div class="no-results" style="display:none; padding: 20px; text-align: center; color: #777;">
+  No username found :(
+  </div>
+  
+
+<div class="share-bottom-menu">
+  <button class="share-action">
+    <div class="share-icon-wrapper">
+      <img src="https://pic.onlinewebfonts.com/thumbnails/icons_201365.svg" alt="Copy Link">
+    </div>
+    <span>Copy Link</span>
+  </button>
+
+  <button class="share-action">
+    <div class="share-icon-wrapper">
+      <img src="https://img.icons8.com/?size=512&id=118484&format=png" alt="Facebook">
+    </div>
+    <span>Facebook</span>
+  </button>
+
+  <button class="share-action">
+    <div class="share-icon-wrapper">
+      <img src="https://img.icons8.com/?size=512&id=20202&format=png" alt="Messenger">
+    </div>
+    <span>Messenger</span>
+  </button>
+
+  <button class="share-action">
+    <div class="share-icon-wrapper">
+      <img src="https://img.icons8.com/?size=512&id=16712&format=png" alt="WhatsApp">
+    </div>
+    <span>WhatsApp</span>
+  </button>
+
+  <button class="share-action">
+    <div class="share-icon-wrapper">
+      <img src="https://img.icons8.com/?size=512w&id=12580&format=png" alt="Email">
+    </div>
+    <span>Email</span>
+  </button>
+
+  <button class="share-action">
+    <div class="share-icon-wrapper">
+      <img src="https://img.icons8.com/?size=512&id=fJp7hepMryiw&format=png" alt="X">
+    </div>
+    <span>X</span>
+  </button>
+</div>
+
+      <!-- Send Box -->
+      <div class="send-box" style="display: none;">
+        <textarea placeholder="Write a message..."></textarea>
+        <button class="send-button">Send</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div id="toast-message" class="toast-hidden">Message sent!</div>
+  <div id="toast-comment" class="toast-hidden">Comment posted!</div>
     </div>
   </div>> 
   <script src="feed.js"></script>
