@@ -60,12 +60,12 @@ function verification()
     else if(isUsernameValid == false && isPasswordValid == false)
     {
         errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Username must be a real Email, Phone, or valid username. <br> Password must contain at least 6 characters, and without spaces.";
+        errorMsg.innerHTML = "Username must be a real Email, Phone, or valid username. <br> Password must contain at least 6 characters, without spaces.";
     }
     else if(isUsernameValid == true && isPasswordValid == false)
     {
         errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Password must contain at least 6 characters, and without spaces.";
+        errorMsg.innerHTML = "Password must contain at least 6 characters, without spaces.";
     }
     else if(isUsernameValid == false && isPasswordValid == true)
     {
