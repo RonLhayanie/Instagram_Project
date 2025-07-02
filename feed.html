@@ -37,7 +37,10 @@
       </div>
     
         <div class="sidebar-item sidebar-hoverable">
-          <img id="left-sb-home" src="https://cdn-icons-png.flaticon.com/128/9440/9440315.png" alt="home">
+          <img id="left-sb-home" 
+          src="https://cdn-icons-png.flaticon.com/128/9440/9440315.png"
+
+          alt="home">
           <span><b>Home</b></span>
         </div>
     
@@ -231,7 +234,7 @@
           <span>Notifications</span>
         </div>
     
-        <div class="sidebar-item sidebar-hoverable">
+        <div class="sidebar-item sidebar-hoverable" id="create-post-button">
           <img src="https://cdn-icons-png.flaticon.com/128/10103/10103630.png" alt="create">
           <span>Create</span>
         </div>
@@ -256,8 +259,25 @@
     
     </aside>  
 
+
+      <!-- הודעה על פוסט חדש -->
+  <div id="new-post-notice" class="hidden">New post added!</div>
+
+
+
+
+
   <main class="feed">
+  
+      <div class="stories-wrapper">
+
+          <div class="scroll-button left" id="scroll-left">
+          <svg viewBox="0 0 24 24">
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
       <div class="stories-container">
+
         <div class="story">
           <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Vered_26135">
           <div class="story-name">Vered_26135</div>
@@ -289,24 +309,104 @@
         <div class="story">
           <div class="story-image-wrapper">
             <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Liam_01">
-            <div class="scroll-button">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
           </div>
           <div class="story-name">Liam_01</div>
         </div>
+        <div class="story">
+        <div class="story-image-wrapper">
+          <img src="https://randomuser.me/api/portraits/men/10.jpg" alt="Ethan_02">
+        </div>
+        <div class="story-name">Ethan_02</div>
       </div>
+
+      <div class="story">
+        <div class="story-image-wrapper">
+          <img src="https://randomuser.me/api/portraits/women/15.jpg" alt="Maya_03">
+        </div>
+        <div class="story-name">Maya_03</div>
+      </div>
+
+      <div class="story">
+        <div class="story-image-wrapper">
+          <img src="https://randomuser.me/api/portraits/men/20.jpg" alt="Noah_04">
+        </div>
+        <div class="story-name">Noah_04</div>
+      </div>
+
+      <div class="story">
+        <div class="story-image-wrapper">
+          <img src="https://randomuser.me/api/portraits/women/25.jpg" alt="Ella_05">
+        </div>
+        <div class="story-name">Ella_05</div>
+      </div>
+
+      <div class="story">
+        <div class="story-image-wrapper">
+          <img src="https://randomuser.me/api/portraits/men/30.jpg" alt="Luca_06">
+        </div>
+        <div class="story-name">Luca_06</div>
+      </div>
+
+    <div class="story">
+      <div class="story-image-wrapper">
+        <img src="https://randomuser.me/api/portraits/women/40.jpg" alt="ShiraLuv">
+      </div>
+      <div class="story-name">ShiraLuv</div>
+    </div>
+
+    <div class="story">
+      <div class="story-image-wrapper">
+        <img src="https://randomuser.me/api/portraits/men/27.jpg" alt="AmitGo23">
+      </div>
+      <div class="story-name">AmitGo23</div>
+    </div>
+
+       </div>
+             <div class="scroll-button right" id="scroll-right">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      </div>
+
+
+
+
+
     
       <!-- הפוסט יורד לפה, מחוץ ל-stories-container -->
+
     
   <div id="no-posts-message" style="display: none; text-align: center; color: gray; font-size: 40px; margin-top: 30px;">
     No posts found :(
   </div>
-      
-      <div class="posts-wrapper">
-      <div class="post" id="post1">
+
+
+      <!-- <div class="custom-filter">
+      <img src="https://img.icons8.com/?size=100&id=21637&format=png" alt="filter icon" class="filter-icon">
+      <div class="dropdown">
+        <div class="dropdown-option" data-type="all">All</div>
+        <div class="dropdown-option" data-type="text">Text</div>
+        <div class="dropdown-option" data-type="image">Image</div>
+        <div class="dropdown-option" data-type="video">Video</div>
+      </div>
+    </div>   -->
+
+      <div class="posts-wrapper" >
+
+              
+                  <div class="custom-filter">
+      <img src="https://img.icons8.com/?size=100&id=21637&format=png" alt="filter icon" class="filter-icon">
+      <div class="dropdown">
+        <div class="dropdown-option" data-type="all">All</div>
+        <div class="dropdown-option" data-type="text">Text</div>
+        <div class="dropdown-option" data-type="image">Image</div>
+        <div class="dropdown-option" data-type="video">Video</div>
+      </div>
+    </div>  
+
+
+      <div class="post imgtype" id="post1">
           <div class="post-header">
             <div class="post-user">
               <div class="avatar-wrapper">
@@ -318,6 +418,7 @@
                 <span class="time" title="Ap 24, 2025" >3h</span>
               </div>
             </div>
+
             <button class="more-options">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
                   <circle cx="6" cy="12" r="1.5"/>
@@ -375,7 +476,7 @@
 
 
       
-      <div class="post" id="post2">
+      <div class="post videotype" id="post2">
         <div class="post-header">
           <div class="post-user">
             <div class="avatar-wrapper">
@@ -430,7 +531,7 @@
               <!-- תגובות נוספות... -->
               <!-- שדה מצב כתיבה -->
               <div class="comment writing" style="display: none;">
-                <img src="MY_AVATAR_URL" alt="Me" class="comment-avatar">
+                <img src="" alt="Me" class="comment-avatar">
                 <div class="comment-content">
                   <span class="comment-username">my_username</span>
                   <span class="comment-text text-gray">is writing a comment...</span>
@@ -449,7 +550,7 @@
         </div>
 
       
-          <div class="post" id="post3">
+          <div class="post imgtype" id="post3">
             <div class="post-header">
               <div class="post-user">
                 <div class="avatar-wrapper">
@@ -504,7 +605,7 @@
               <!-- תגובות נוספות... -->
               <!-- שדה מצב כתיבה -->
               <div class="comment writing" style="display: none;">
-                <img src="MY_AVATAR_URL" alt="Me" class="comment-avatar">
+                <img src="" alt="Me" class="comment-avatar">
                 <div class="comment-content">
                   <span class="comment-username">my_username</span>
                   <span class="comment-text text-gray">is writing a comment...</span>
@@ -521,9 +622,269 @@
               </div>
               </div>
         </div>
+
+            <div class="post texttype" id="post4">
+      <div class="post-header">
+        <div class="post-user">
+          <div class="avatar-wrapper">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Avatar" class="user-avatar">
+          </div>
+          <div class="user-details">
+            <span class="user-name">dana_rabinovich1221</span>
+            <span class="dot">•</span>
+            <span class="time" title="Jun 24, 2025">2h</span>
+          </div>
+        </div>
+        <button class="more-options">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+            <circle cx="6" cy="12" r="1.5"/>
+            <circle cx="12" cy="12" r="1.5"/>
+            <circle cx="18" cy="12" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- אין תמונה כאן -->
+      
+      <div class="post-actions">
+        <div class="left-actions">
+          <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn" title="Like">
+          <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
+          <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
+        </div>
+        <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
+      </div>
+
+      <div class="post-description">
+        <div class="likes-row">
+          <div class="mini-images">
+            <img src="https://randomuser.me/api/portraits/men/11.jpg" alt="user1" class="mini-image">
+            <img src="https://randomuser.me/api/portraits/women/3.jpg" alt="user2" class="mini-image">
+          </div>
+          <span class="likes-count">312 likes</span>
+        </div>
+        <p class="post-text">
+          <span id="descript-username" class="user-name">dana_rabinovich1221</span>
+          <span class="short-text">Feeling so grateful lately. 🌻...</span>
+          <span class="full-text" style="display: none;">Feeling so grateful lately. 🌻 The little things really are the big things. Taking time to breathe.</span>
+          <span class="more">more</span>
+        </p>
+        <!-- תגובות -->
+        <div class="comment-section">
+          <p class="view-comments"><span class="view-comments-text">View all 9 comments</span></p>
+          <div class="comments-list"></div>
+          <div class="comment-row">
+            <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+            <span class="post-button">Post</span>
+            <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
+              <path d="M15.83..."/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    <div class="post imgtype" id="post5">
+      <div class="post-header">
+        <div class="post-user">
+          <div class="avatar-wrapper">
+            <img src="https://as2.ftcdn.net/jpg/02/71/88/77/1000_F_271887776_f8Fj3Tvc5Gm3z0Vn5sAuheTxv0rdDOKj.jpg" alt="User Avatar" class="user-avatar">
+          </div>
+          <div class="user-details">
+            <span class="user-name">gal_shamay</span>
+            <span class="dot">•</span>
+            <span class="time" title="Jun 24, 2025">5h</span>
+          </div>
+        </div>
+        <button class="more-options">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+            <circle cx="6" cy="12" r="1.5"/>
+            <circle cx="12" cy="12" r="1.5"/>
+            <circle cx="18" cy="12" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="post-image">
+        <img src="https://as2.ftcdn.net/jpg/02/22/29/31/1000_F_222293109_1pAoH2GWtsCbqFV2OwJhTdf6yfRjiqFa.jpg" alt="Selfie at stadium" />
+      </div>
+
+      <div class="post-actions">
+        <div class="left-actions">
+          <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn" title="Like">
+          <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
+          <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
+        </div>
+        <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
+      </div>
+
+      <div class="post-description">
+        <div class="likes-row">
+          <div class="mini-images">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="user1" class="mini-image">
+            <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="user2" class="mini-image">
+          </div>
+          <span class="likes-count">872 likes</span>
+        </div>
+        <p class="post-text">
+          <span id="descript-username" class="user-name">gal_shamay_22</span>
+          <span class="short-text">Selfie time at the match! ⚽🔥</span>
+          <span class="full-text" style="display: none;">
+            Selfie time at the match! ⚽🔥  
+            The crowd is wild, the energy is insane, and the view is perfect.  
+            Best night of the week so far!
+          </span>
+          <span class="more">more</span>
+        </p>
+        <div class="comment-section">
+          <p class="view-comments"><span class="view-comments-text">View all 63 comments</span></p>
+          <div class="comments-list"></div>
+          <div class="comment-row">
+            <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+            <span class="post-button">Post</span>
+            <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
+              <path d="M15.83..."/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="post videotype" id="post6">
+    <div class="post-header">
+      <div class="post-user">
+        <div class="avatar-wrapper">
+          <img src="https://randomuser.me/api/portraits/women/54.jpg" alt="User Avatar" class="user-avatar">
+        </div>
+        <div class="user-details">
+          <span class="user-name">shir_ortal456</span>
+          <span class="dot">•</span>
+          <span class="time" title="Jun 24, 2025">4h</span>
+        </div>
+      </div>
+      <button class="more-options">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+          <circle cx="6" cy="12" r="1.5"/>
+          <circle cx="12" cy="12" r="1.5"/>
+          <circle cx="18" cy="12" r="1.5"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="post-video">
+      <video width="100%" height="auto" controls muted loop >
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm">
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+        הדפדפן שלך לא תומך בניגון וידאו.
+      </video>
+    </div>
+
+    <div class="post-actions">
+      <div class="left-actions">
+        <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn" title="Like">
+        <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
+        <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
+      </div>
+      <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
+    </div>
+
+    <div class="post-description">
+      <div class="likes-row">
+        <div class="mini-images">
+          <img src="https://randomuser.me/api/portraits/women/20.jpg" alt="user1" class="mini-image">
+          <img src="https://randomuser.me/api/portraits/men/43.jpg" alt="user2" class="mini-image">
+        </div>
+        <span class="likes-count">892 likes</span>
+      </div>
+      <p class="post-text">
+        <span id="descript-username" class="user-name">shir_ortal456</span>
+        <span class="short-text">Blooming beauty in motion! 🌸✨</span>
+        <span class="full-text" style="display: none;">
+          Blooming beauty in motion! 🌸✨  
+          Watch this stunning flower blossom in slow motion.  
+          Nature's miracle captured perfectly.
+        </span>
+        <span class="more">more</span>
+      </p>
+      <div class="comment-section">
+        <p class="view-comments"><span class="view-comments-text">View all 27 comments</span></p>
+        <div class="comments-list"></div>
+        <div class="comment-row">
+          <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+          <span class="post-button">Post</span>
+          <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
+            <path d="M15.83..."/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+      
+        <div class="post texttype" id="post7">
+    <div class="post-header">
+      <div class="post-user">
+        <div class="avatar-wrapper">
+          <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="User Avatar" class="user-avatar">
+        </div>
+        <div class="user-details">
+          <span class="user-name">omri.levi_88</span>
+          <span class="dot">•</span>
+          <span class="time" title="Jun 23, 2025">8h</span>
+        </div>
+      </div>
+      <button class="more-options">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+          <circle cx="6" cy="12" r="1.5"/>
+          <circle cx="12" cy="12" r="1.5"/>
+          <circle cx="18" cy="12" r="1.5"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- אין תמונה כאן -->
+
+    <div class="post-actions">
+      <div class="left-actions">
+        <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn" title="Like">
+        <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
+        <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
+      </div>
+      <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
+    </div>
+
+    <div class="post-description">
+      <div class="likes-row">
+        <div class="mini-images">
+          <img src="https://randomuser.me/api/portraits/men/19.jpg" alt="user1" class="mini-image">
+          <img src="https://randomuser.me/api/portraits/women/20.jpg" alt="user2" class="mini-image">
+        </div>
+        <span class="likes-count">78 likes</span>
+      </div>
+      <p class="post-text">
+        <span id="descript-username" class="user-name">omri.levi_88</span>
+        <span class="short-text">Just some thoughts before bed...</span>
+        <span class="full-text" style="display: none;">Just some thoughts before bed. Grateful for the people around me, for the silence, for the lessons.</span>
+        <span class="more">more</span>
+      </p>
+      <div class="comment-section">
+        <p class="view-comments"><span class="view-comments-text">View all 13 comments</span></p>
+        <div class="comments-list"></div>
+        <div class="comment-row">
+          <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+          <span class="post-button">Post</span>
+          <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
+            <path d="M15.83..."/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+      
+        
+
         </div>
 
-
+       
        
 
   <!--
@@ -532,8 +893,7 @@
 
   -->
   
-
-      <aside class="sidebar-right">
+      <aside class="sidebar-right" id="sidebarRight">
         <div class="right-pfp">
         <img id="pfp-r" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="pfp" class="profile-picture">
         <div class="right-pfp-name">
@@ -632,18 +992,21 @@
             <div class="copyright">© 2025 INSTAGRAM FROM META</div>
           </div>
         </aside>
+        </main>
+
         
-         </main>
+
+
 
           <button id="scrollToTopBtn" class="dimmable" title="Back to Top" style="display: none;">
     <img src="https://ps.w.org/wpfront-scroll-top/assets/icon.svg?rev=1534312" alt="Scroll to Top" />
   </button>
   
 <div class="comment-modal" style="display:none;">
-  <div class="modal-content">
+  <div class="comment-modal-content">
     
     <div class="modal-left">
-      <img src="POST_IMAGE_URL" alt="Post Image" class="modal-post-image">
+      <img src="" alt="Post Image" class="modal-post-image">
     </div>
 
     <div class="modal-right">
@@ -866,14 +1229,14 @@
 <div class="share-bottom-menu">
   <button class="share-action">
     <div class="share-icon-wrapper">
-      <img src="https://pic.onlinewebfonts.com/thumbnails/icons_201365.svg" alt="Copy Link">
+      <img src="https://img.icons8.com/?size=512w&id=7867&format=png" alt="Copy Link">
     </div>
     <span>Copy Link</span>
   </button>
 
   <button class="share-action">
     <div class="share-icon-wrapper">
-      <img src="https://img.icons8.com/?size=512&id=118484&format=png" alt="Facebook">
+      <img src="https://img.icons8.com/?size=48&id=118487&format=png" alt="Facebook">
     </div>
     <span>Facebook</span>
   </button>

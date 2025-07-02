@@ -54,7 +54,48 @@ likeButtons.forEach(function(btn) {
     }, 400);
   });
 });
- 
+
+/// stories scroll
+const storiesContainer = document.querySelector('.stories-container');
+const scrollLeftBtn = document.querySelector('.scroll-button.left');
+const scrollRightBtn = document.querySelector('.scroll-button.right');
+const stories = Array.from(document.querySelectorAll('.story'));
+
+scrollLeftBtn.style.display = 'none';  // להתחלה - הכפתור השמאלי מוסתר
+
+// רוחב של סטורי אחד כולל רווח (בפיקסלים) - שנה לפי ה-CSS שלך
+const storyWidth = stories[0].offsetWidth + 10; // 10 זה ה-gap בין סטוריז ב-CSS
+let cnt = 0;
+// גלילה ימינה - גלילה של 3 סטוריז בכל לחיצה
+scrollRightBtn.addEventListener('click', () => {
+
+
+  storiesContainer.scrollBy({ left: storyWidth * 3, behavior: 'smooth' });
+});
+
+let cnt1 = 0;
+
+// גלילה שמאלה - גלילה של 3 סטוריז בכל לחיצה
+scrollLeftBtn.addEventListener('click', () => {
+  storiesContainer.scrollBy({ left: -storyWidth * 3, behavior: 'smooth' });
+});
+
+// מאזין לגלילה כדי להסתיר ולהציג כפתורים
+storiesContainer.addEventListener('scroll', () => {
+  if (storiesContainer.scrollLeft <= 0) {
+    scrollLeftBtn.style.display = 'none';
+  } else {
+    scrollLeftBtn.style.display = 'flex';
+  }
+
+  if (storiesContainer.scrollWidth - storiesContainer.clientWidth - storiesContainer.scrollLeft <= 1) {
+    scrollRightBtn.style.display = 'none';
+  } else {
+    scrollRightBtn.style.display = 'flex';
+  }
+});
+
+
 ///btn more shows all text
 
 const moreButtons = document.querySelectorAll(".more");
@@ -188,8 +229,11 @@ searchInput.addEventListener('input', () => {
 
 const posts = document.querySelectorAll('.posts-wrapper .post');
 const sidebar = document.querySelector('.sidebar-right');
+
+const cfilter = document.querySelector('.custom-filter');
 let anyVisible = false;
 let hiddenCount = 0;
+let firstMatch = null;
 
 posts.forEach((post) => {
   const shortText = post.querySelector('.short-text')?.textContent.toLowerCase() || "";
@@ -198,14 +242,32 @@ posts.forEach((post) => {
 
   if (selectedFilter === 'description') {
     const isMatch = description.includes(query);
-    post.style.display = isMatch ? "block" : "none";
-    if (isMatch) anyVisible = true;
-    else hiddenCount++;
+    
+    if (isMatch) {
+      post.style.display = "block";
+      if (!firstMatch) {
+        firstMatch = post;
+      }
+      anyVisible = true;
+    } else {
+      post.style.display = "none";
+      hiddenCount++;
+    }
   } else {
     post.style.display = "";
     anyVisible = true;
   }
 });
+
+// הצגת הפילטר רק אם יש פוסט מוצג
+if (anyVisible && firstMatch) {
+  const moreOptions = firstMatch.querySelector('.more-options');
+  if (moreOptions) {
+    cfilter.style.visibility = "visible";  // מציג את הפילטר
+  }
+} else {
+  cfilter.style.visibility = "hidden"; // מסתיר את הפילטר אבל שומר על המרחב
+}
 
 // עדכון קלאסים לפי מספר ההסתרות
 sidebar.classList.remove('hide-1', 'hide-2', 'hide-3plus');
@@ -1130,3 +1192,1225 @@ sharesendButton.addEventListener('click', () => {
   }, 1500);
 });
 
+
+
+
+const mainfeed = document.querySelector('.posts-wrapper');
+const notice = document.getElementById('new-post-notice');
+const createBtn = document.getElementById('create-post-button');
+
+if (!mainfeed || !createBtn) {
+  console.error('Missing required elements');
+}
+
+const createModal = document.createElement('div');
+createModal.className = 'create-post-modal';
+createModal.innerHTML = `
+<link rel="stylesheet" href="styles.css">
+
+<div class="create-post-overlay" id="createModal">
+  <button id="close-create-modal">×</button>
+  <div class="modal-instagram-layout">
+    <!-- Left Side: Image -->
+    <div class="post-image-side">
+      <img id="post-image-preview" src="" alt="Preview" style="display: none;" />
+      <div class="upload-options" id="upload-options">
+        <button class="upload-file-btn" onclick="document.getElementById('upload-file').click()">Upload a File</button>
+        <input type="file" id="upload-file" accept="image/*" style="display: none;" />
+        <input type="url" id="upload-url" placeholder="Paste image URL" />
+      </div>
+      <button class="close-image" id="close-image" style="display: none;">×</button>
+      <div class="error-message" id="error-message"></div>
+    </div>
+
+    <!-- Right Side: Post Form -->
+    <div class="post-form-side">
+      <!-- Header -->
+      <div class="post-form-header">Create new post</div>
+
+      <!-- User Info -->
+      <div class="post-user-info">
+        <img src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="User Avatar" />
+        <span>_ron_lhayanie</span>
+      </div>
+
+      <!-- Description Textarea + Emoji -->
+      <div class="desc-with-emoji">
+        <textarea id="new-post-desc" maxlength="2200" placeholder="Write a caption..."></textarea>
+        <button class="create-unique-emoji-button">
+          <svg aria-label="Emoji" class="emoji" fill="currentColor" height="20" role="img" viewBox="0 0 24 24" width="20">
+            <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Emoji Picker -->
+      <div id="create-unique-emoji-picker" class="create-unique-emoji-picker" style="display:none; position:absolute; padding:10px; max-width:250px; max-height:150px; overflow:auto; z-index:1000;">
+        <span class="emoji-item">😀</span>
+        <span class="emoji-item">😃</span>
+        <span class="emoji-item">😄</span>
+        <span class="emoji-item">😁</span>
+        <span class="emoji-item">😆</span>
+        <span class="emoji-item">😂</span>
+        <span class="emoji-item">🤣</span>
+        <span class="emoji-item">😊</span>
+        <span class="emoji-item">😍</span>
+        <span class="emoji-item">😘</span>
+        <span class="emoji-item">🥰</span>
+        <span class="emoji-item">😎</span>
+        <span class="emoji-item">🤔</span>
+        <span class="emoji-item">😢</span>
+        <span class="emoji-item">😭</span>
+        <span class="emoji-item">😡</span>
+        <span class="emoji-item">😱</span>
+        <span class="emoji-item">👍</span>
+        <span class="emoji-item">👎</span>
+        <span class="emoji-item">👌</span>
+        <span class="emoji-item">✌️</span>
+        <span class="emoji-item">🙏</span>
+        <span class="emoji-item">👏</span>
+        <span class="emoji-item">💪</span>
+        <span class="emoji-item">🖐️</span>
+        <span class="emoji-item">🤝</span>
+        <span class="emoji-item">❤️</span>
+        <span class="emoji-item">🧡</span>
+        <span class="emoji-item">💛</span>
+        <span class="emoji-item">💚</span>
+        <span class="emoji-item">💙</span>
+        <span class="emoji-item">💜</span>
+        <span class="emoji-item">🖤</span>
+        <span class="emoji-item">💔</span>
+        <span class="emoji-item">💖</span>
+        <span class="emoji-item">💕</span>
+        <span class="emoji-item">💞</span>
+        <span class="emoji-item">🔥</span>
+        <span class="emoji-item">🎉</span>
+        <span class="emoji-item">🎊</span>
+        <span class="emoji-item">✨</span>
+        <span class="emoji-item">🌟</span>
+        <span class="emoji-item">💫</span>
+        <span class="emoji-item">🍀</span>
+        <span class="emoji-item">🍕</span>
+        <span class="emoji-item">🍔</span>
+        <span class="emoji-item">🍟</span>
+        <span class="emoji-item">🌮</span>
+        <span class="emoji-item">🍩</span>
+        <span class="emoji-item">🍦</span>
+        <span class="emoji-item">🍎</span>
+        <span class="emoji-item">🍉</span>
+        <span class="emoji-item">🍫</span>
+        <span class="emoji-item">☕</span>
+        <span class="emoji-item">🥤</span>
+        <span class="emoji-item">✔️</span>
+        <span class="emoji-item">❌</span>
+        <span class="emoji-item">⚠️</span>
+        <span class="emoji-item">🔔</span>
+        <span class="emoji-item">⭐</span>
+        <span class="emoji-item">🌈</span>
+        <span class="emoji-item">☀️</span>
+        <span class="emoji-item">🌙</span>
+        <span class="emoji-item">❄️</span>
+        <span class="emoji-item">💤</span>
+        <span class="emoji-item">🐶</span>
+        <span class="emoji-item">🐱</span>
+        <span class="emoji-item">🐻</span>
+        <span class="emoji-item">🐼</span>
+        <span class="emoji-item">🦊</span>
+        <span class="emoji-item">🐨</span>
+        <span class="emoji-item">🐸</span>
+        <span class="emoji-item">🐧</span>
+        <span class="emoji-item">🐥</span>
+        <span class="emoji-item">🦄</span>
+      </div>
+
+      <!-- Location -->
+      <div class="input-field-container">
+        <input type="text" id="location-input" class="input-field" placeholder="Add location" />
+        <svg class="location-icon" aria-label="Add location" class="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>Add location</title><path d="M12.053 8.105a1.604 1.604 0 1 0 1.604 1.604 1.604 1.604 0 0 0-1.604-1.604Zm0-7.105a8.684 8.684 0 0 0-8.708 8.66c0 5.699 6.14 11.495 8.108 13.123a.939.939 0 0 0 1.2 0c1.969-1.628 8.109-7.424 8.109-13.123A8.684 8.684 0 0 0 12.053 1Zm0 19.662C9.29 18.198 5.345 13.645 5.345 9.66a6.709 6.709 0 0 1 13.417 0c0 3.985-3.944 8.538-6.709 11.002Z"></path></svg>
+        <div id="location-suggestions" class="location-suggestions"></div>
+      </div>
+
+      <!-- Collaborators -->
+      <div class="input-field-container">
+        <input type="text" class="input-field" placeholder="Add collaborators" />
+        <svg class="collaborator-icon" aria-label="Add collaborators" class="x1lliihq x1n2onr6 x1roi4f4" fill="#000000" height="16" role="img" viewBox="0 0 24 24" width="16"><title>Add collaborators</title><path d="M21 10a1 1 0 0 0-1 1v9c0 .932-.643 1.71-1.507 1.931C18.429 19.203 16.199 17 13.455 17H8.55c-2.745 0-4.974 2.204-5.037 4.933A1.999 1.999 0 0 1 2 20V6c0-1.103.897-2 2-2h9a1 1 0 1 0 0-2H4C1.794 2 0 3.794 0 6v14c0 2.206 1.794 4 4 4h14c2.206 0 4-1.794 4-4v-9a1 1 0 0 0-1-1zM8.549 19h4.906a3.05 3.05 0 0 1 3.045 3H5.505a3.05 3.05 0 0 1 3.044-3z"></path><path d="M6.51 11.002c0 2.481 2.02 4.5 4.502 4.5 2.48 0 4.499-2.019 4.499-4.5s-2.019-4.5-4.5-4.5a4.506 4.506 0 0 0-4.5 4.5zm7 0c0 1.378-1.12 2.5-2.498 2.5-1.38 0-2.501-1.122-2.501-2.5s1.122-2.5 2.5-2.5a2.502 2.502 0 0 1 2.5 2.5zM23.001 3.002h-2.004V1a1 1 0 1 0-2 0v2.002H17a1 1 0 1 0 0 2h1.998v2.003a1 1 0 1 0 2 0V5.002h2.004a1 1 0 1 0 0-2z"></path></svg>
+      </div>
+
+      <!-- Share to List -->
+      <div class="share-to">
+        <strong>Share to</strong>
+        <label><span><img src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="Profile" class="profile-img" />Threads</span><span class="create-slider"><input type="checkbox" id="share-to-user"><span class="slider"></span></span></label>
+        <label><span><img src="https://img.icons8.com/?size=512&id=uLWV5A9vXIPu&format=png" alt="Facebook" class="fb-icon" />Facebook friends</span><span class="create-slider"><input type="checkbox" id="share-to-fb"><span class="slider"></span></span></label>
+      </div>
+
+      <!-- Accessibility -->
+      <div class="section-toggle">
+        <button class="toggle-accessibility"><span>Accessibility</span><svg class="arrow-down" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1L6 6L11 1" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></button>
+        <div class="accessibility-content" style="display: none;">
+          <p>Alt text describes your photos for people with visual impairments. Alt text will be automatically created for your photos or you can choose to write your own.</p>
+          <input type="text" class="input-field" placeholder="Write alt text..." style="margin-top: 10px;" />
+        </div>
+      </div>
+
+      <!-- Advanced Settings -->
+      <div class="section-toggle">
+        <button class="toggle-advanced"><span>Advanced Settings</span><svg class="arrow-down" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1L6 6L11 1" stroke="#262626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></button>
+        <div class="advanced-settings-content">
+          <label>
+            <div class="setting-title">
+              <span>Hide like and view counts on this post</span>
+              <span class="create-slider"><input type="checkbox" id="hide-counts"><span class="slider"></span></span>
+            </div>
+            <p class="setting-desc">Only you will see the total number of likes and views on this post. You can change this later by going to the ··· menu at the top of the post.</p>
+          </label>
+          <label>
+            <div class="setting-title">
+              <span>Turn off commenting</span>
+              <span class="create-slider"><input type="checkbox" id="turn-off-comments"><span class="slider"></span></span>
+            </div>
+            <p class="setting-desc">You can change this later by going to the ··· menu at the top of your post.</p>
+          </label>
+          <label>
+            <div class="setting-title">
+              <span>Automatically share to Threads</span>
+              <span class="create-slider"><input type="checkbox" id="share-to-threads"><span class="slider"></span></span>
+            </div>
+            <p class="setting-desc">Always share your posts to Threads. You can change your audience on Threads settings.</p>
+          </label>
+          <label>
+            <div class="setting-title">
+              <span>Automatically share to Facebook</span>
+              <span class="create-slider"><input type="checkbox" id="share-to-fb-auto"><span class="slider"></span></span>
+            </div>
+            <p class="setting-desc">Always share your posts to Facebook. You can change your audience on Facebook settings.</p>
+          </label>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button id="submit-new-post" class="submit-button">Share</button>
+    </div>
+  </div>
+
+  <!-- הודעת אישור לסגירה -->
+  <div class="confirmation-modal" id="confirmationModal">
+    <p>If you leave, your edits won't be saved.</p>
+    <button class="discard-btn" id="discardBtn">DISCARD</button>
+    <button class="cancel-btn" id="cancelBtn">Cancel</button>
+  </div>
+`;
+document.body.appendChild(createModal);
+
+
+const fileInput = createModal.querySelector('#upload-file');
+const urlInput = createModal.querySelector('#upload-url');
+const previewImg = createModal.querySelector('#post-image-preview');
+const createEmojiBtn = createModal.querySelector('.create-unique-emoji-button');
+const createEmojiPicker = createModal.querySelector('#create-unique-emoji-picker');
+const textArea = createModal.querySelector('#new-post-desc');
+
+function updatePreview(src) {
+  previewImg.src = src;
+  previewImg.style.display = 'block';
+  createModal.querySelector('#upload-options').style.display = 'none';
+  createModal.querySelector('#close-image').style.display = 'block';
+}
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => updatePreview(e.target.result);
+      img.onerror = () => {
+        createModal.querySelector('#error-message').textContent = 'Invalid image file. Please try again.';
+        createModal.querySelector('#error-message').style.display = 'block';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+urlInput.addEventListener('input', () => {
+  const url = urlInput.value.trim();
+  if (url) {
+    const img = new Image();
+    img.onload = () => updatePreview(url);
+    img.onerror = () => {
+      createModal.querySelector('#error-message').textContent = 'Invalid image URL. Please try again.';
+      createModal.querySelector('#error-message').style.display = 'block';
+    };
+    img.src = url;
+  } else {
+    previewImg.style.display = 'none';
+    createModal.querySelector('#upload-options').style.display = 'block';
+    createModal.querySelector('#close-image').style.display = 'none';
+    createModal.querySelector('#error-message').style.display = 'none';
+  }
+});
+
+const overlay = document.getElementById('createModal');
+
+function closeModal() {
+  overlay.classList.remove('visible');
+  createModal.classList.remove('visible');
+
+  // מניעת קליקים בזמן האנימציה
+  overlay.style.pointerEvents = 'none';
+  createModal.style.pointerEvents = 'none';
+  sidebarLeft.classList.remove('dimmed');
+  setTimeout(() => {
+    overlay.style.display = 'none';
+    createModal.style.display = 'none';
+    overlay.style.pointerEvents = '';
+    createModal.style.pointerEvents = '';
+  }, 150);
+}
+
+// בדיקת שינויים והוספת הודעת אישור
+let isChanged = false;
+const formElements = [createModal.querySelector('#new-post-desc'), createModal.querySelector('#location-input'), ...createModal.querySelectorAll('input[type="checkbox"]'), createModal.querySelector('.accessibility-content .input-field')];
+const originalValues = {};
+formElements.forEach(element => {
+  originalValues[element.id] = element.type === 'checkbox' ? element.checked : element.value;
+});
+
+function checkForChanges() {
+  let changed = false;
+  formElements.forEach(element => {
+    if (element.type === 'checkbox') {
+      if (element.checked !== originalValues[element.id]) changed = true;
+    } else if (element.value !== originalValues[element.id]) changed = true;
+  });
+  if (previewImg.style.display === 'block' && fileInput.files.length === 0 && !urlInput.value) changed = true;
+  return changed;
+}
+
+formElements.forEach(element => {
+  element.addEventListener('input', () => {
+    isChanged = checkForChanges();
+  });
+  element.addEventListener('change', () => {
+    isChanged = checkForChanges();
+  });
+});
+
+fileInput.addEventListener('change', () => {
+  isChanged = checkForChanges();
+});
+urlInput.addEventListener('input', () => {
+  isChanged = checkForChanges();
+});
+
+createBtn.addEventListener('click', () => {
+  createModal.style.display = 'block';
+  overlay.style.display = 'flex';
+
+  requestAnimationFrame(() => {
+    overlay.classList.add('visible');
+    sidebarLeft.classList.add('dimmed');
+    createModal.classList.add('visible');
+  });
+});
+
+createModal.querySelector('#close-create-modal').addEventListener('click', () => {
+  if (isChanged) {
+    document.getElementById('confirmationModal').style.display = 'block';
+  } else {
+    closeModal();
+  }
+});
+
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay && isChanged) {
+    document.getElementById('confirmationModal').style.display = 'block';
+  } else if (e.target === overlay && !isChanged) {
+    closeModal();
+  }
+});
+
+// ניהול הודעת האישור
+document.getElementById('discardBtn').addEventListener('click', () => {
+  closeModal();
+  document.getElementById('confirmationModal').style.display = 'none';
+  formElements.forEach(element => {
+    if (element.type === 'checkbox') element.checked = originalValues[element.id];
+    else element.value = originalValues[element.id];
+  });
+  previewImg.style.display = 'none';
+  fileInput.value = '';
+  urlInput.value = '';
+  isChanged = false;
+});
+
+document.getElementById('cancelBtn').addEventListener('click', () => {
+  document.getElementById('confirmationModal').style.display = 'none';
+});
+
+createModal.querySelector('#close-image').addEventListener('click', () => {
+  previewImg.style.display = 'none';
+  createModal.querySelector('#upload-options').style.display = 'block';
+  createModal.querySelector('#close-image').style.display = 'none';
+  fileInput.value = '';
+  urlInput.value = '';
+  createModal.querySelector('#error-message').style.display = 'none';
+  isChanged = checkForChanges();
+});
+
+// Location suggestions (dummy data)
+const locationInput = createModal.querySelector('#location-input');
+const locationSuggestions = createModal.querySelector('#location-suggestions');
+const locations = [
+  "Tel Aviv, Israel",
+  "Jerusalem, Israel",
+  "Haifa, Israel",
+  "Eilat, Israel",
+  "Netanya, Israel",
+  "Rishon LeZion, Israel",
+  "Petah Tikva, Israel",
+  "Ashdod, Israel",
+  "Beer Sheva, Israel",
+  "Holon, Israel",
+  "Bnei Brak, Israel",
+  "Ramat Gan, Israel",
+  "Bat Yam, Israel",
+  "Rehovot, Israel",
+  "Herzliya, Israel",
+  "Kfar Saba, Israel",
+  "Modi'in-Maccabim-Re'ut, Israel",
+  "Ra'anana, Israel",
+  "Nahariya, Israel",
+  "Acre (Akko), Israel",
+  "Tiberias, Israel",
+  "Safed (Tzfat), Israel",
+  "Ashkelon, Israel",
+  "Kiryat Ata, Israel",
+  "Kiryat Gat, Israel",
+  "Dimona, Israel",
+  "Yehud, Israel",
+  "Ramat HaSharon, Israel",
+  "Karmiel, Israel",
+  "Ness Ziona, Israel",
+  "Ma'alot-Tarshiha, Israel",
+  "Or Akiva, Israel",
+  "Kiryat Yam, Israel",
+  "Sderot, Israel",
+  "Kiryat Bialik, Israel",
+  "Nof HaGalil, Israel",
+  "Givatayim, Israel",
+  "Tirat Carmel, Israel",
+  "Afula, Israel",
+  "Arad, Israel",
+  "Migdal HaEmek, Israel",
+  "Beit Shemesh, Israel",
+  "Ofakim, Israel",
+  "Kiryat Motzkin, Israel",
+  "Kadima-Zoran, Israel",
+  "Giv'at Shmuel, Israel"
+];
+
+locationInput.addEventListener('input', () => {
+  const value = locationInput.value.toLowerCase();
+  locationSuggestions.innerHTML = '';
+  if (value) {
+    const filtered = locations.filter(loc => loc.toLowerCase().includes(value));
+    if (filtered.length > 0) {
+      filtered.forEach(loc => {
+        const div = document.createElement('div');
+        div.className = 'location-suggestion';
+        div.textContent = loc;
+        div.addEventListener('click', () => {
+          locationInput.value = loc;
+          locationSuggestions.style.display = 'none';
+        });
+        locationSuggestions.appendChild(div);
+      });
+      locationSuggestions.style.display = 'block';
+    } else {
+      locationSuggestions.style.display = 'none';
+    }
+  } else {
+    locationSuggestions.style.display = 'none';
+  }
+});
+
+const textInputs = [createModal.querySelector('#new-post-desc'), locationInput, createModal.querySelector('.accessibility-content .input-field')];
+textInputs.forEach(input => {
+  input.addEventListener('input', () => {
+    const hebrewRegex = /[\u0590-\u05FF]/;
+    if (hebrewRegex.test(input.value)) {
+      input.setAttribute('lang', 'he');
+    } else {
+      input.setAttribute('lang', 'en');
+    }
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (!locationInput.contains(e.target) && !locationSuggestions.contains(e.target)) {
+    locationSuggestions.style.display = 'none';
+  }
+  if (!createModal.contains(e.target)) {
+    createEmojiPicker.style.display = 'none';
+  }
+});
+
+// Toggle accessibility and advanced settings
+const accessibilityToggle = createModal.querySelector('.toggle-accessibility');
+const advancedToggle = createModal.querySelector('.toggle-advanced');
+const accessibilityContent = createModal.querySelector('.accessibility-content');
+const advancedContent = createModal.querySelector('.advanced-settings-content');
+const accessibilityArrow = accessibilityToggle.querySelector('.arrow-down');
+const advancedArrow = advancedToggle.querySelector('.arrow-down');
+
+accessibilityToggle.addEventListener('click', () => {
+  const isOpen = accessibilityContent.style.display === 'block';
+  accessibilityContent.style.display = isOpen ? 'none' : 'block';
+  accessibilityArrow.classList.toggle('rotated', !isOpen);
+});
+
+advancedToggle.addEventListener('click', () => {
+  const isOpen = advancedContent.style.display === 'block';
+  advancedContent.style.display = isOpen ? 'none' : 'block';
+  advancedArrow.classList.toggle('rotated', !isOpen);
+});
+
+// Toggle emoji picker
+createEmojiBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const isVisible = createEmojiPicker.style.display === 'block';
+  createEmojiPicker.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    const rect = createEmojiBtn.getBoundingClientRect();
+    createEmojiPicker.style.top = `${rect.bottom + window.scrollY + 5}px`;
+    createEmojiPicker.style.left = `${rect.left + window.scrollX}px`;
+  }
+});
+
+// Add emoji to textarea
+const emojiItems = createModal.querySelectorAll('.emoji-item');
+emojiItems.forEach(item => {
+  item.addEventListener('click', () => {
+    textArea.value += item.textContent;
+    textArea.focus();
+    createEmojiPicker.style.display = 'none';
+    isChanged = checkForChanges();
+  });
+});
+
+function isValidImageUrl(url) {
+  return /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
+}
+
+const urlErrorMsg = createModal.querySelector('#error-message');
+
+createModal.querySelector('#submit-new-post').addEventListener('click', () => {
+  const file = fileInput.files[0];
+  const url = urlInput.value.trim();
+  const text = createModal.querySelector('#new-post-desc').value.trim();
+
+  if (!text) {
+    alert('Please write a description.');
+    return;
+  }
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      addPost(e.target.result, text);
+    };
+    reader.readAsDataURL(file);
+  } else if (url) {
+    if (!isValidImageUrl(url)) {
+      urlErrorMsg.style.display = 'block';
+      urlInput.focus();
+      return;
+    } else {
+      urlErrorMsg.style.display = 'none';
+    }
+    addPost(url, text);
+  }
+});
+
+
+let leftSidebarOffset = -3860;
+let postsCount = 0;
+// השתמשתי ב-commentData2 כדי להימנע מהתנגשות
+let commentData2 = {}; // משתנה גלובלי לאחסון תגובות
+
+function resizeImage(src, callback) {
+  const img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const targetSize = 600;
+    canvas.width = targetSize;
+    canvas.height = targetSize;
+
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, targetSize, targetSize);
+
+    const ratio = Math.min(targetSize / img.width, targetSize / img.height);
+    const newWidth = img.width * ratio;
+    const newHeight = img.height * ratio;
+    const xOffset = (targetSize - newWidth) / 2;
+    const yOffset = (targetSize - newHeight) / 2;
+
+    ctx.drawImage(img, xOffset, yOffset, newWidth, newHeight);
+    callback(canvas.toDataURL('image/jpeg'));
+  };
+  img.onerror = function() {
+    callback(src);
+  };
+  img.src = src;
+}
+
+function createPost({ username, avatar, image, likes, text, commentsCount, time, date }) {
+  const post = document.createElement('div');
+  post.className = 'post';
+  post.innerHTML = `
+    <div class="post-header">
+      <div class="post-user">
+        <div class="avatar-wrapper">
+          <img src="${avatar}" alt="${username}" class="user-avatar">
+        </div>
+        <div class="user-details">
+          <span class="user-name">${username}</span>
+          <span class="dot">•</span>
+          <span class="time" title="${date}">${time}</span>
+        </div>
+      </div>
+      <button class="more-options">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+          <circle cx="6" cy="12" r="1.5"/>
+          <circle cx="12" cy="12" r="1.5"/>
+          <circle cx="18" cy="12" r="1.5"/>
+        </svg>
+      </button>
+      <div class="more-menu" style="display: none;">
+        <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
+      </div>
+    </div>
+    ${image ? `
+      <div class="post-image">
+        <img src="${image}" alt="Post Image">
+      </div>` : ''}
+    <div class="post-actions">
+      <div class="left-actions">
+        <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn">
+        <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn">
+        <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn">
+      </div>
+      <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn">
+    </div>
+    <div class="post-description">
+      <div class="likes-row">
+        <span class="likes-count">${likes.toLocaleString()} likes</span>
+      </div>
+      <p class="post-text">
+        <span class="user-name">${username}</span>
+        <span class="short-text">${text.substring(0, 30)}...</span>
+        <span class="full-text" style="display:none;">${text}</span>
+        <span class="more">more</span>
+      </p>
+      <div class="comment-section">
+        <p class="view-comments"><span class="view-comments-text">View all ${commentsCount} comments</span></p>
+        <div class="comments-list"></div>
+        <div class="comment-row">
+          <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+          <button class="post-button disabled">Post</button>
+        </div>
+      </div>
+    </div>
+  `;
+  return post;
+}
+
+function addPost(image, text) {
+  let processedImage = image;
+  if (image) {
+    resizeImage(image, (resizedImage) => {
+      processedImage = resizedImage;
+      const postId = `post-${Date.now()}`;
+      const newPost = createPost({
+        username: '_ron_lhayanie',
+        avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
+        image: processedImage,
+        likes: 0,
+        text,
+        commentsCount: 0,
+        time: 'Just now',
+        date: new Date().toDateString(),
+      });
+
+      newPost.id = postId;
+      mainfeed.insertBefore(newPost, mainfeed.querySelector('.custom-filter').nextSibling);
+
+      // אירועי לייק
+      const likeBtn = newPost.querySelector('.like');
+      likeBtn.addEventListener('click', function() {
+        const post = this.closest('.post-actions').nextElementSibling;
+        const likesCountSpan = post.querySelector('.likes-count');
+        let currentLikes = parseInt(likesCountSpan.textContent.replace(/,/g, '')) || 0;
+        const isLiked = this.src.includes('2107845.png');
+        if (!isLiked) {
+          this.src = 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png';
+          this.classList.add('liked');
+          likesCountSpan.textContent = (currentLikes + 1).toLocaleString() + ' likes';
+        } else {
+          this.src = 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
+          this.classList.remove('liked');
+          likesCountSpan.textContent = Math.max(0, currentLikes - 1).toLocaleString() + ' likes';
+        }
+        this.classList.add('pop');
+        setTimeout(() => this.classList.remove('pop'), 400);
+      });
+
+      // אירועי תגובות
+      const commentBtn = newPost.querySelector('.comment');
+      commentBtn.addEventListener('click', () => {
+        const post = commentBtn.closest('.post');
+        window.currentPostInModal = post;
+        const modal = document.querySelector('.comment-modal');
+        if (!modal) return;
+
+        modal.querySelector('.modal-post-image').src = post.querySelector('.post-image img')?.src || '';
+        const avatarSrc = post.querySelector('.user-avatar')?.src || '';
+        modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
+        const username = post.querySelector('.user-name')?.textContent || '';
+        modal.querySelectorAll('.modal-username').forEach(u => u.textContent = username);
+        const descriptionEl = post.querySelector('.post-text .full-text') || post.querySelector('.post-text .short-text');
+        modal.querySelector('.modal-post-description').textContent = descriptionEl?.textContent || '';
+        const postLikesEl = post.querySelector('.likes-count');
+        const modalLikesEl = modal.querySelector('.modal-likes-count');
+        modalLikesEl.textContent = postLikesEl ? postLikesEl.textContent : '0 likes';
+
+        const modalLikeBtn = modal.querySelector('.modal-footer-static .like');
+        const modalSaveBtn = modal.querySelector('.modal-footer-static .save');
+        const feedLikeBtn = post.querySelector('.post-actions .like');
+        const feedSaveBtn = post.querySelector('.post-actions .save');
+        if (modalLikeBtn && feedLikeBtn) {
+          const liked = feedLikeBtn.classList.contains('liked');
+          modalLikeBtn.classList.toggle('liked', liked);
+          modalLikeBtn.src = liked ? 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png' : 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
+        }
+        if (modalSaveBtn && feedSaveBtn) {
+          const isSaved = feedSaveBtn.classList.contains('saved');
+          modalSaveBtn.classList.toggle('saved', isSaved);
+          modalSaveBtn.src = isSaved ? 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png' : 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
+        }
+
+        const postId = post.id;
+        modal.setAttribute('data-post-id', postId);
+        const commentsList = modal.querySelector('.comments-list');
+        commentsList.querySelectorAll('.comment-item:not(.writing)').forEach(el => el.remove());
+        const postComments = commentData[postId] || [];
+        postComments.forEach(comment => {
+          const commentEl = document.createElement('div');
+          commentEl.className = 'comment-item';
+          commentEl.innerHTML = `<img src="${comment.avatar}" alt="${comment.username}" class="comment-avatar"><div class="comment-content"><span class="comment-username">${comment.username}</span><span class="comment-text">${comment.text}</span></div>`;
+          commentsList.appendChild(commentEl);
+        });
+
+        openCommentModal();
+      });
+
+      // אירועי שמירה
+      const saveBtn = newPost.querySelector('.save');
+      saveBtn.addEventListener('click', function() {
+        const isSaved = this.classList.contains('saved');
+        if (!isSaved) {
+          this.classList.add('saved');
+          this.src = 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png';
+        } else {
+          this.classList.remove('saved');
+          this.src = 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
+        }
+      });
+
+      // אירועי שיתוף
+      const shareBtn = newPost.querySelector('.share');
+      shareBtn.addEventListener('click', opensharemodal);
+
+      // אירועי "more"
+      const moreBtn = newPost.querySelector('.more');
+      moreBtn.addEventListener('click', function() {
+        const postText = this.closest('.post-text');
+        const shortText = postText.querySelector('.short-text');
+        const fullText = postText.querySelector('.full-text');
+        if (fullText.style.display === 'none') {
+          shortText.style.display = 'none';
+          fullText.style.display = 'inline';
+          this.textContent = 'less';
+        } else {
+          shortText.style.display = 'inline';
+          fullText.style.display = 'none';
+          this.textContent = 'more';
+        }
+      });
+
+      // אירועי מחיקה
+      const moreOptionsBtn = newPost.querySelector('.more-options');
+      moreOptionsBtn.addEventListener('click', function(e) {
+        const menu = this.nextElementSibling;
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      });
+      const deleteIcon = newPost.querySelector('.delete-post-icon');
+      deleteIcon.addEventListener('click', function() {
+        newPost.remove();
+        console.log('🗑️ פוסט נמחק');
+      });
+
+      // הוספת תגובה ישירות מהפוסט
+      const addCommentBox = newPost.querySelector('.add-comment-box');
+      const postButton = newPost.querySelector('.post-button');
+      const viewCommentsText = newPost.querySelector('.view-comments-text');
+      const commentsList = newPost.querySelector('.comments-list');
+      const writingComment = document.createElement('div');
+      writingComment.className = 'comment writing';
+      writingComment.innerHTML = '<span class="comment-text">writing...</span>';
+
+      addCommentBox.addEventListener('input', function() {
+        postButton.classList.toggle('disabled', !this.value.trim());
+        if (this.value.trim()) {
+          if (!commentsList.querySelector('.writing')) {
+            commentsList.appendChild(writingComment.cloneNode(true));
+          }
+        } else {
+          const existingWriting = commentsList.querySelector('.writing');
+          if (existingWriting) existingWriting.remove();
+        }
+      });
+
+      postButton.addEventListener('click', function() {
+        const commentText = addCommentBox.value.trim();
+        if (commentText && !this.classList.contains('disabled')) {
+          const postId = newPost.id;
+          if (!commentData[postId]) commentData[postId] = [];
+          const newComment = {
+            avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
+            username: '_ron_lhayanie',
+            text: commentText
+          };
+          commentData[postId].push(newComment);
+
+          // איפוס השדה והכפתור
+          addCommentBox.value = '';
+          postButton.classList.add('disabled');
+          const existingWriting = commentsList.querySelector('.writing');
+          if (existingWriting) existingWriting.remove();
+
+          // עדכון מספר התגובות בטקסט "View all"
+          const totalComments = commentData[postId].length;
+          viewCommentsText.textContent = `View all ${totalComments} comment${totalComments !== 1 ? 's' : ''}`;
+
+          // הצגת הודעה קופצת
+          showToast(document.getElementById('toast-comment'));
+        }
+      });
+
+      // פתיחת מודל תגובות דרך "View X Comments"
+      viewCommentsText.addEventListener('click', function() {
+        const post = this.closest('.post');
+        window.currentPostInModal = post;
+        const modal = document.querySelector('.comment-modal');
+        if (!modal) return;
+
+        modal.querySelector('.modal-post-image').src = post.querySelector('.post-image img')?.src || '';
+        const avatarSrc = post.querySelector('.user-avatar')?.src || '';
+        modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
+        const username = post.querySelector('.user-name')?.textContent || '';
+        modal.querySelectorAll('.modal-username').forEach(u => u.textContent = username);
+        const descriptionEl = post.querySelector('.post-text .full-text') || post.querySelector('.post-text .short-text');
+        modal.querySelector('.modal-post-description').textContent = descriptionEl?.textContent || '';
+        const postLikesEl = post.querySelector('.likes-count');
+        const modalLikesEl = modal.querySelector('.modal-likes-count');
+        modalLikesEl.textContent = postLikesEl ? postLikesEl.textContent : '0 likes';
+
+        const modalLikeBtn = modal.querySelector('.modal-footer-static .like');
+        const modalSaveBtn = modal.querySelector('.modal-footer-static .save');
+        const feedLikeBtn = post.querySelector('.post-actions .like');
+        const feedSaveBtn = post.querySelector('.post-actions .save');
+        if (modalLikeBtn && feedLikeBtn) {
+          const liked = feedLikeBtn.classList.contains('liked');
+          modalLikeBtn.classList.toggle('liked', liked);
+          modalLikeBtn.src = liked ? 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png' : 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
+        }
+        if (modalSaveBtn && feedSaveBtn) {
+          const isSaved = feedSaveBtn.classList.contains('saved');
+          modalSaveBtn.classList.toggle('saved', isSaved);
+          modalSaveBtn.src = isSaved ? 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png' : 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
+        }
+
+        const postId = post.id;
+        modal.setAttribute('data-post-id', postId);
+        const commentsList = modal.querySelector('.comments-list');
+        commentsList.querySelectorAll('.comment-item:not(.writing)').forEach(el => el.remove());
+        const postComments = commentData[postId] || [];
+        postComments.forEach(comment => {
+          const commentEl = document.createElement('div');
+          commentEl.className = 'comment-item';
+          commentEl.innerHTML = `<img src="${comment.avatar}" alt="${comment.username}" class="comment-avatar"><div class="comment-content"><span class="comment-username">${comment.username}</span><span class="comment-text">${comment.text}</span></div>`;
+          commentsList.appendChild(commentEl);
+        });
+
+        openCommentModal();
+      });
+
+      // אירוע לפתיחת תפריט אימוג'ים
+      const emojiBtn = newPost.querySelector('.emoji');
+      const emojiPicker = document.getElementById('emoji-picker');
+      let isPickerOpen = false;
+
+      emojiBtn.addEventListener('click', () => {
+        if (!isPickerOpen) {
+          emojiPicker.style.display = 'block';
+          emojiPicker.style.position = 'absolute';
+          emojiPicker.style.padding = '10px';
+          emojiPicker.style.maxWidth = '250px';
+          emojiPicker.style.maxHeight = '150px';
+          emojiPicker.style.overflow = 'auto';
+          emojiPicker.style.zIndex = '1000';
+          emojiPicker.style.width = '350px';
+          emojiPicker.style.height = '350px';
+          emojiPicker.style.top = '400px';
+          emojiPicker.style.left = '950px';
+          isPickerOpen = true;  
+
+          document.body.classList.add('no-scroll');
+
+          // הוספת אירועי לחיצה לכל אימוג'י בתפריט
+          const emojiItems = emojiPicker.querySelectorAll('.emoji-item');
+          emojiItems.forEach(item => {
+            item.addEventListener('click', () => {
+              addCommentBox.value += item.textContent;
+              addCommentBox.dispatchEvent(new Event('input')); // עדכון ממשק המשתמש
+              emojiPicker.style.display = 'none';
+              isPickerOpen = false;
+            });
+          });
+
+          // סגירה בעת לחיצה מחוץ לתפריט
+          document.addEventListener('click', outsideClickListener);
+        } else {
+          emojiPicker.style.display = 'none';
+          isPickerOpen = false;
+          document.removeEventListener('click', outsideClickListener);
+        }
+      });
+
+      // פונקציה לסגירת התפריט בעת לחיצה מחוץ
+      function outsideClickListener(event) {
+        if (!emojiPicker.contains(event.target) && event.target !== emojiBtn) {
+          emojiPicker.style.display = 'none';
+          isPickerOpen = false;
+          document.removeEventListener('click', outsideClickListener);
+        }
+      }
+
+      closeModal();
+      showNotice();
+      newPost.classList.add('highlight');
+      setTimeout(() => newPost.classList.remove('highlight'), 2000);
+
+      postsCount++;
+      const newMargin = leftSidebarOffset - (postsCount * 670);
+      document.querySelector('.sidebar-right').style.marginTop = `${newMargin}px`;
+      console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
+    });
+  } else {
+    const postId = `post-${Date.now()}`;
+    const newPost = createPost({
+      username: '_ron_lhayanie',
+      avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
+      image: processedImage,
+      likes: 0,
+      text,
+      commentsCount: 0,
+      time: 'Just now',
+      date: new Date().toDateString(),
+    });
+
+    newPost.id = postId;
+    mainfeed.insertBefore(newPost, mainfeed.querySelector('.custom-filter').nextSibling);
+
+    // [אירועים זהים כמו למעלה, מועתקים לשמירה על עקביות]
+
+    closeModal();
+    showNotice();
+    newPost.classList.add('highlight');
+    setTimeout(() => newPost.classList.remove('highlight'), 2000);
+
+    postsCount++;
+    const newMargin = leftSidebarOffset - (postsCount * 670);
+    document.querySelector('.sidebar-right').style.marginTop = `${newMargin}px`;
+    console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
+  }
+}
+
+// פונקציות עזר
+function updateCommentsCount(post) {
+  const postId = post.id;
+  const commentsCountSpan = post.querySelector('.comments-count') || post.querySelector('.view-comments-text');
+  const count = (commentData2[postId] || []).length;
+  if (commentsCountSpan) {
+    commentsCountSpan.textContent = count > 0 ? `${count} comments` : '0 comments';
+  }
+}
+
+function updateViewCommentsText(post) {
+  const postId = post.id;
+  const viewCommentsText = post.querySelector('.view-comments-text');
+  const count = (commentData2[postId] || []).length;
+  if (viewCommentsText) {
+    viewCommentsText.textContent = `View all ${count} comment${count !== 1 ? 's' : ''}`;
+  }
+}
+
+function showNotice() {
+  if (!notice) return;
+  notice.style.display = 'block';
+  notice.style.animation = 'fadeSlideIn 0.4s ease-in forwards';
+
+  setTimeout(() => {
+    notice.style.animation = 'fadeSlideOut 0.4s ease-out forwards';
+    setTimeout(() => {
+      notice.style.display = 'none';
+    }, 400);
+  }, 2000);
+}
+
+const addedPostsCount = {
+  text: 0,
+  image: 0,
+  video: 0
+};
+
+function createPost({ username, avatar, image, likes, text, commentsCount, time, date }) {
+  const post = document.createElement('div');
+
+  const postType = image ? 'imgtype' : 'texttype';
+  addedPostsCount[image ? 'image' : 'text'] += 1;
+  post.className = `post ${postType}`;
+
+  const isLongText = text.length > 30;
+  const shortText = text.substring(0, 30);
+
+  post.innerHTML = `
+    <div class="post-header">
+      <div class="post-user">
+        <div class="avatar-wrapper">
+          <img src="${avatar}" alt="${username}" class="user-avatar">
+        </div>
+        <div class="user-details">
+          <span class="user-name">${username}</span>
+          <span class="dot">•</span>
+          <span class="time" title="${date}">${time}</span>
+        </div>
+      </div>
+      <button class="more-options">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+          <circle cx="6" cy="12" r="1.5"/>
+          <circle cx="12" cy="12" r="1.5"/>
+          <circle cx="18" cy="12" r="1.5"/>
+        </svg>
+      </button>
+      <div class="more-menu" style="display: none;">
+        <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
+      </div>
+    </div>
+    ${image ? `
+      <div class="post-image">
+        <img src="${image}" alt="Post Image">
+      </div>` : ''}
+    <div class="post-actions">
+      <div class="left-actions">
+        <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn">
+        <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn">
+        <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn">
+      </div>
+      <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn">
+    </div>
+    <div class="post-description">
+      <div class="likes-row">
+        <span class="likes-count">${likes} likes</span>
+      </div>
+      <p class="post-text">
+        <span class="user-name">${username}</span>
+        <span class="short-text">${text.substring(0, 30)}...</span>
+        <span class="full-text" style="display:none;">${text}</span>
+        <span class="more">more</span>
+      </p>
+      <div class="comment-section">
+        <p class="view-comments"><span class="view-comments-text">View all ${commentsCount} comments</span></p>
+        <div class="comments-list"></div>
+        <div class="comment-row">
+          <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+          <span class="post-button">Post</span>
+          <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
+            <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  `;
+  return post;
+}
+
+function filterPostsByType(type) {
+  const allPosts = document.querySelectorAll('.post');
+
+  allPosts.forEach(post => {
+    post.style.display = 'none';
+
+    const isText = post.classList.contains('texttype');
+    const isImage = post.classList.contains('imgtype');
+    const isVideo = post.classList.contains('videotype');
+
+    if (
+      type === 'all' ||
+      (type === 'text' && isText) ||
+      (type === 'image' && isImage) ||
+      (type === 'video' && isVideo)
+    ) {
+      post.style.display = '';
+    }
+  });
+}
+
+const OFFSET_PER_POST = {
+  text: 520,
+  image: 670,
+  video: 670,
+  all: 670
+};
+
+function updateRightSidebarClass(currentType) {
+  const rsidebar = document.getElementById('sidebarRight');
+
+  rsidebar.classList.remove('hide-0', 'hide-1', 'hide-2', 'hide-3plus');
+  rsidebar.classList.remove('show-text', 'show-image', 'show-video', 'show-all');
+  rsidebar.style.marginTop = '';
+
+  switch (currentType) {
+    case 'text':
+      rsidebar.classList.add('show-text');
+      break;
+    case 'image':
+      rsidebar.classList.add('show-image');
+      break;
+    case 'video':
+      rsidebar.classList.add('show-video');
+      break;
+    case 'all':
+    default:
+      rsidebar.classList.add('show-all');
+      break;
+  }
+
+  let addedCount = 0;
+  if (currentType === 'all') {
+    addedCount = addedPostsCount.text + addedPostsCount.image + addedPostsCount.video;
+  } else {
+    addedCount = addedPostsCount[currentType] || 0;
+  }
+
+  if (addedCount > 0) {
+    setTimeout(() => {
+      const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop);
+      const adjustedMargin = baseMargin - (addedCount * 670);
+      rsidebar.style.marginTop = `${adjustedMargin}px`;
+      console.log(`📉 הפחתת מרג'ין עבור ${addedCount} פוסטים מסוג ${currentType}: ${adjustedMargin}px`);
+    }, 0);
+  }
+}
+
+const filterIcon = document.querySelector('.filter-icon');
+const dropdown = document.querySelector('.dropdown');
+
+filterIcon.addEventListener('click', () => {
+  dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+});
+
+document.addEventListener('click', (e) => {
+  if (!document.querySelector('.custom-filter').contains(e.target)) {
+    dropdown.style.display = 'none';
+  }
+});
+
+const dropdownOptions = document.querySelectorAll('.dropdown-option');
+
+dropdownOptions.forEach(option => {
+  option.addEventListener('click', () => {
+    const type = option.dataset.type;
+    console.log("📌 סינון לפי:", type);
+    dropdown.style.display = 'none';
+
+    filterPostsByType(type);
+    updateRightSidebarClass(type);
+  });
+});
+
+document.addEventListener('click', function (e) {
+  if (e.target.closest('.more-options')) {
+    const post = e.target.closest('.post');
+    const menu = post.querySelector('.more-menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  } else {
+    document.querySelectorAll('.more-menu').forEach(menu => {
+      menu.style.display = 'none';
+    });
+  }
+
+  if (e.target.classList.contains('delete-post-icon')) {
+    const post = e.target.closest('.post');
+    post.remove();
+    console.log('🗑️ פוסט נמחק');
+  }
+});
+
+function moveCustomFilterToPost(post) {
+  const customFilter = document.querySelector('.custom-filter');
+  if (!customFilter) return;
+
+  customFilter.remove();
+
+  const header = post.querySelector('.post-header');
+  const moreBtn = header.querySelector('.more-options');
+  header.insertBefore(customFilter, moreBtn);
+}
+
+function filterPosts(type) {
+  const allPosts = document.querySelectorAll('.posts-wrapper .post');
+  let firstVisiblePost = null;
+
+  allPosts.forEach(post => {
+    const isImage = post.classList.contains('imgtype');
+    const isText = post.classList.contains('texttype');
+    const isVideo = post.classList.contains('videotype');
+
+    let show = false;
+    if (type === 'all') show = true;
+    else if (type === 'image') show = isImage;
+    else if (type === 'text') show = isText;
+    else if (type === 'video') show = isVideo;
+
+    post.style.display = show ? 'block' : 'none';
+
+    if (show && !firstVisiblePost) {
+      firstVisiblePost = post;
+    }
+  });
+
+  if (firstVisiblePost) {
+    moveCustomFilterToPost(firstVisiblePost);
+  }
+}
