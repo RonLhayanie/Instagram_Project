@@ -22,12 +22,15 @@
 
             <input type="text" id="user" class="userpassword" placeholder="">
             <label id="userlabel" class="labels" for="user"> Phone number, username or email </label>
-
+            <img src="https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/info-512.png" class="syntaxUserPass" id="syntaxUsername">
+            <div class="tooltip" id="tooltipUsername"><b>Phone number:</b> starts with 05 and contains exactly 10 digits.<br><b>Username:</b> at least 6 characters, no spaces, includes at least one letter and "." or "_".<br><b>Email:</b> containing one "@" and at least one "." after it</div>
             <br>
 
             <input type="password" id="pass" class="userpassword" placeholder="">
             <label id="passlabel" class="labels" for="pass"> Password </label>
             <button type="button" class="showButton" onclick="show()"> Show </button>
+            <img src="https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/info-512.png" class="syntaxUserPass" id="syntaxPassword">
+            <div class="tooltip" id="tooltipPassword"><b>Password:</b> at least 6 characters without spaces </div>
 
             <br>
             <button id="LogIn" onclick="verification()"> <b> Log in </b> </button>
@@ -67,8 +70,8 @@
         <!-- Google Play and Microsoft buttons -->
         Get the app.
         <br> <br>
-        <img src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png" class="shopLogos" id="googlePlay">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png" class="shopLogos" id="microsoft">
+        <img src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png" class="shopLogos" id="googlePlay" onclick="openGoogleShop()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png" class="shopLogos" id="microsoft" onclick="openMicrosoftShop()">
             
     </div>
 

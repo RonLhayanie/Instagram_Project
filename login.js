@@ -5,9 +5,9 @@ function UsernameVerification()     /* check if the username is valid */
 
     var usernameInput = document.getElementById("user").value;
     
-    var PatternEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;     
-    var PatternPhone = /^05\d{8}$/;
-    var PatternUsername = /^(?=\S{1,}$)(?=.*\d)(?=.*[^A-Za-z0-9])/;
+    var PatternEmail = /^[^\s@]+@[^\s@.]+.[^\s@.]+$/;     /* containing one "@" and at least one "." after it */
+    var PatternPhone = /^05\d{8}$/;                      /* starting with "05" and exactly 8 digits */
+    var PatternUsername = /^(?=\S{6,}$)(?=.*[A-Za-z])(?=.*[._]).+$/;   /*at least 6 characters, no spaces, includes at least one letter and "." or "_" */
 
     if(PatternEmail.test(usernameInput) == true)
     {
@@ -21,9 +21,17 @@ function UsernameVerification()     /* check if the username is valid */
     {
         return true;
     }
+    else if (/^[0-9]+$/.test(usernameInput)) 
+    {
+        return "invalidPhone";
+    } 
+    else if (usernameInput.includes("@")) 
+    {
+    return "invalidEmail";
+    }
     else
     {
-        return false;
+        return "invalidUsername"
     }
 
 }
@@ -32,9 +40,9 @@ function PasswordVerification()     /* check if the password is valid */
 {
     var passwordInput = document.getElementById("pass").value;
 
-    PatterPassword = /^[^ %&$@]{6,30}$/
+    var PatternPassword = /^[^\s]{6,}$/;  /* at least 6 characters without spaces */
 
-    if(PatterPassword.test(passwordInput) == true)
+    if(PatternPassword.test(passwordInput) == true)
     {
         return true;
     }
@@ -47,30 +55,46 @@ function PasswordVerification()     /* check if the password is valid */
  
 function verification()
 {
-    
     var errorMsg = document.getElementById("verificationAlert");
 
-    var isUsernameValid = UsernameVerification();
-    var isPasswordValid = PasswordVerification();
+    var usernameStatus = UsernameVerification(); 
+    var passwordStatus = PasswordVerification(); 
 
-    if(isUsernameValid == true && isPasswordValid == true)
+    errorMsg.style.display = "none";
+    errorMsg.innerHTML = "";
+
+    if (usernameStatus === true && passwordStatus === true) 
     {
         window.location.href = "feed.html";
-    }
-    else if(isUsernameValid == false && isPasswordValid == false)
+    } 
+    else 
     {
         errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Username must be a real Email, Phone, or valid username. <br> Password must contain at least 6 characters, without spaces.";
-    }
-    else if(isUsernameValid == true && isPasswordValid == false)
-    {
-        errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Password must contain at least 6 characters, without spaces.";
-    }
-    else if(isUsernameValid == false && isPasswordValid == true)
-    {
-        errorMsg.style.display = "block";
-        errorMsg.innerHTML = "Username must be a real Email, Phone, or valid username";
+
+        // Check Username 
+        if (usernameStatus !== true) 
+        {
+            if (usernameStatus === "invalidPhone") 
+            {
+                errorMsg.innerHTML = "Phone number is invalid.";
+            }
+
+            else if (usernameStatus === "invalidEmail") 
+            {
+                errorMsg.innerHTML = "Email is invalid.";
+            }
+
+            else if (usernameStatus === "invalidUsername") 
+            {
+                errorMsg.innerHTML = "Username is invalid.";
+            }
+        }
+
+        // Check Password
+        if (passwordStatus === false) 
+        {
+            errorMsg.innerHTML += (errorMsg.innerHTML ? "<br>" : "") + "Password is invalid.";
+        }
     }
 }
 
@@ -97,3 +121,15 @@ function show()
 
 }
 
+
+
+/* Shop logos */
+function openGoogleShop()
+{
+    window.open("https://play.google.com/store/apps/details?id=com.instagram.android&referrer=ig_mid%3D95D527BA-C6DA-4AD6-A9CF-BC47EB923C12%26utm_content%3Dlo%26utm_source%3Dinstagramweb%26utm_medium%3Dbadge%26original_referrer%3Dhttps://www.google.com/&pli=1", "_blank");
+}
+
+function openMicrosoftShop()
+{
+    window.open("https://apps.microsoft.com/detail/9nblggh5l9xt?hl=he-IL&gl=IL", "_blank");
+}
