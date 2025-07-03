@@ -49,9 +49,13 @@ body.dark-mode #scrollToTopBtn {
     ,body.dark-mode .share-bottom-menu
     ,body.dark-mode .send-box
     ,body.dark-mode .send-box textarea
-    
-
-{
+    ,body.dark-mode .post-form-side
+    ,body.dark-mode .post-form-header
+    ,body.dark-mode .input-field
+    ,body.dark-mode .upload-options input[type="url"]
+    ,body.dark-mode .location-suggestions
+    ,body.dark-mode .confirmation-modal
+  {
     background-color:rgb(32, 32, 32) ;
     border-color: #ececec;
     border-left: none;
@@ -61,6 +65,23 @@ body.dark-mode #scrollToTopBtn {
 
   }
 
+  body.dark-mode .post-user-info span,
+  body.dark-mode .section-toggle span,
+  body.dark-mode .confirmation-modal p{
+    color: white;
+  }
+
+  body.dark-mode .post-form-side .slider{
+    background-color: #7e7e7e;
+  }
+
+
+    body.dark-mode .location-icon,
+    body.dark-mode .collaborator-icon
+  {
+    fill: white;
+  }
+
   body.dark-mode .dropdown{
     background-color:rgb(32, 32, 32) ;
     border-color:1px #ececec;
@@ -68,7 +89,8 @@ body.dark-mode #scrollToTopBtn {
 
   }
 
-  body.dark-mode .dropdown-option:hover{
+  body.dark-mode .dropdown-option:hover,
+  body.dark-mode .location-suggestion:hover{
     background-color:rgb(67, 67, 67) ;
   }
 
@@ -125,18 +147,30 @@ body.dark-mode #scrollToTopBtn {
       background-color: rgb(32, 32, 32);
     }
 
-    body.dark-mode #emoji-picker {
+    body.dark-mode #emoji-picker,
+    body.dark-mode .create-unique-emoji-picker {
       background: #302f2f; /* אפור כהה */
       color: #eee;
+      border: none;
     }
 
 
 
-    body.dark-mode .emoji-button svg, body.dark-mode .modal-options svg{
+    body.dark-mode .emoji-button svg, 
+    body.dark-mode .modal-options svg,
+    body.dark-mode .emoji
+    {
       fill: white;
     }
 
-        body.dark-mode .emoji-button svg:hover, body.dark-mode .modal-options svg:hover{
+    body.dark-mode .arrow-down path
+    {
+      stroke: white;
+    }
+
+
+
+        body.dark-mode .emoji-button svg:hover, body.dark-mode .modal-options svg:hover, body.dark-mode .emoji:hover{
       fill: rgb(147, 147, 147);
     }
 
@@ -716,7 +750,7 @@ body.dark-mode #scrollToTopBtn img {
 }
 
 #scrollToTopBtn.dimmed {
-  border-color: transparent !important;
+  border-radius:0%;
 }
 
 
@@ -749,6 +783,8 @@ body.dark-mode #scrollToTopBtn img {
   border-radius: inherit;
   z-index: 1000; /* מעל התוכן, מתחת למודלים */
 }
+
+
 
 #toast-message,
 #toast-comment {
@@ -1115,7 +1151,7 @@ color: #005289;
   border-radius: 50%; /* עיגול של התמונה */
   object-fit: cover; /* מוודא שהתמונה תתמלא בצורה נכונה */
   border: 4px solid white; /* גבול לבן קטן בין התמונה למסגרת */
-  background-image: linear-gradient(to top, #ffd900, #ff9900,  #ff66b2,  #ff66b2 ); /* מגדיר את הגרדיאנט של המסגרת */
+  background-image: linear-gradient(to top, #ffd900, #ff9900,  #da5899,  #ff66b2 ); /* מגדיר את הגרדיאנט של המסגרת */
   padding: 3px; /* מוסיף רווח בין התמונה למסגרת */
   border-radius: 50%; /* שומר על העיגול */
   transition: background-image 0.3s ease; /* אפקט מעבר */
@@ -2291,7 +2327,7 @@ font-weight: 600;
   align-items: center;
   z-index: 1000;
   opacity: 0;
-  transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-out;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
 }
@@ -2303,7 +2339,7 @@ font-weight: 600;
 .create-post-modal {
   display: none;
   opacity: 0;
-  transition: opacity 0.15s ease-in-out;
+  transition: opacity 0.15s ease-out;
 }
 
 .create-post-modal.visible {
@@ -2322,17 +2358,66 @@ font-weight: 600;
   padding: 5px;
 }
 
+.create-unique-emoji-button button:hover,
+.create-unique-emoji-button .emoji:hover,
+.create-unique-emoji-button svg:hover {
+  fill: #000000 !important; /* ודא שהצבע השחור תקף בזמן הובר */
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 
 .create-slider {
   position: relative;
   display: inline-block;
-  width: 40px;
+  width: 30px;
   height: 20px;
   margin-left: auto;
   cursor: pointer;
   max-width: fit-content;
 }
+
+.thread-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* מרווח בין התמונה לטקסט */
+}
+
+.profile-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%; /* עיגול התמונה אם רצוי */
+  position: relative; /* לשליטה בזרימה */
+}
+
+.thread-svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+  border: 2px solid #fff; /* מסגרת לבנה */
+  border-radius: 50%; /* עיגול ה-SVG */
+  background: #fff; /* רקע לבן */
+  padding: 2px; /* מרווח פנימי */
+  box-sizing: content-box; /* שמירה על גודל */
+  display: inline-block; /* שמירה בזרימה */
+  vertical-align: middle; /* יישור אנכי עם התמונה */
+  z-index: 1;
+}
+
+.thread-svg path {
+  fill: #000; /* צבע הפסים בתוך ה-SVG */
+}
+
+/* שילוב חלקי עם התמונה */
+.thread-icon-wrapper .profile-img {
+  margin-right: -8px; /* חפיפה קלה עם ה-SVG */
+}
+
+.thread-icon-wrapper .thread-svg {
+  margin-left: -20px; /* חפיפה קלה עם התמונה */
+  margin-bottom: -20px;
+}
+
 
 .create-slider input {
   opacity: 0;
@@ -2341,6 +2426,8 @@ font-weight: 600;
 }
 
 .create-slider .slider {
+  width: 45px;
+  height: 24px;
   position: absolute;
   top: 0;
   right: 15;
@@ -2369,7 +2456,7 @@ font-weight: 600;
 }
 
 .create-slider input:checked + .slider:before {
-  transform: translateX(30px);
+  transform: translateX(20px);
 }
 
 .create-unique-emoji-button svg {
@@ -2617,7 +2704,7 @@ font-weight: 600;
 
 .share-to {
   margin-bottom: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .share-to strong {
@@ -2630,7 +2717,7 @@ font-weight: 600;
   display: flex;
   align-items: center;
   margin: 5px 0;
-  padding-bottom: 5px;
+  padding-bottom: 8px;
 }
 
 .share-to .profile-img {
@@ -2642,8 +2729,8 @@ font-weight: 600;
 }
 
 .share-to .fb-icon {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   margin-right: 5px;
   vertical-align: middle;
 }
@@ -2743,7 +2830,7 @@ font-weight: 600;
 
 .location-icon {
   position: absolute;
-  top: 50%;
+  top: 40%;
   right: 10px;
   transform: translateY(-50%);
   color: #000000;
@@ -2753,7 +2840,7 @@ font-weight: 600;
 
 .collaborator-icon {
   position: absolute;
-  top: 50%;
+  top: 40%;
   right: 10px;
   transform: translateY(-50%);
   color: #000000;
@@ -2761,58 +2848,128 @@ font-weight: 600;
   height: 22px;
 }
 
-/* סגנון להודעת האישור */
 .confirmation-modal {
+  width: 500px;
   display: none;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -90%);
   background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px 0 0 0; /* פדינג רק למעלה */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   z-index: 2000;
   text-align: center;
+  border: 0;
+  border-radius: 30px;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* בשביל שהרדיוס יעבוד מתחת */
 }
 
 .confirmation-modal p {
-  margin-bottom: 20px;
-  color: #262626;
+  margin: 0 20px 20px 20px;
+  color: #646464;
 }
 
-.confirmation-modal button {
-  padding: 8px 16px;
-  margin: 0 10px;
+.confirmation-modal #discardpostp {
+  color: #000000;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* קונטיינר הכפתורים */
+.confirmation-modal .confirmation-button-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-top: 1px solid #d3d3d3;
+  border-radius: 0 0 30px 30px;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+/* כל כפתור */
+.confirmation-modal .confirmation-button-container button {
+  width: 100%;
+  padding: 15px 0;
   border: none;
-  border-radius: 4px;
+  background: white;
   cursor: pointer;
   font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  border-bottom: none;
+  margin: 0;
+  border-radius: 0;
+  line-height: 1;
+  box-sizing: border-box;
 }
 
-.confirmation-modal .discard-btn {
-  background: #ed4956;
-  color: #fff;
+/* בורדר מפריד בין הכפתורים - רק בכפתור הראשון */
+.confirmation-modal .confirmation-button-container button:first-child {
+  border-bottom: 1px solid #d3d3d3;
+  color: #ED4956;
 }
 
-.confirmation-modal .cancel-btn {
-  background: #0095f6;
-  color: #fff;
+/* הכפתור השני */
+.confirmation-modal .confirmation-button-container button:last-child {
+  color: #000000;
+}
+
+/* אפקט הובר */
+.confirmation-modal .confirmation-button-container button:hover {
+  background-color: #f7f7f7;
+}
+
+#confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* שחור חצי שקוף */
+  z-index: 1999; /* מתחת למודל */
+  display: none; /* מוסתר כברירת מחדל */
 }
 
 
 
+@keyframes ultraSubtleBounce {
+  0%   { transform: translate(-50%, -95%) scale(1); }
+  40%  { transform: translate(-50%, -98%) scale(1.01); }
+  60%  { transform: translate(-50%, -96%) scale(1); }
+  100% { transform: translate(-50%, -95%) scale(1); }
+}
+
+.confirmation-modal.visible {
+  display: block !important;
+  animation: ultraSubtleBounce 0.25s ease forwards;
+}
 
 
 .custom-filter {
   position: relative;
   margin: 0px 0 10px 870px;
-  top: 70;
+  top: 70px;
   display: flex;
   align-items: center;
   width: fit-content;
   z-index: 10;
 }
+
+@media (width: 1920px) {
+.custom-filter {
+  position: relative;
+  margin: 0px 0 10px 1060px;
+  top: 70px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  z-index: 10;
+  }
+}
+
 
 .filter-icon {
   width: 30px;
