@@ -34,6 +34,22 @@
       height: 30px;
     }
 
+    body.dark-mode .confirmation-modal button,
+    body.dark-mode .confirmation-modal #discardpostp,
+    body.dark-mode .confirmation-modal #cancelBtn,
+        body.dark-mode .more-menu
+    {
+    background-color:rgb(32, 32, 32) ;
+    color: white;
+    border: none;
+    }
+
+    body.dark-mode .confirmation-modal button:hover
+    {
+      background-color: #2e2e2e !important;
+    }
+    
+
 
 body.dark-mode #scrollToTopBtn {
   background: #000000;
@@ -2271,9 +2287,15 @@ font-weight: 600;
 }
 
 .highlight,
-.post.highlight .add-comment-box {
-  background-color: #d4f7d4;
-  transition: background-color 2s;
+.post.highlight .add-comment-box,
+.post.highlight .post-header svg,
+.post.highlight .post-header .user-name,
+.post.highlight .likes-row span,
+.post.highlight .post-text,
+.post.highlight .post-text span
+{
+  background-color: #d4f7d4 !important;
+  transition: background-color 2s !important;
 }
 
 #new-post-notice {

@@ -207,87 +207,92 @@ document.addEventListener('DOMContentLoaded', () => {
     items.forEach(item => item.remove());
   });
 
-  //// חיפוש לפי פילטר
+  // חיפוש לפי פילטר
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value || 'username';
 
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.toLowerCase().trim();
-  const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value || 'username';
+    // --- חיפוש במשתמשים (recent-item)
+    const items = recentSection.querySelectorAll('.recent-item');
+    items.forEach(item => {
+      if (selectedFilter === 'username') {
+        const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
+        const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
+        const textToSearch = username + ' ' + name;
 
-  // --- חיפוש במשתמשים (recent-item)
-  const items = recentSection.querySelectorAll('.recent-item');
-  items.forEach(item => {
-    if (selectedFilter === 'username') {
-      const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
-      const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
-      const textToSearch = username + ' ' + name;
-
-      item.style.display = textToSearch.includes(query) ? "" : "none";
-    } else {
-      item.style.display = "";
-    }
-  });
-
-const posts = document.querySelectorAll('.posts-wrapper .post');
-const sidebar = document.querySelector('.sidebar-right');
-
-const cfilter = document.querySelector('.custom-filter');
-let anyVisible = false;
-let hiddenCount = 0;
-let firstMatch = null;
-
-posts.forEach((post) => {
-  const shortText = post.querySelector('.short-text')?.textContent.toLowerCase() || "";
-  const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
-  const description = shortText + " " + fullText;
-
-  if (selectedFilter === 'description') {
-    const isMatch = description.includes(query);
-    
-    if (isMatch) {
-      post.style.display = "block";
-      if (!firstMatch) {
-        firstMatch = post;
+        item.style.display = textToSearch.includes(query) ? "" : "none";
+      } else {
+        item.style.display = "";
       }
-      anyVisible = true;
+    });
+
+    // --- חיפוש בפוסטים בלבד
+    const posts = document.querySelectorAll('.posts-wrapper .post');
+    const storiesContainer = document.querySelector('.stories-container'); // שמירה על הסטורייס
+    const sidebarRight = document.querySelector('.sidebar-right'); // שמירה על הסיידבאר הימני
+    const cfilter = document.querySelector('.custom-filter');
+    let anyVisible = false;
+    let hiddenCount = 0;
+    let firstMatch = null;
+
+    posts.forEach((post) => {
+      const shortText = post.querySelector('.short-text')?.textContent.toLowerCase() || "";
+      const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
+      const description = shortText + " " + fullText;
+
+      if (selectedFilter === 'description') {
+        const isMatch = description.includes(query);
+        
+        if (isMatch) {
+          post.style.display = "block";
+          if (!firstMatch) {
+            firstMatch = post;
+          }
+          anyVisible = true;
+        } else {
+          post.style.display = "none";
+          hiddenCount++;
+        }
+      } else {
+        post.style.display = "";
+        anyVisible = true;
+      }
+    });
+
+    // ודא שהסטורייס נשארים גלויים
+    if (storiesContainer) storiesContainer.style.display = "";
+
+    // ודא שהסיידבאר הימני לא מוסתר
+    if (sidebarRight) sidebarRight.style.display = "";
+
+    // הצגת הפילטר רק אם יש פוסט מוצג
+    if (anyVisible && firstMatch) {
+      const moreOptions = firstMatch.querySelector('.more-options');
+      if (moreOptions) {
+        cfilter.style.visibility = "visible";  // מציג את הפילטר
+      }
     } else {
-      post.style.display = "none";
-      hiddenCount++;
+      cfilter.style.visibility = "hidden"; // מסתיר את הפילטר אבל שומר על המרחב
     }
-  } else {
-    post.style.display = "";
-    anyVisible = true;
-  }
+
+    // עדכון קלאסים לפי מספר ההסתרות
+    sidebarRight.classList.remove('hide-0', 'hide-1', 'hide-2', 'hide-3plus');
+
+    // if (hiddenCount === 0) {
+    //   sidebarRight.classList.add('hide-0');
+    // } else if (hiddenCount === 1) {
+    //   sidebarRight.classList.add('hide-1');
+    // } else if (hiddenCount === 2) {
+    //   sidebarRight.classList.add('hide-2');
+    // } else if (hiddenCount >= 3) {
+    //   sidebarRight.classList.add('hide-3plus');
+    // }
+
+    // הודעה אם אין בכלל פוסטים
+    const noPostsMessage = document.getElementById('no-posts-message');
+    noPostsMessage.style.display = anyVisible ? 'none' : 'block';
+  });
 });
-
-// הצגת הפילטר רק אם יש פוסט מוצג
-if (anyVisible && firstMatch) {
-  const moreOptions = firstMatch.querySelector('.more-options');
-  if (moreOptions) {
-    cfilter.style.visibility = "visible";  // מציג את הפילטר
-  }
-} else {
-  cfilter.style.visibility = "hidden"; // מסתיר את הפילטר אבל שומר על המרחב
-}
-
-// עדכון קלאסים לפי מספר ההסתרות
-sidebar.classList.remove('hide-1', 'hide-2', 'hide-3plus');
-
-if (hiddenCount === 1) {
-  sidebar.classList.add('hide-1');
-} else if (hiddenCount === 2) {
-  sidebar.classList.add('hide-2');
-} else if (hiddenCount >= 3) {
-  sidebar.classList.add('hide-3plus');
-}else if (hiddenCount === 0) {
-  sidebar.classList.add('hide-0');
-}
-
-// הודעה אם אין בכלל פוסטים
-const noPostsMessage = document.getElementById('no-posts-message');
-noPostsMessage.style.display = anyVisible ? 'none' : 'block';
-});
-});
-
 
 
 ///hide sidebar-left spans
@@ -465,7 +470,7 @@ document.querySelectorAll('.view-comments-text').forEach(viewBtn => {
 function openCommentModal() {
     const sidebar = document.querySelector('.sidebar-left');
   const scrollBtn = document.querySelector('#scrollToTopBtn');
-
+  
 
   const modal = document.querySelector('.comment-modal');
   modal.style.display = 'flex';
@@ -475,6 +480,7 @@ function openCommentModal() {
       if (scrollBtn) scrollBtn.classList.add('dimmable', 'dimmed');
   }, 10);
 
+    sidebar.style.pointerEvents = 'none';
 
     setupModalSaveListener();
 
@@ -491,6 +497,8 @@ function closeCommentModal() {
   const scrollBtn = document.querySelector('#scrollToTopBtn');
   if (sidebar) sidebar.classList.remove('dimmed');
   if (scrollBtn) scrollBtn.classList.remove('dimmed');
+    sidebar.style.pointerEvents = 'all';
+
 }
 
 // מאזין ללחיצות על אייקוני תגובה
@@ -1031,9 +1039,12 @@ const xBtn         = document.getElementById('share-x');
 
 function opensharemodal() {
   // מציג את האובראליי ומאפס שקיפות
+  const leftsidebar = document.querySelector('.sidebar-left');
+  leftsidebar.style.pointerEvents = 'none';
   shareoverlay.style.display = 'flex';
   shareoverlay.style.opacity = '0';
-  shareoverlay.style.pointerEvents = 'none';
+ shareoverlay.style.pointerEvents = 'none';
+
 
   // מוודא שהאובראליי יתאנמץ בשקיפות חלקה
   setTimeout(() => {
@@ -1060,9 +1071,12 @@ shareBtns.forEach(btn => btn.addEventListener('click', opensharemodal));
 // סגירת המודל והסרת החשכה
 sharecloseBtn.addEventListener('click', () => {
   // שקיפות יורדת
+  const sidebar = document.querySelector('.sidebar-left');
+
+
   shareoverlay.style.opacity = '0';
   shareoverlay.style.pointerEvents = 'none';
-
+  
   // מחכה לסיום האנימציה ואז מסתיר
   setTimeout(() => {
     shareoverlay.style.display = 'none';
@@ -1071,12 +1085,13 @@ sharecloseBtn.addEventListener('click', () => {
 
       FROMSHAREsidebarLeft?.classList.remove('dimmed');
   FROMSHAREscrollToTopBtn?.classList.remove('dimmed');
-
+    sidebar.style.pointerEvents = 'all'
   
 
 });
 
 shareoverlay.addEventListener('click', (e) => {
+  const sidebar = document.querySelector('.sidebar-left');
   if (e.target === shareoverlay) {
     // מבצע סגירה כמו כפתור ה-X
     shareoverlay.style.opacity = '0';
@@ -1088,6 +1103,7 @@ shareoverlay.addEventListener('click', (e) => {
 
     FROMSHAREsidebarLeft?.classList.remove('dimmed');
     FROMSHAREscrollToTopBtn?.classList.remove('dimmed');
+    sidebar.style.pointerEvents = 'all'
   }
 });
 
@@ -1438,10 +1454,18 @@ const createEmojiPicker = createModal.querySelector('#create-unique-emoji-picker
 const textArea = createModal.querySelector('#new-post-desc');
 
 function updatePreview(src) {
+  const previewImg = createModal.querySelector('#post-image-preview');
+  const uploadOptions = createModal.querySelector('#upload-options');
+  const closeImage = createModal.querySelector('#close-image');
+  const errorMessage = createModal.querySelector('#error-message');
+  const uploadUrl = createModal.querySelector('#upload-url');
+
   previewImg.src = src;
   previewImg.style.display = 'block';
-  createModal.querySelector('#upload-options').style.display = 'none';
-  createModal.querySelector('#close-image').style.display = 'block';
+  uploadOptions.style.display = 'none';
+  closeImage.style.display = 'block';
+  errorMessage.style.display = 'none'; // איפוס הודעת שגיאה
+  uploadUrl.style.border = 'none'; // איפוס הגבול למצב הרגיל המוגדר ב-CSS
 }
 
 fileInput.addEventListener('change', () => {
@@ -1450,14 +1474,48 @@ fileInput.addEventListener('change', () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
-      img.onload = () => updatePreview(e.target.result);
+      img.onload = () => {
+        updatePreview(e.target.result);
+      };
       img.onerror = () => {
-        createModal.querySelector('#error-message').textContent = 'Invalid image file. Please try again.';
-        createModal.querySelector('#error-message').style.display = 'block';
+        const errorMessage = createModal.querySelector('#error-message');
+        const uploadUrl = createModal.querySelector('#upload-url');
+        errorMessage.textContent = 'Invalid image file. Please try again.';
+        errorMessage.style.display = 'block';
+        uploadUrl.style.border = '2px solid red'; // הגדרת גבול אדום בשגיאה
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+  }
+});
+
+urlInput.addEventListener('input', () => {
+  const url = urlInput.value.trim();
+  const errorMessage = createModal.querySelector('#error-message');
+  const uploadUrl = createModal.querySelector('#upload-url');
+  const previewImg = createModal.querySelector('#post-image-preview');
+  const uploadOptions = createModal.querySelector('#upload-options');
+  const closeImage = createModal.querySelector('#close-image');
+
+  if (url) {
+    const img = new Image();
+    img.onload = () => {
+      updatePreview(url);
+      uploadUrl.style.border = 'none'; // איפוס הגבול לאחר הצלחה
+    };
+    img.onerror = () => {
+      errorMessage.textContent = 'Invalid image URL. Please try again.';
+      errorMessage.style.display = 'block';
+      uploadUrl.style.border = '2px solid red'; // הגדרת גבול אדום בשגיאה
+    };
+    img.src = url;
+  } else {
+    previewImg.style.display = 'none';
+    uploadOptions.style.display = 'block';
+    closeImage.style.display = 'none';
+    errorMessage.style.display = 'none';
+    uploadUrl.style.border = 'none'; // איפוס הגבול כאשר השדה ריק
   }
 });
 
@@ -1484,6 +1542,7 @@ urlInput.addEventListener('input', () => {
 const overlay = document.getElementById('createModal');
 
 function closeModal() {
+  sidebarLeft.style.pointerEvents = 'all';
   overlay.classList.remove('visible');
   createModal.classList.remove('visible');
 
@@ -1539,6 +1598,7 @@ urlInput.addEventListener('input', () => {
 
 createBtn.addEventListener('click', () => {
   // הצגה מיידית
+  sidebarLeft.style.pointerEvents = 'none';
   overlay.style.display = 'flex';
   createModal.style.display = 'block';
 
@@ -1791,8 +1851,8 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
 
 
 let leftSidebarOffset = -3860;
-let postsCount = 0;
-// השתמשתי ב-commentData2 כדי להימנע מהתנגשות
+let textPostsCount = 0; // ספירה נפרדת לפוסטי טקסט
+let imagePostsCount = 0; // ספירה נפרדת לפוסטי תמונות
 let commentData2 = {}; // משתנה גלובלי לאחסון תגובות
 
 function resizeImage(src, callback) {
@@ -1821,67 +1881,6 @@ function resizeImage(src, callback) {
     callback(src);
   };
   img.src = src;
-}
-
-function createPost({ username, avatar, image, likes, text, commentsCount, time, date }) {
-  const post = document.createElement('div');
-  post.className = 'post';
-  post.innerHTML = `
-    <div class="post-header">
-      <div class="post-user">
-        <div class="avatar-wrapper">
-          <img src="${avatar}" alt="${username}" class="user-avatar">
-        </div>
-        <div class="user-details">
-          <span class="user-name">${username}</span>
-          <span class="dot">•</span>
-          <span class="time" title="${date}">${time}</span>
-        </div>
-      </div>
-      <button class="more-options">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
-          <circle cx="6" cy="12" r="1.5"/>
-          <circle cx="12" cy="12" r="1.5"/>
-          <circle cx="18" cy="12" r="1.5"/>
-        </svg>
-      </button>
-      <div class="more-menu" style="display: none;">
-        <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
-      </div>
-    </div>
-    ${image ? `
-      <div class="post-image">
-        <img src="${image}" alt="Post Image">
-      </div>` : ''}
-    <div class="post-actions">
-      <div class="left-actions">
-        <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn">
-        <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn">
-        <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn">
-      </div>
-      <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn">
-    </div>
-    <div class="post-description">
-      <div class="likes-row">
-        <span class="likes-count">${likes.toLocaleString()} likes</span>
-      </div>
-      <p class="post-text">
-        <span class="user-name">${username}</span>
-        <span class="short-text">${text.substring(0, 30)}...</span>
-        <span class="full-text" style="display:none;">${text}</span>
-        <span class="more">more</span>
-      </p>
-      <div class="comment-section">
-        <p class="view-comments"><span class="view-comments-text">View all ${commentsCount} comments</span></p>
-        <div class="comments-list"></div>
-        <div class="comment-row">
-          <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
-          <button class="post-button disabled">Post</button>
-        </div>
-      </div>
-    </div>
-  `;
-  return post;
 }
 
 function addPost(image, text) {
@@ -2046,9 +2045,14 @@ function addPost(image, text) {
       const postToDelete = deleteIcon.closest('.post');
       if (postToDelete) {
         postToDelete.remove();
-        postsCount--;
-        updateSidebarMargin(image ? 670 : 260); // עדכון מרחק לפי סוג הפוסט
-        console.log('🗑️ פוסט נמחק, מספר פוסטים נוכחי:', postsCount);
+        if (image) {
+          imagePostsCount--;
+          updateSidebarMargin(-670); // מעדכן מרג'ין כלפי מעלה עבור תמונה
+        } else {
+          textPostsCount--;
+          updateSidebarMargin(-260); // מעדכן מרג'ין כלפי מעלה עבור טקסט
+        }
+        console.log('🗑️ פוסט נמחק, מספר פוסטי תמונות:', imagePostsCount, 'מספר פוסטי טקסט:', textPostsCount);
       }
     });
 
@@ -2193,9 +2197,19 @@ function addPost(image, text) {
       }
     }
 
-    // עדכון ספירת פוסטים ומרג'ין
-    postsCount++;
-    updateSidebarMargin(image ? 670 : 260); // מרחק לפי סוג הפוסט
+    // עדכון ספירת פוסטים ומרג'ין, ואיפוס המודל
+    if (image) {
+      imagePostsCount++;
+      updateSidebarMargin(670); // מעדכן מרג'ין כלפי מטה עבור תמונה
+    } else {
+      textPostsCount++;
+      updateSidebarMargin(260); // מעדכן מרג'ין כלפי מטה עבור טקסט
+    }
+    // איפוס המודל לאחר פרסום
+    const imageInput = document.querySelector('#postImage'); // שדה התמונה
+    if (imageInput) imageInput.value = ''; // איפוס שדה התמונה
+    const textInput = document.querySelector('#postText'); // שדה התיאור
+    if (textInput) textInput.value = ''; // איפוס שדה התיאור
     closeModal();
     showNotice();
     newPost.classList.add('highlight');
@@ -2206,11 +2220,10 @@ function addPost(image, text) {
 // פונקציה חיצונית לעדכון מרג'ין עם פרמטר מרחק
 function updateSidebarMargin(distance) {
   const sidebarRight = document.querySelector('.sidebar-right');
-  const newMargin = leftSidebarOffset - (postsCount * distance); // השתמש במרחק המסופק
+  const newMargin = leftSidebarOffset - ((imagePostsCount * 670) + (textPostsCount * 260)); // חישוב מרג'ין לפי ספירות נפרדות
   sidebarRight.style.marginTop = `${newMargin}px`;
   console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
 }
-
 
 // פונקציות עזר
 function updateCommentsCount(post) {
@@ -2244,17 +2257,10 @@ function showNotice() {
   }, 2000);
 }
 
-const addedPostsCount = {
-  text: 0,
-  image: 0,
-  video: 0
-};
-
 function createPost({ username, avatar, image, likes, text, commentsCount, time, date }) {
   const post = document.createElement('div');
 
   const postType = image ? 'imgtype' : 'texttype';
-  addedPostsCount[image ? 'image' : 'text'] += 1;
   post.className = `post ${postType}`;
 
   const isLongText = text.length > 30;
@@ -2326,7 +2332,7 @@ function filterPostsByType(type) {
 
   allPosts.forEach(post => {
     post.style.display = 'none';
-
+    
     const isText = post.classList.contains('texttype');
     const isImage = post.classList.contains('imgtype');
     const isVideo = post.classList.contains('videotype');
@@ -2355,7 +2361,7 @@ function updateRightSidebarClass(currentType) {
   rsidebar.classList.remove('hide-0', 'hide-1', 'hide-2', 'hide-3plus');
   rsidebar.classList.remove('show-text', 'show-image', 'show-video', 'show-all');
   rsidebar.style.marginTop = '';
-
+  
   switch (currentType) {
     case 'text':
       rsidebar.classList.add('show-text');
