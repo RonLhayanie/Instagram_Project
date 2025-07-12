@@ -1851,9 +1851,10 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
 
 
 let leftSidebarOffset = -3860;
-let textPostsCount = 0; // ספירה נפרדת לפוסטי טקסט
-let imagePostsCount = 0; // ספירה נפרדת לפוסטי תמונות
-let commentData2 = {}; // משתנה גלובלי לאחסון תגובות
+let textPostsCount = 0; 
+let imagePostsCount = 0; 
+let videoPostsCount = 0; 
+let commentData2 = {}; 
 
 function resizeImage(src, callback) {
   const img = new Image();
@@ -2348,20 +2349,21 @@ function filterPostsByType(type) {
   });
 }
 
-const OFFSET_PER_POST = {
-  text: 520,
-  image: 670,
-  video: 670,
-  all: 670
-};
-
 function updateRightSidebarClass(currentType) {
   const rsidebar = document.getElementById('sidebarRight');
 
+  // בדיקה אם הסיידבאר קיים
+  if (!rsidebar) {
+    console.error('🚫 הסיידבאר לא נמצא ב-DOM');
+    return;
+  }
+
+  // הסרת כל הקלאסים הקשורים להצגה והסתרה
   rsidebar.classList.remove('hide-0', 'hide-1', 'hide-2', 'hide-3plus');
   rsidebar.classList.remove('show-text', 'show-image', 'show-video', 'show-all');
-  rsidebar.style.marginTop = '';
-  
+  rsidebar.style.marginTop = ''; // איפוס המרג'ין
+
+  // הוספת הקלאס המתאים לפי סוג הפוסט
   switch (currentType) {
     case 'text':
       rsidebar.classList.add('show-text');
@@ -2378,21 +2380,49 @@ function updateRightSidebarClass(currentType) {
       break;
   }
 
-  let addedCount = 0;
-  if (currentType === 'all') {
-    addedCount = addedPostsCount.text + addedPostsCount.image + addedPostsCount.video;
-  } else {
-    addedCount = addedPostsCount[currentType] || 0;
-  }
+  // עדכון המרג'ין
+    const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop) || 0; // ערך ברירת מחדל
+    let adjustedMargin;
 
-  if (addedCount > 0) {
-    setTimeout(() => {
-      const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop);
-      const adjustedMargin = baseMargin - (addedCount * 670);
-      rsidebar.style.marginTop = `${adjustedMargin}px`;
-      console.log(`📉 הפחתת מרג'ין עבור ${addedCount} פוסטים מסוג ${currentType}: ${adjustedMargin}px`);
-    }, 0);
-  }
+
+  if (currentType === 'all') {
+    // הדפסת קאונטרים לבדיקה
+    console.log('📌 קאונטרים לפני חישוב all:', {
+      imagePostsCount: imagePostsCount || 0,
+      textPostsCount: textPostsCount || 0,
+      videoPostsCount: videoPostsCount || 0
+    });
+
+    // חישוב ההפחתה עבור 'all': תמונות * 670 + טקסט * 260 + וידאו * 670
+    const offset = (
+      ((imagePostsCount || 0) * 670) +
+      ((textPostsCount || 0) * 260) +
+      ((videoPostsCount || 0) * 670)
+    );
+    adjustedMargin = baseMargin - offset; // שימוש ב-baseMargin כדי לשמור על מרג'ין דינמי
+    rsidebar.style.marginTop = `${adjustedMargin}px`;
+    console.log(`📊 עדכון מרג'ין עבור ${currentType}: ${adjustedMargin}px (תמונות: ${imagePostsCount || 0}, טקסט: ${textPostsCount || 0}, וידאו: ${videoPostsCount || 0}, הפחתה: ${offset}px)`);
+  } else {
+      // חישוב המרג'ין לפי סוג הפוסט
+      let postCount = 0;
+      let offset = 0;
+      if (currentType === 'text') {
+        postCount = textPostsCount;
+        offset = 260;
+      } else if (currentType === 'image') {
+        postCount = imagePostsCount;
+        offset = 670;
+      } else if (currentType === 'video') {
+        postCount = videoPostsCount;
+        offset = 670;
+      }
+
+      if (postCount > 0) {
+        adjustedMargin = baseMargin - (postCount * offset);
+        rsidebar.style.marginTop = `${adjustedMargin}px`;
+        console.log(`📉 הפחתת מרג'ין עבור ${postCount} פוסטים מסוג ${currentType}: ${adjustedMargin}px`);
+      }
+    }
 }
 
 const filterIcon = document.querySelector('.filter-icon');
