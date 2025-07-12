@@ -1,4 +1,9 @@
-
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loading-screen');
+  setTimeout(() => {
+    loader.style.display = 'none';
+  }, 2000); 
+});
 
 // toggle dark mode
   const toggle = document.getElementById('darkModeToggle');
