@@ -6,29 +6,29 @@ window.addEventListener('load', () => {
 });
 
 // toggle dark mode
-  const toggle = document.getElementById('darkModeToggle');
-  toggle.addEventListener('change', () => {
+const toggle = document.getElementById('darkModeToggle');
+toggle.addEventListener('change', () => {
     document.body.classList.toggle('dark-mode', toggle.checked);
-    });
+});
 
-    /// scroll to top button
-  const feed = document.querySelector("main.feed");
-  const scrollBtn = document.getElementById("scrollToTopBtn");
+// scroll to top button
+const feed = document.querySelector("main.feed");
+const scrollBtn = document.getElementById("scrollToTopBtn");
 
-  feed.addEventListener("scroll", () => {
+feed.addEventListener("scroll", () => {
     if (feed.scrollTop > 100) {
       scrollBtn.style.display = "block";
     } else {
       scrollBtn.style.display = "none";
     }
-  });
+});
 
-  scrollBtn.addEventListener("click", () => {
+scrollBtn.addEventListener("click", () => {
     feed.scrollTo({
       top: 0,
       behavior: "smooth"
     });
-  });
+});
 
 // like pop
 

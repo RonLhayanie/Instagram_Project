@@ -300,7 +300,7 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 }
 #signUp     /* sign up button */  
 {
-    border: none;
+    text-decoration: none;
     background-color: white;
 
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
