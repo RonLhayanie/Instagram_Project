@@ -65,7 +65,7 @@ function verification()
 
     if (usernameStatus === true && passwordStatus === true) 
     {
-        window.location.href = "feed.html";
+        window.location.href = "../feed/feed.html";
     } 
     else 
     {
@@ -98,9 +98,12 @@ function verification()
     }
 }
 
+addEventListener('submit', (event) => {
+    event.preventDefault()
+    verification()
+})
 
 
- 
 /* "show" button in password */ 
 function show()
 {
@@ -120,7 +123,6 @@ function show()
 
 
 }
-
 
 
 /* Shop logos */
