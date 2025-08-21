@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../login/login.css">
+    <link rel="stylesheet" href="signup.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up &bull; Instagram </title>
@@ -14,47 +14,98 @@
 
     <div class="main-div">       
         <img id="instaLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png">
-
+        <br>
+        <span id="SignUpSentence">Sign up to see photos and videos from your friends.</span>
+        <button id="facebook"> <img src="https://cdn1.iconfinder.com/data/icons/logotypes/32/facebook-512.png" id="facebookLogo">Log in with Facebook</button>
         
+        <br>
+        <!-- dividing line with "or" -->  
+        <div class="sp-div">
+            <div class="line"></div>
+                <span> OR </span>
+            <div class="line"></div>
+        </div>
+        
+        <br>
 
-        <!-- username, password and login button -->
-        <form class="input-div">     
 
-            <input type="text" id="user" class="userpassword" placeholder="" required>
-            <label id="userlabel" class="labels" for="user"> Phone number, username or email </label>
-            <img src="https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/info-512.png" class="syntaxUserPass" id="syntaxUsername">
-            <div class="tooltip" id="tooltipUsername"><b>Phone number:</b> starts with 05 and contains exactly 10 digits.<br><b>Username:</b> at least 6 characters, no spaces, includes at least one letter and "." or "_".<br><b>Email:</b> containing one "@" and at least one "." after it</div>
-            <br>
+    <div class="input-div">
 
-            <input type="password" id="pass" class="userpassword" placeholder="" required>
-            <label id="passlabel" class="labels" for="pass"> Password </label>
-            <button type="button" class="showButton" onclick="show()"> Show </button>
-            <img src="https://cdn1.iconfinder.com/data/icons/bootstrap-vol-3/16/info-512.png" class="syntaxUserPass" id="syntaxPassword">
-            <div class="tooltip" id="tooltipPassword"><b>Password:</b> at least 6 characters without spaces </div>
+        <!-- Phone number-->
+        <div class="input-group">  
+            <input type="text" id="PhoneNumberInput" class="inputs" placeholder="" required>
+            <label id="PhoneLabel" class="labels" for="PhoneNumberInput">Phone number</label>
+            <span class="verificationAlert" id="PhoneVer"></span>
+        </div>
 
-            <br>
-            <button type="submit" id="LogIn"> <b> Sign up </b> </button>
-        </form>
+        <!-- Email Address -->
+        <div class="input-group">
+            <input type="text" id="EmailAddressInput" class="inputs" placeholder="" required>
+            <label id="EmailLabel" class="labels" for="EmailAddressInput">Email</label>
+            <span class="verificationAlert" id="EmailVer"></span>
+        </div>
+        
+        <!-- Password -->
+        <div class="input-group">
+            <input type="password" id="PasswordInput" class="inputs" placeholder="" required>
+            <label id="PasswordLabel" class="labels" for="PasswordInput">Password</label>
+            <button class="showButton" onclick="Show()">Show</button>
+            <span class="verificationAlert" id="PasswordVer"></span>
+        </div>
+    
+        <!-- Full name -->
+        <div class="input-group">
+            <input type="text" id="FullNameInput" class="inputs" placeholder="" required>
+            <label id="FullNameLabel" class="labels" for="FullNameInput">Full name</label>
+            <span class="verificationAlert" id="FullNameVer"></span>
+        </div>
+    
+        <!-- Username -->
+        <div class="input-group">
+            <input type="text" id="UsernameInput" class="inputs" placeholder="" required>
+            <label id="UsernameLabel" class="labels" for="UsernameInput">Username</label>
+            <span class="verificationAlert" id="UsernameVer"></span>
+        </div>
+
+    </div>
+
+
+        <br>
+
+
+            <!-- Privacy Policy links-->
+            <span id="PrivacyPolicy">People who use our service may have uploaded your contact information to Instagram. <a href="" class="LearnMore">Learn More</a>   </span>
+            <span id="PrivacyPolicy">By signing up, you agree to our <a href="" class="LearnMore">Terms</a>, <a href="" class="LearnMore">Privacy Policy</a> and <a href="" class="LearnMore">Cookies Policy</a> .  </span>
+
+
+            <!-- sign up button -->
+            <button id="SignUp"> <b> Sign up </b> </button>
         
         <br> 
 
     </div>
 
+
+    <!-- Log in button -->
     <div class="second-div">
         <p id="haveAccount">
-            Already have an account? <a id="signUp" href="../login/login.html"> Log in </a>
+            Have an account? 
+            <br>
+            <button id="LogInButton" onclick="LogInButton()"> Log In </button>
         </p>
     </div>
-    
 
+
+
+    <!-- Google Play and Microsoft buttons -->
     <div id="shopButton-div">
-        <!-- Google Play and Microsoft buttons -->
         Get the app.
         <br> <br>
         <img src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png" class="shopLogos" id="googlePlay" onclick="openGoogleShop()">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png" class="shopLogos" id="microsoft" onclick="openMicrosoftShop()">
             
     </div>
+
 
 
     <!-- bottom links bar -->
@@ -76,9 +127,10 @@
     
     </div>
 
+
+    <!-- change language -->
     <div id="lang-div">
         
-        <!-- change language -->
         <select id="language">
             <option value="african"> African </option>
             <option value="arabic"> Arabic </option>
@@ -131,7 +183,6 @@
     </div>
 
     <br> <br>
-    <script src="../login/login.js"> </script>
     <script src="signup.js"> </script>
 </body>
 
