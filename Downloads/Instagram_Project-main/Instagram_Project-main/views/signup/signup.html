@@ -1,0 +1,189 @@
+<!-- ron-lhayanie-329681662-or-benshoshan-333173045 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="signup.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up &bull; Instagram </title>
+    <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1024px-Instagram_logo_2022.svg.png">
+</head>
+
+<body>
+
+    <div class="main-div">       
+        <img id="instaLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png">
+        <br>
+        <span id="SignUpSentence">Sign up to see photos and videos from your friends.</span>
+        <button id="facebook"> <img src="https://cdn1.iconfinder.com/data/icons/logotypes/32/facebook-512.png" id="facebookLogo">Log in with Facebook</button>
+        
+        <br>
+        <!-- dividing line with "or" -->  
+        <div class="sp-div">
+            <div class="line"></div>
+                <span> OR </span>
+            <div class="line"></div>
+        </div>
+        
+        <br>
+
+
+    <div class="input-div">
+
+        <!-- Phone number-->
+        <div class="input-group">  
+            <input type="text" id="PhoneNumberInput" class="inputs" placeholder="" required>
+            <label id="PhoneLabel" class="labels" for="PhoneNumberInput">Phone number</label>
+            <span class="verificationAlert" id="PhoneVer"></span>
+        </div>
+
+        <!-- Email Address -->
+        <div class="input-group">
+            <input type="text" id="EmailAddressInput" class="inputs" placeholder="" required>
+            <label id="EmailLabel" class="labels" for="EmailAddressInput">Email</label>
+            <span class="verificationAlert" id="EmailVer"></span>
+        </div>
+        
+        <!-- Password -->
+        <div class="input-group">
+            <input type="password" id="PasswordInput" class="inputs" placeholder="" required>
+            <label id="PasswordLabel" class="labels" for="PasswordInput">Password</label>
+            <button class="showButton" onclick="Show()">Show</button>
+            <span class="verificationAlert" id="PasswordVer"></span>
+        </div>
+    
+        <!-- Full name -->
+        <div class="input-group">
+            <input type="text" id="FullNameInput" class="inputs" placeholder="" required>
+            <label id="FullNameLabel" class="labels" for="FullNameInput">Full name</label>
+            <span class="verificationAlert" id="FullNameVer"></span>
+        </div>
+    
+        <!-- Username -->
+        <div class="input-group">
+            <input type="text" id="UsernameInput" class="inputs" placeholder="" required>
+            <label id="UsernameLabel" class="labels" for="UsernameInput">Username</label>
+            <span class="verificationAlert" id="UsernameVer"></span>
+        </div>
+
+    </div>
+
+
+        <br>
+
+
+            <!-- Privacy Policy links-->
+            <span id="PrivacyPolicy">People who use our service may have uploaded your contact information to Instagram. <a href="" class="LearnMore">Learn More</a>   </span>
+            <span id="PrivacyPolicy">By signing up, you agree to our <a href="" class="LearnMore">Terms</a>, <a href="" class="LearnMore">Privacy Policy</a> and <a href="" class="LearnMore">Cookies Policy</a> .  </span>
+
+
+            <!-- sign up button -->
+            <button id="SignUp"> <b> Sign up </b> </button>
+        
+        <br> 
+
+    </div>
+
+
+    <!-- Log in button -->
+    <div class="second-div">
+        <p id="haveAccount">
+            Have an account? 
+            <br>
+            <button id="LogInButton" onclick="LogInButton()"> Log In </button>
+        </p>
+    </div>
+
+
+
+    <!-- Google Play and Microsoft buttons -->
+    <div id="shopButton-div">
+        Get the app.
+        <br> <br>
+        <img src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png" class="shopLogos" id="googlePlay" onclick="openGoogleShop()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png" class="shopLogos" id="microsoft" onclick="openMicrosoftShop()">
+            
+    </div>
+
+
+
+    <!-- bottom links bar -->
+    <div id="linksBar-div">
+        <button class="link"> Meta </button>
+        <button class="link"> About </button>
+        <button class="link"> Blog </button>
+        <button class="link"> Jobs </button>
+        <button class="link"> Help </button>
+        <button class="link"> API </button>
+        <button class="link"> Privacy </button>
+        <button class="link"> Terms </button>
+        <button class="link"> Locations </button>
+        <button class="link"> Instagram Lite </button>
+        <button class="link"> Threads </button>
+        <button class="link"> Contact Uploading & Non-Users </button>
+        <button class="link"> Meta verified </button>
+        <button class="link"> Settlement Agreements </button>
+    
+    </div>
+
+
+    <!-- change language -->
+    <div id="lang-div">
+        
+        <select id="language">
+            <option value="african"> African </option>
+            <option value="arabic"> Arabic </option>
+            <option value="bengali"> Bengali </option>
+            <option value="bulgarian"> Bulgarian </option>
+            <option value="chinese"> Chinese </option>
+            <option value="czech"> Czech </option>
+            <option value="croatian"> Croatian </option>
+            <option value="danish"> Danish </option>
+            <option value="dutch"> Dutch </option>
+            <option value="english" selected> English </option>
+            <option value="englishUK"> English(UK) </option>
+            <option value="filipino"> Filipino </option>
+            <option value="finnish"> Finnish </option>
+            <option value="french"> French </option>
+            <option value="german"> German </option>
+            <option value="greek"> Greek </option>
+            <option value="hebrew"> Hebrew </option>
+            <option value="hindi"> Hindi </option>
+            <option value="hungarian"> Hungarian </option>
+            <option value="indonesian"> Indonesian </option>
+            <option value="italian"> Italian </option>
+            <option value="japanese"> Japanese </option>
+            <option value="korean"> Korean </option>
+            <option value="malay"> Malay </option>
+            <option value="malayalam"> Malayalam </option>
+            <option value="marathi"> Marathi </option>
+            <option value="nepali"> Nepali </option>
+            <option value="norwegian"> Norwegian </option>
+            <option value="persian"> Persian </option>
+            <option value="polish"> Polish </option>
+            <option value="portuguese"> Portuguese </option>
+            <option value="serbian"> Serbian </option>
+            <option value="sinhala"> Sinhala </option>
+            <option value="slovak"> Slovak </option>
+            <option value="russian"> Russian </option>
+            <option value="spanish"> Spanish </option>
+            <option value="swedish"> Swedish </option>
+            <option value="thai"> Thai </option>
+            <option value="turkish"> Turkish </option>
+            <option value="tamil"> Tamil </option>
+            <option value="telugu"> Telugu </option>
+            <option value="ukrainian"> Ukrainian </option>
+            <option value="vietnamese"> Vietnamese </option>
+        </select>
+
+        <!-- copyright -->
+        <p id="copyright"> © 2025 Instagram from Meta </p>  
+
+    </div>
+
+    <br> <br>
+    <script src="signup.js"> </script>
+</body>
+
+</html>
