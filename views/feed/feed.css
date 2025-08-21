@@ -1,0 +1,3104 @@
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* ביטול גלילה רגילה */
+    }
+    
+    .container{
+    justify-content: space-between;
+    align-items: flex-start; /* כדי ששניהם יהיו למעלה */
+    z-index: 10;
+    }
+
+    #loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999999999;
+  }
+
+  #loading-logo {
+    width: 80px;
+    margin-bottom: 50px;
+  }
+
+  #loading-from-text {
+    position: fixed;
+    bottom: 50px;
+    width: 100%;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #848484;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  #loading-from-image {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  #loading-from-image img {
+    max-height: 30px;
+  }
+
+
+    #scrollToTopBtn {
+      position: fixed;
+      bottom: 10px;
+      right: 180px;
+      background: #ffffff;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 9999;
+      display: block;
+    }
+
+    #scrollToTopBtn img {
+      width: 30px;
+      height: 30px;
+    }
+
+    body.dark-mode .confirmation-modal button,
+    body.dark-mode .confirmation-modal #discardpostp,
+    body.dark-mode .confirmation-modal #cancelBtn,
+        body.dark-mode .more-menu
+    {
+    background-color:rgb(32, 32, 32) ;
+    color: white;
+    border: none;
+    }
+
+    body.dark-mode .confirmation-modal button:hover
+    {
+      background-color: #2e2e2e !important;
+    }
+    
+
+
+body.dark-mode #scrollToTopBtn {
+  background: #000000;
+}
+
+  body.dark-mode .modal-right
+  ,body.dark-mode .modal-user-info.modal-summary-row
+    ,body.dark-mode .modal-footer-static
+    ,body.dark-mode .comment-input textarea
+    ,body.dark-mode .share-modal-header
+    ,body.dark-mode .share-modal-content
+    ,body.dark-mode .close-share-modal
+    ,body.dark-mode .share-bottom-menu
+    ,body.dark-mode .send-box
+    ,body.dark-mode .send-box textarea
+    ,body.dark-mode .post-form-side
+    ,body.dark-mode .post-form-header
+    ,body.dark-mode .input-field
+    ,body.dark-mode .upload-options input[type="url"]
+    ,body.dark-mode .location-suggestions
+    ,body.dark-mode .confirmation-modal
+  {
+    background-color:rgb(32, 32, 32) ;
+    border-color: #ececec;
+    border-left: none;
+    color: white;
+    border-bottom-color: #646464;
+    border-top-color: #646464;
+
+  }
+
+  body.dark-mode .post-user-info span,
+  body.dark-mode .section-toggle span,
+  body.dark-mode .confirmation-modal p{
+    color: white;
+  }
+
+  body.dark-mode .post-form-side .slider{
+    background-color: #7e7e7e;
+  }
+
+
+    body.dark-mode .location-icon,
+    body.dark-mode .collaborator-icon
+  {
+    fill: white;
+  }
+
+  body.dark-mode .dropdown{
+    background-color:rgb(32, 32, 32) ;
+    border-color:1px #ececec;
+    color: white;
+
+  }
+
+  body.dark-mode .dropdown-option:hover,
+  body.dark-mode .location-suggestion:hover{
+    background-color:rgb(67, 67, 67) ;
+  }
+
+  body.dark-mode .modal-content,
+  body.dark-mode .create-post-modal .modal-content h2,
+  body.dark-mode #new-post-desc,
+  body.dark-mode .modal-content #new-post-image
+  {
+  background-color: rgb(32, 32, 32);
+  color: white;
+  }
+  body.dark-mode .create-post-modal .modal-content button
+  {
+  background-color: #3d3d3d;
+  color: white;
+  }
+  
+
+   body.dark-mode .send-box textarea::placeholder,
+   body.dark-mode .search-box input::placeholder,
+   body.dark-mode .search-box img
+   body.dark-mode .modal-content::placeholder
+   
+   {
+    filter: brightness(1.6) invert(0);
+   }
+
+    body.dark-mode .search-box input{
+      color: white;
+    }
+
+
+
+  body.dark-mode .share-search-wrapper
+   {
+    background-color:rgb(32, 32, 32) ;
+    }
+    body.dark-mode .share-icon-wrapper,
+    body.dark-mode .search-box{
+        background-color:#121212 ;
+    }
+
+    body.dark-mode .share-action span,
+    body.dark-mode .custom-filter img{
+      filter: invert(1);
+    }
+
+    body.dark-mode .share-action img{
+      filter: invert(1);
+    }
+
+
+    body.dark-mode .send-comment{
+      background-color: rgb(32, 32, 32);
+    }
+
+    body.dark-mode #emoji-picker,
+    body.dark-mode .create-unique-emoji-picker {
+      background: #302f2f; /* אפור כהה */
+      color: #eee;
+      border: none;
+    }
+
+
+
+    body.dark-mode .emoji-button svg, 
+    body.dark-mode .modal-options svg,
+    body.dark-mode .emoji
+    {
+      fill: white;
+    }
+
+    body.dark-mode .arrow-down path
+    {
+      stroke: white;
+    }
+
+
+
+        body.dark-mode .emoji-button svg:hover, body.dark-mode .modal-options svg:hover, body.dark-mode .emoji:hover{
+      fill: rgb(147, 147, 147);
+    }
+
+  
+
+    body.dark-mode .modal-post-actions img{
+      filter: invert(1);
+    }
+  
+    body.dark-mode .modal-username
+    ,body.dark-mode .modal-post-description
+    ,body.dark-mode .comment-username
+    ,body.dark-mode .comment-text
+
+
+    {
+    color: white;
+    }
+
+ 
+
+body.dark-mode #scrollToTopBtn img {
+  filter: invert(1); /* שחור בדארק */
+}
+    
+    body.dark-mode .sidebar-left ,
+      body.dark-mode ,  body.dark-mode .post
+      , body.dark-mode .add-comment-box
+      , body.dark-mode .seeAll, body.dark-mode .story-name
+    , body.dark-mode .post-text
+      , body.dark-mode .likes-count
+      , body.dark-mode .user-name
+        , body.dark-mode .more-options
+        , body.dark-mode .search-modal
+        , body.dark-mode .search-input
+        
+      {
+    background-color: #000;
+    color: white;
+    fill: white;
+  }
+
+
+  body.dark-mode .stories-container img {
+    border: 4px solid black;
+  }
+
+  /* הופך תמונות רק בתוך הסיידבר השמאלי */
+  body.dark-mode .sidebar-left img,
+  body.dark-mode .post-actions img{
+    filter: invert(1);
+  }
+
+
+
+
+  body.dark-mode img.like.liked {
+    filter: none !important;
+  }
+
+  body.dark-mode .search-modal .recent-item img {
+    filter: none !important;
+  }
+
+  body.dark-mode .recent-item:hover {
+    background-color: #2c2c2c; /* אפור כהה */
+  }
+  body.dark-mode .search-modal {
+    border-left: 1px solid black;
+  }
+  body.dark-mode .search-modal .search-input::placeholder {
+    color: #aaaaaa;
+  }
+  body.dark-mode .search-modal .search-input {
+    background-color: #262626;       /* מעט בהיר מהרקע הראשי */
+    color: #fff;}
+
+  body.dark-mode .search-modal {
+    scrollbar-width: thin;                  /* לפיירפוקס */
+    scrollbar-color: #bbbbbb #2f2f2f;          /* thumb (בהיר), track (כהה) */
+  }
+    body.dark-mode {
+    scrollbar-width:thin;                  /* לפיירפוקס */
+    scrollbar-color: #bbbbbb #2f2f2f;          /* thumb (בהיר), track (כהה) */
+  }
+
+  body.dark-mode .search-modal::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  body.dark-mode .search-modal::-webkit-scrollbar-track {
+    background: #2a2a2a;                    /* רקע פס הגלילה – כהה */
+  }
+
+
+
+
+  body.dark-mode .search-modal::-webkit-scrollbar-button:single-button:vertical:decrement {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="8" width="8" xmlns="http://www.w3.org/2000/svg"><polygon points="0,6 4,2 8,6"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 10px;
+    display: block;
+  }
+
+  body.dark-mode .search-modal::-webkit-scrollbar-button:single-button:vertical:increment {
+    display: none; /* אין חץ למטה */
+  }
+
+
+
+  body.dark-mode ::-webkit-scrollbar-button {
+    display: block;
+    height: 12px;
+    background-color: #333;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-button:vertical:decrement {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24'><path d='M7 14l5-5 5 5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  body.dark-mode ::-webkit-scrollbar-button:vertical:increment {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  body.dark-mode .sidebar-left {
+    border-right: 1px solid #282828 !important; 
+  }
+  body.dark-mode .recent-section{
+    border-top: 1px solid #282828;
+  }
+  body.dark-mode #post2{
+    border-bottom: 1px solid #282828;
+  }
+    body.dark-mode #post1{
+    border-bottom: 1px solid #282828;
+  }
+
+  /* כפתור מתג Dark Mode קבוע למעלה */
+
+
+  .switch-toggle {
+    position: fixed;;
+    bottom: 20px;
+    right: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+    transition: color 0.3s ease;
+  }
+
+
+  body.dark-mode .switch-toggle {
+    color: white;
+  }
+
+  .switch-toggle input {
+    display: none;
+  }
+
+  .slider {
+    position: relative;
+    width: 55px;
+    height: 26px;
+    background-color: #ccc; /* רקע אפור בהתחלה */
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: inset 0 0 5px #aaa;
+  }
+
+  body.dark-mode .slider {
+    background-color: #fff; /* רקע לבן בדארק */
+  }
+
+  .circle {
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: white; /* עיגול לבן בהתחלה */
+    border-radius: 50%;
+    transition: left 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  body.dark-mode .circle {
+    left: 33px;
+    background-color: black; /* עיגול שחור בדארק */
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.3s ease;
+  }
+
+  .sun {
+    opacity: 1;
+  }
+
+  .moon {
+    opacity: 0;
+    filter: invert(1);
+  }
+
+  body.dark-mode .sun {
+    opacity: 0;
+  }
+
+  body.dark-mode .moon {
+    opacity: 1;
+  }
+
+  /* left side bar */
+  
+  .sidebar-left {
+    z-index: 9999999;
+    position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ensures space between top and bottom sections */
+  height: 100vh;
+  width: 210px;
+  background-color: #fff;
+  border-right: 1px solid #dbdbdb;
+  padding: 20px;
+  left: -5;
+  top: 0;
+  transition: border-color 0.15s ease;   /* החלקה כמו ההאפלה */
+
+  }
+  
+  .sidebar-items {
+  display: flex;
+  flex-direction: column;
+  gap:20px;
+  }
+  
+  .sidebar-top {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  }
+  
+  .sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+  }
+  
+  .sidebar-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 95%;
+  padding:10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  }
+  
+  .sidebar-hoverable:hover {
+  background-color: #e3e3e383;
+  }
+  
+  .sidebar-item img {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  object-fit: contain;
+
+  }
+
+  
+  #pfp-l {
+  width: 30px;
+  height: 30px;
+  }
+  
+  #lftlogo {
+  height: 42px;
+  width: 115px;
+  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  }
+  #iftlogo:active
+  {
+    opacity: 0.7;
+  }
+  
+  #lftlogo:hover {
+  background-color: transparent;
+  box-shadow: none;
+  }
+  
+  /* Optional: Adjust size of bottom icons */
+  .sidebar-bottom img {
+  width: 25px;
+  height: 25px;
+  }
+  
+  /* Optional: Add margins for the bottom items to have more space from the top section */
+  .sidebar-bottom .sidebar-item {
+  margin-top: 12px;
+  }
+  
+  .share-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* החשכה */
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  
+    opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+ .share-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 60vh;
+  max-height: 90vh;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.share-search-wrapper {
+  padding: 12px 16px 0 16px;
+  background: #fff;
+}
+
+.search-box {
+  position: relative;
+  background: #efefef;
+  border-radius: 10px;
+  padding-left: 36px;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  margin-bottom: 10px;
+}
+
+.no-results {
+  position: absolute;
+  top: 150px;
+  left: 120px;
+  text-align: center;
+  font-size: 20px;         /* מגדיל את הטקסט */
+  font-weight: 500;
+  color: #888;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  width: 100%;
+  padding: 8px 12px 8px 0;
+  color: #262626;
+  direction: ltr;
+  text-align: left;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  opacity: 0.6;
+}
+
+.share-modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  border-radius: 12px;
+}
+
+.share-modal-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+.close-share-modal {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-80%);
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* אזור גלילה */
+.share-scrollable {
+    position: relative;
+  height: 400px; 
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* גריד של המשתמשים */
+.user-grid {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px; 
+}
+
+.user-grid .username{
+  font-size: 14px;
+}
+
+.user-item {
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.share-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.share-avatar-wrapper img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.checkmark {
+  display: none;
+  position: absolute;
+  top: 55;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  background: #0af;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+    box-shadow: 0 0 0 3px white; /* מסגרת לבנה מסביב */
+}
+
+.user-item.selected .checkmark {
+  display: block;
+}
+
+/* תפריט שיתוף בתחתית */
+.share-bottom-menu {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* כפתורי אייקון */
+.share-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 72px;
+  gap: 6px;
+  font-size: 12px;
+  color: #333;
+  text-align: center;
+  white-space: nowrap; /* 💡 זה שומר על הכל בשורה אחת */
+}
+
+.share-icon-wrapper {
+  background: #f0f0f0;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-icon-wrapper img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.share-action img {
+  width: 24px;
+  height: 24px;
+}
+
+/* תיבת שליחה */
+.send-box {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.send-box textarea {
+  resize: none;
+  width: 100%;
+  height: 40px;
+  padding: 8px;
+  font-size: 14px;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  font-family: inherit;
+  background: white;
+}
+
+.dimmed {
+    border-color:#717171 ;
+}
+
+#scrollToTopBtn.dimmed {
+  border-radius:0%;
+}
+
+
+.dimmed::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* החשכה */
+  z-index: 1000; /* שיהיה מעל אבל לא מעל המודל */
+  pointer-events: none; /* שימנע בעיות קליקים */
+  border-radius: inherit; /* אם יש רדיוס – שישמר */
+}
+
+.dimmable.dimmed::after {
+  opacity: 0.5;   
+}
+
+
+.dimmable::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 1); /* שחור מלא – לא משנה, נשלוט באופסיטי */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  border-radius: inherit;
+  z-index: 1000; /* מעל התוכן, מתחת למודלים */
+}
+
+
+
+#toast-message,
+#toast-comment {
+  position: fixed;
+  bottom: 80px; /* מעל התפריט התחתון */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, bottom 0.3s ease;
+  z-index: 1000000;
+  user-select: none;
+}
+
+.toast-show {
+  opacity: 1 !important;
+  bottom: 120px !important;
+  pointer-events: auto !important;
+}
+
+.toast-hidden {
+  opacity: 0;
+  bottom: 80px;
+  pointer-events: none;
+}
+
+
+.send-button {
+  background: #007aff;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+  
+  /* yamin */
+    
+  .sidebar-right {
+      width: 410px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    /* אין top ואין transform */
+    margin-left: 72%;
+    margin-top: -3860px;
+  }
+
+    .sidebar-right.hide-0 {
+    margin-top: -3860px;
+  }
+  .sidebar-right.hide-1 {
+    margin-top: -1397px;
+  }
+
+  .sidebar-right.hide-2 {
+    margin-top: -700px;
+  }
+
+  .sidebar-right.hide-3plus {
+    margin-top: -185px;
+  }
+
+  .sidebar-right.show-text{
+    margin-top: -632px ;
+  }
+    .sidebar-right.show-image{
+    margin-top: -2122px ;
+  }
+      .sidebar-right.show-video{
+    margin-top: -1334px ;
+  }
+
+  
+
+  .right-pfp {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  }
+  
+  .right-pfp img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  }
+  
+  .right-pfp-name .username {
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+
+  }
+  
+  .right-pfp-name .name {
+  font-size: 14px;
+  color: gray;
+  }
+  
+  .switch-link {
+      font-size: 12px;
+      color: #0095f6;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      margin-left: 95;
+  }
+  
+  .switch-link:hover {
+  color: #005289;
+  }
+  
+  
+  .suggested-section {
+  margin-bottom: 10px;
+  font-weight: 600;
+  }
+  
+  .suggested-header {
+  display: flex;
+  font-size: 14px;
+  color: #747474;
+  margin-bottom: 20px;
+  }
+
+  
+  .suggested-header a {
+  font-size: 12px;
+  color: #000000;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 130;
+  align-self: center;
+  }
+  
+  .suggested-header a:hover {
+  color: #8e8e8e;
+  }
+  
+  /* updated layout for suggested users */
+  .suggested-user {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  }
+  
+  .suggested-user-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  }
+  
+  .suggested-user img {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  }
+
+  .suggested-user img:hover{
+  cursor: pointer;
+  }
+  
+  .user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  }
+  
+  .user-info .username {
+  font-weight: 600;
+  font-size: 14px;
+  display: block;
+  }
+
+  .user-info .username{
+      cursor: pointer;
+  }
+  
+  .user-info .relation {
+  font-size: 12px;
+  color: #8e8e8e;
+  font-weight: 400;
+  }
+  
+  .follow-btn{
+  font-size: 12px;
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 136;
+  
+}
+  .follow-btn:hover {
+  color: #005289;
+  }
+
+  .profile-picture {
+      width: 40px; /* או 45px או מה שמתאים לך */
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .verified-badge {
+display: inline-block;
+vertical-align: middle;
+margin-left: 4px;
+}
+
+#insta-follow{
+  font-size: 12px;
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 18;
+}
+
+#insta-follow:hover {
+color: #005289;
+}
+#or-follow{
+  font-size: 12px;
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 11;
+}
+
+#ziv-follow{
+  font-size: 12px;
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8;
+}
+
+#kim-follow{
+  font-size: 12px;
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 11;
+}
+#ari-follow{
+  font-size: 12px;
+  color: #0095f6;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10;
+}
+#or-follow:hover,#ziv-follow:hover,#kim-follow:hover,#ari-follow:hover{
+color: #005289;
+}
+.footer-links {
+  font-size: 12px; /* טיפה יותר קטן */
+  color: #aaa;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px; /* רווחים קטנים יותר */
+  line-height: 1.3;
+  padding-top: 5px;
+}
+
+.footer-links a {
+  color: #c0c0c0;
+  text-decoration: none;
+  position: relative;
+  padding-right: 6px; /* פחות רווח מימין */
+}
+
+.footer-links a::after {
+  content: '.';
+  position: absolute;
+  right: 0;
+  color: #ccc;
+  font-weight: bold; /* שתיראה יותר כמו נקודה */
+  font-size: 10px; /* טיפה בולטת אבל לא ענקית */
+  top: -2.px; /* מרכז אותה לגובה הטקסט */
+}
+
+.footer-links a:last-of-type::after {
+  content: ''; /* לא להוסיף נקודה בסוף */
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-links .copyright {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #C7C7C7;
+  text-align: start;
+}
+.footer-links a.break-line {
+  flex-basis: 100%; /* שובר שורה */
+}
+
+.footer-links a.break-line::after{
+  content: ''; 
+}
+
+/* main feed */
+/* עוטף של שורת הסטוריז */
+.stories-wrapper {
+    position: relative;
+  width: 100%;
+  max-width: 750px; /* או מה שאתה צריך */
+  margin: 0 auto;
+  overflow: hidden; /* כדי למנוע חריגות */
+}
+
+.stories-container {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  padding: 20px 10px;
+  width: 600px; /* 6 סטוריז בערך */
+  margin: 0 auto 0 auto; /* אוטומטי במרכז, מרווח מלמטה לפיד */
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  overflow-x: hidden; /* נסתר גלילה רגילה */
+  min-height: 100px;
+  transform: translateX(-80px);
+}
+
+
+/* כל אלמנט סטורי */
+.story {
+   flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  color: #262626;
+  text-align: center; /* מבטיח שהשם יהיה ממרכז */
+    opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(0);
+}
+
+
+
+/* עיגול של התמונה */
+.story img {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%; /* עיגול של התמונה */
+  object-fit: cover; /* מוודא שהתמונה תתמלא בצורה נכונה */
+  border: 4px solid white; /* גבול לבן קטן בין התמונה למסגרת */
+  background-image: linear-gradient(to top, #ffd900, #ff9900,  #da5899,  #ff66b2 ); /* מגדיר את הגרדיאנט של המסגרת */
+  padding: 3px; /* מוסיף רווח בין התמונה למסגרת */
+  border-radius: 50%; /* שומר על העיגול */
+  transition: background-image 0.3s ease; /* אפקט מעבר */
+
+}
+
+/* אפקט של הובר על התמונה */
+.story img:hover {
+  cursor: pointer;
+}
+
+/* שם משתמש */
+.story-name {
+  color: #000000; /* צבע כהה יותר לשם */
+  font-size: 12px; /* גודל טקסט לשם */
+}
+.story-name:hover{
+cursor: pointer;
+}
+
+.story-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.story-image-wrapper img {
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .story img {
+    width: 48px;
+    height: 48px;
+  }
+  .story-name {
+    max-width: 50px;
+    font-size: 10px;
+  }
+}
+
+/* סגנון לכפתור הגלילה */
+.scroll-button {
+  position: absolute;
+  top: 65px;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%; /* עיגול סביב הכפתור */
+  background-color: #ffffff; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 20;
+  transition: background-color 0.3s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: rgb(100, 100, 100);
+}
+
+/* הוספת חץ svg */
+.scroll-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.scroll-button.left {
+  left: 25px;
+}
+
+.scroll-button.right {
+  left: 565px;
+}
+
+/* post */
+
+/* סגנון לפוסט */
+  .post {
+    
+  margin-left: -500;
+    width: 500px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    transform: translateX(-80px); /* מזיז את הפוסט שמאלה */
+    max-width: 500px;
+  }
+
+/* כותרת הפוסט (שם משתמש) */
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-user {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-wrapper {
+  background-image: linear-gradient(to top, #ffd900, #ff9900,  #ff66b2,  #ff66b2 );
+  padding: 3px; /* זה מה שיוצר את עובי המסגרת */
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: block;
+  background-color: white; /* חשוב - מספק ניגוד ברור למסגרת */
+  
+}
+
+.user-avatar:hover{
+  cursor: pointer;
+}
+
+.user-name {
+  font-size: 14px;
+  margin-left: 10px; /* מזיז את השם ימינה */
+  font-weight: 500;
+  color: #000000;
+}
+.user-name:hover{
+  cursor: pointer;
+}
+.user-name:active{
+  color: #737373;
+}
+
+.more-options {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.more-options svg {
+  display: block;
+}
+
+
+.post-image {
+  background-color: black; /* רווחים שחורים בצדדים */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px; /* או כל גובה שתרצה */
+  overflow: hidden;
+}
+
+.post-image img {
+  height: 100%;
+  width: auto;
+  object-fit: contain; /* שומר על פרופורציות */
+}
+
+.post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 5px;
+}
+
+.post-actions .left-actions {
+  display: flex;
+  gap: 15px; /* מרווח בין האייקונים */
+}
+
+.post-actions img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.post-actions img:hover {
+  opacity: 0.5;
+}
+
+
+/* תיאור הפוסט */
+.post-description {
+  gap: 0px; /* קרבתי את כל האלמנטים בתוך post-description */
+  display: flex;
+  flex-direction: column; /* נוודא שהאלמנטים יהיו טור אחד */
+  margin-top: 10px;
+  color: #000000; /* שים כאן את הצבע שאתה רוצה */
+}
+
+.likes-count {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.like.pop{
+  transition: transform 0.2s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.like.pop {
+  animation: pop 0.4s ease;
+}
+
+
+.likes-count:hover {
+  cursor: pointer;
+}
+
+
+.post-text {
+  font-size: 14px;
+  color: #000000;
+  margin-bottom: 0;
+}
+
+.feed {
+  overflow-y: auto;
+  height: 100vh;
+    display: flex;
+  flex-direction: column;
+  
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #737373;
+}
+
+.dot {
+  font-size: 14px;
+  color: #737373;
+}
+
+.time {
+  color: #737373;
+  font-size: 14px;
+}
+
+.time:hover {
+  cursor: pointer;
+}
+
+/* שורה אחת עבור המיני תמונות וכמות הלייקים */
+.likes-row {
+  display: flex;
+  align-items: center; /* יישור האלמנטים במרכז אנכית */
+  gap: 8px; /* רווח בין המיני תמונות ללייקים */
+}
+
+/* הצגת המיני תמונות בצורה של שורה */
+.mini-images {
+  display: inline-block; /* מאפשר למיני תמונות להיות על אותה שורה */
+  position: relative;
+  width: 22px; /* תלוי כמה חפיפה אתה רוצה */
+  height: 14px;
+}
+
+.more {
+  color: #737373; /* צבע אפור לכפתור MORE */
+  cursor: pointer;
+  display: inline-block;
+}
+.view-comments {
+  margin-top: 5px; /* הסרת רווחים לפני ה-view-comments */
+  margin-bottom: 5px;
+  color: #737373;  /* צבע ברירת המחדל */
+  font-size: 14px;
+  cursor: default;  /* אין קורסור על כל השורה */
+  margin-bottom: 0;
+}
+
+.view-comments-text {
+  cursor: pointer; /* קורסור של אצבע רק על הטקסט */
+}
+
+.mini-image {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid white;
+  object-fit: cover;
+  transition: filter 0.2s; /* מעבר חלק לצבע */
+}
+
+.mini-image:hover {
+  filter: brightness(0.8); /* עמעום קל כשעוברים עם העכבר */
+  cursor: pointer;
+}
+
+.mini-image:nth-child(1) {
+  left: 0;
+  z-index: 2; /* תמונה אחת על השנייה */
+}
+
+.mini-image:nth-child(2) {
+  left: 8px; /* כמה חפיפה אתה רוצה */
+  z-index: 1;
+}
+
+#descript-username {
+  font-weight: 500;
+  margin-right: 5px;
+  margin-left: 0px; /* לא צריך להזיז ימינה */
+  font-size: 14px;
+}
+
+.comment-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.view-comments-text {
+  color: #737373;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.comment-row {
+  display: flex;
+  align-items: center; /* מוודא שכל האלמנטים במרכז */
+  width: 100%; /* מאפשר לתיבה למלא את כל רוחב האב */
+}
+
+.add-comment-box {
+  font-family: inherit;
+  flex: 1;
+  border: none;
+  background-color: white;
+  resize: none;
+  font-size: 14px;
+  padding: 8px 0;
+  color: #737373;
+}
+
+
+.add-comment-box:focus {
+  outline: none;
+}
+
+.emoji {
+  font-size: 18px;
+  color: #737373;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: filter 0.2s;
+  margin-top: -18px;
+}
+
+.emoji:hover {
+  filter: brightness(0.5);
+}
+
+.comment-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: none; /* נתחיל סגור */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-family: 'Arial', sans-serif;
+  background-color: rgba(0, 0, 0, 0.5); /* החשכה */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none; /* לא לאפשר אינטראקציה כשהוא נסגר */
+}
+.comment-modal.active {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto; /* מאפשר אינטראקציה כשהוא פתוח */
+}
+
+
+
+.comment-modal-content {
+  display: flex !important;
+  background: #fff !important;
+  width: 80vw !important;
+  max-width: 900px !important;
+  height: 80vh !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  opacity: 1 !important;
+  transition: opacity 0.15s ease !important;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3) !important;
+}
+
+/* צד שמאל - תמונת הפוסט */
+.comment-modal .modal-left {
+  flex: 1.1 !important;
+  background: black !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.modal-post-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* צד ימין - תגובות */
+.modal-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #ddd;
+  background: #fff;
+    height: 100%;
+
+}
+
+/* כותרת עם משתמש וכפתור אפשרויות */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 0.5px solid #ececec;
+}
+
+/* כפתור סגירה */
+.modal-close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  user-select: none;
+  transition: color 0.3s ease;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+
+.modal-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+  
+  .comment-item img,
+  .modal-user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f56040; 
+    
+  }
+
+
+
+.modal-user-avatar:hover{
+  cursor: pointer;
+}
+
+.modal-username {
+  font-weight: 600;
+  font-size: 14px;
+  color: #262626;
+}
+.modal-username:hover {
+cursor: pointer;
+color: #909090;
+
+}
+.modal-summary-row {
+  display: flex;
+  align-items: center; /* מיישר אנכית למרכז */
+  gap: 12px;
+  padding: 10px 16px;
+  background-color: #ffffff;
+  user-select: none;
+}
+/* התמונה */
+.modal-summary-row img.modal-user-avatar {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* קונטיינר לטקסט (שם ותיאור) שיושבים בשורה */
+.modal-summary-row .modal-post-text-wrapper {
+  display: inline; /* או inline-block */
+  margin-left: 8px; /* ריווח בין התמונה לטקסט */
+  vertical-align: middle;
+  max-width: calc(100% - 48px);
+}
+
+/* שם המשתמש עם נקודתיים */
+.modal-summary-row .modal-username {
+  font-weight: 600;
+  font-size: 14px;
+  color: #262626;
+  display: inline;
+  white-space: nowrap;
+  margin-right: 4px;
+  margin-bottom: 15px;
+}
+
+.modal-summary-row .modal-username::after {
+  content: ":";
+}
+
+.modal-summary-row .modal-username:hover {
+  text-decoration: underline 1.2px;
+}
+
+
+/* תיאור הפוסט - מתחיל אחרי שם המשתמש, עם שבירת שורות רגילה */
+.modal-summary-row .modal-post-description {
+  margin-top: 15px;
+  color: #000000;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  display: inline;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: calc(100% - 60px); /* התאמה לריווח */
+}
+
+.disable-interactions {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* כפתור שלוש נקודות */
+.modal-options  {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.modal-options:hover {
+color: #909090;
+}
+
+/* תיאור הפוסט */
+.modal-post-text {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #262626;
+  border-bottom: 1px solid #eee;
+  min-height: 50px;
+}
+
+/* רשימת תגובות */
+/* רשימת תגובות */
+/* עוטף גלילה */
+.modal-scrollable-comments-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0; /* מאפשר overflow בתוך flex */
+  border-bottom: 1px solid #eee;
+}
+
+/* רשימת תגובות */
+.comment-modal .comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #262626;
+}
+/* תגובה בודדת */
+.comment {
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #262626;
+}
+
+
+/* קונטיינר תוכן התגובה */
+
+.comment-content {
+  display:flex;
+  gap: 10px;  
+  align-items: center;
+  line-height: 1.3;
+  word-break: break-word;
+    flex-wrap: wrap; /* מאפשר לשבור שורה במקרה שאין מקום */
+}
+
+/* שם משתמש מודגש */
+.comment-username {
+  display:inline-block;
+  font-weight: 600;
+  margin-left: 50px;
+  margin-top: -50px;
+  cursor: pointer;
+}
+
+#IWusername{
+  display:inline-block;
+  font-weight: 600;
+  margin-left: 10px;
+  margin-top: -10px !important;
+  cursor: pointer;
+}
+
+#IWtext{
+  margin-top: -10px;
+  color: #828282;
+}
+
+
+
+/* טקסט תגובה */
+.comment-text {
+  font-size: 14px;
+  margin-top: -50px;
+  }
+
+  
+
+.comment.writing {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-style: italic;
+  color: gray;
+}
+
+.comment.writing .comment-text {
+  color: #999;
+  font-style: italic;
+}
+  
+/* אימוג'י פיקר גדול במודל לא ישפיע */
+#emoji-picker.post-picker {
+  width: 200px !important;
+  height: 200px !important;
+}
+
+/* תגובה יחידה */
+.comments-list p {
+  margin: 6px 0;
+  line-height: 1.3;
+}
+
+/* אזור הוספת תגובה */
+.comment-input {
+    position: relative;
+    margin-top: auto; /* תזיז את תיבת התגובה לתחתית */
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px 16px;
+  gap: 10px;
+}
+
+.emoji-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  margin-bottom: -10px;
+}
+
+textarea {
+  flex-grow: 1;
+  resize: vertical;
+  min-height: 40px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+#emoji-picker {
+  position: fixed;
+  bottom: 150px; /* מעל שורת התגובה */
+  left: 800px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  border-radius: 6px;
+  background: white;
+  user-select: none;
+}
+
+.feed.no-scroll {
+  overflow-y: hidden;
+  height: 100vh; /* או גובה ספציפי לפי הצורך */
+}
+
+.modal-footer-static {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 16px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+
+.emoji-item {
+  font-size: 20px;
+  margin: 3px;
+}
+
+.modal-post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-post-actions .left-actions {
+  display: flex;
+  gap: 12px;
+}
+
+
+.modal-post-actions img,
+.modal-post-actions svg {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.modal-post-actions img:hover {
+  opacity: 0.5;
+}
+
+.modal-save {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+
+.modal-likes-date {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-likes-count {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.modal-likes-count:hover {
+cursor: pointer;
+}
+
+.modal-post-date {
+  font-size: 12px;
+  color: #888;
+}
+.modal-post-date:hover {
+cursor: pointer;
+}
+
+.comment-input textarea {
+  flex: 1;
+  resize: none;
+  height: 38px;
+  border: none;
+  font-size: 14px;
+  outline: none;
+  margin-top: 6px;
+  font-family: 'Arial', sans-serif;
+}
+
+.comment-input textarea:focus {
+  background: #fff;
+}
+
+.send-comment {
+  font-size: 14px;
+  color: #0095f6;
+  font-weight: 550;
+  border: none;
+  background-color: #ffffff;
+  opacity: 0.4;          /* שקוף פחות */
+}
+
+/* מצב פעיל */
+.send-comment.enabled {
+  cursor: pointer;
+  opacity: 1;
+  color: #0095f6;
+}
+
+/* הובר רק כשפעיל */
+.send-comment.enabled:hover {
+  color: #005289;
+}
+
+/* Scrollbar עדין לרשימת תגובות */
+.comments-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+.post-button {
+  font-size: 14px;
+  color:#0095f6;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0;
+  margin-left: 10px;
+  margin-top: -20px;
+}
+
+.post-button:hover{
+  color: #005289;
+}
+
+.add-comment-box:not(:placeholder-shown) ~ .post-button {
+  opacity: 1;
+}
+
+.add-comment-box:placeholder-shown ~ .post-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+#post1,#post2,#post3,#post4,#post5,#post6{
+border-bottom: 1px solid #d0d0d0 ;
+border-radius: 0%;
+}
+
+
+
+.end-of-page {
+height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
+}
+
+.search-modal {
+  position: fixed;
+  top: 0;
+  left: 72px;
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  border-top-right-radius: 3%;
+  box-shadow: 3px 0 5px rgba(0,0,0,0.1);
+  border-left: 1px solid #f3f3f3;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: transform 0.5s ease, opacity 0.5s ease; 
+  pointer-events: none;
+}
+
+.search-filter{
+margin-bottom: 10px;
+margin-left: 20px;
+}
+
+.search-modal.active {
+  display: flex; 
+  opacity: 1;
+  pointer-events: auto;
+  animation: slideIn 0.5s ease forwards;
+
+}
+
+.search-modal.closing {
+  animation: slideOut 0.5s ease forwards;
+  opacity: 0;
+  pointer-events: none;
+
+}
+
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 5px;
+  padding: 20px;
+}
+
+.search-input::placeholder {
+  font-weight: 100; /* מוריד הדגשה */
+  color: #888;          /* אפור נעים לעין */
+  opacity: 1;  
+}
+
+.search-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  font-size: 24px;
+  cursor: pointer;
+  margin-bottom: 30px;
+
+}
+
+.search-input {
+  margin: 15px 0;
+  padding: 12px;
+  width: 100%;
+  border-radius: 7px;
+  border:none;
+  background-color: #f1f1f1;
+  font-size:16px ;
+  direction: auto;
+  unicode-bidi: plaintext; /* זהו הקסם שמזהה נכון את כיוון השפה */
+  margin: 0 20px;         /* ריווח חיצוני מהצדדים של המודל */
+  width: calc(100% - 40px); /* כדי שהשדה לא יגלוש מהקונטיינר */
+  margin-bottom: 15;
+}
+
+.search-input:focus {
+  outline: none;          
+  border-color: #ccc;      
+  box-shadow: none;        
+}
+
+.recent-section {
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-top: 10px;
+  border-top: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.search-modal, .recent-section {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; 
+}
+
+.recent-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  padding: 20;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box; 
+  width: 100%;
+}
+
+.recent-item:hover{
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.recent-item img {
+  width: 45px;
+  border-radius: 50%;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.recent-text {
+  flex-grow: 1;
+font-weight: normal;
+}
+
+#clearALL{
+text-decoration: none;
+font-weight: 600;
+font-size:15px ;
+color: #3143E3;
+}
+
+#clearALL:hover{
+text-decoration: underline;
+}
+
+#Recent{
+font-weight: 600;
+
+}
+
+.m_username {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.m_name {
+  font-size: 15px;
+  color: gray;
+}
+
+.remove {
+  cursor: pointer;
+  font-size: 18px;
+  color: #999;
+}
+
+.sidebar-left.sidebar--collapsed .sidebar-item span {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: 0.3s ease;
+  
+}
+
+.logo-container {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#logo-img-full,
+#logo-img-small {
+  position: absolute;
+  left: 6px;
+  margin-bottom: 14px;
+  transition: opacity 0.3s ease;
+}
+
+#logo-img-full {
+  height: auto;
+  width: 120px;
+
+  opacity: 1;
+}
+
+#logo-img-small {
+  width: 32px;
+  height: auto;
+  opacity: 0;
+}
+
+/* כשמצמצמים סיידבר – להסתיר את הלוגו הגדול ולהציג הקטן */
+.sidebar--collapsed #logo-img-full {
+  opacity: 0;
+}
+
+.sidebar--collapsed #logo-img-small {
+  opacity: 1;
+}
+
+.sidebar-left.sidebar--collapsed {
+  width: 40px;
+    transition: width 0.3s ease;
+}
+
+.sidebar-left.sidebar--collapsed #lftlogo {
+  width: 22px;
+  margin-left: 3px;
+
+}
+
+.sidebar-left .sidebar-item span {
+  transition: 0.3s ease;
+}
+
+#logo-img {
+  transition: opacity 0.3s ease;
+}
+.fade-out {
+  opacity: 0;
+}
+
+.highlight,
+.post.highlight .add-comment-box,
+.post.highlight .post-header svg,
+.post.highlight .post-header .user-name,
+.post.highlight .likes-row span,
+.post.highlight .post-text,
+.post.highlight .post-text span
+{
+  background-color: #d4f7d4 !important;
+  transition: background-color 2s !important;
+}
+
+#new-post-notice {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+  color: white;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: fadeSlideIn 0.4s ease-in forwards;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes fadeSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
+
+.create-post-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+}
+
+.create-post-overlay.visible {
+  opacity: 1;
+}
+
+.create-post-modal {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.15s ease-out;
+}
+
+.create-post-modal.visible {
+  opacity: 1;
+}
+
+/* כפתור האימוג'י */
+.create-unique-emoji-button {
+  position: absolute;
+  right: 0px;
+  top: 90%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.create-unique-emoji-button button:hover,
+.create-unique-emoji-button .emoji:hover,
+.create-unique-emoji-button svg:hover {
+  fill: #000000 !important; /* ודא שהצבע השחור תקף בזמן הובר */
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+
+.create-slider {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 20px;
+  margin-left: auto;
+  cursor: pointer;
+  max-width: fit-content;
+}
+
+.thread-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* מרווח בין התמונה לטקסט */
+}
+
+.profile-img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%; /* עיגול התמונה אם רצוי */
+  position: relative; /* לשליטה בזרימה */
+}
+
+.thread-svg {
+  width: 16px;
+  height: 16px;
+  fill: #fff;
+  border: 2px solid #fff; /* מסגרת לבנה */
+  border-radius: 50%; /* עיגול ה-SVG */
+  background: #fff; /* רקע לבן */
+  padding: 2px; /* מרווח פנימי */
+  box-sizing: content-box; /* שמירה על גודל */
+  display: inline-block; /* שמירה בזרימה */
+  vertical-align: middle; /* יישור אנכי עם התמונה */
+  z-index: 1;
+}
+
+.thread-svg path {
+  fill: #000; /* צבע הפסים בתוך ה-SVG */
+}
+
+/* שילוב חלקי עם התמונה */
+.thread-icon-wrapper .profile-img {
+  margin-right: -8px; /* חפיפה קלה עם ה-SVG */
+}
+
+.thread-icon-wrapper .thread-svg {
+  margin-left: -20px; /* חפיפה קלה עם התמונה */
+  margin-bottom: -20px;
+}
+
+
+.create-slider input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.create-slider .slider {
+  width: 45px;
+  height: 24px;
+  position: absolute;
+  top: 0;
+  right: 15;
+  bottom: 0;
+  background-color: #dbdbdb;
+  transition: background-color 0.3s ease;
+  border-radius: 12px; /* עיגול מודגש יותר */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15); /* צל פנימי עדין */
+}
+
+.create-slider .slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #fff;
+  transition: transform 0.3s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* צל חיצוני מעט חזק יותר */
+}
+
+.create-slider input:checked + .slider {
+  background-color: #0095f6;
+}
+
+.create-slider input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.create-unique-emoji-button svg {
+  fill: #6d6d6d;
+}
+
+.create-unique-emoji-button:hover svg {
+  fill: #0095f6;
+}
+
+/* בחירת האימוג'ים (Emoji Picker) */
+.create-unique-emoji-picker {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  max-width: 250px;
+  max-height: 150px;
+  overflow: auto;
+  z-index: 1000;
+}
+
+.emoji-item {
+  display: inline-block;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.emoji-item:hover {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.modal-instagram-layout {
+  display: flex;
+  width: 900px;
+  height: 80vh;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.post-image-side {
+  flex: 1.2;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+#post-image-preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: none;
+}
+
+.upload-options {
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.upload-options button.upload-file-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #0095f6;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin: 10px 0;
+}
+
+.upload-options button.upload-file-btn:hover {
+  background: #007bb5;
+}
+
+.upload-options input[type="url"] {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #fff;
+  color: #262626;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.close-image {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.error-message {
+  color: #ff0000;
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+}
+
+.post-form-side {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden; /* מניעת גלילה אופקית */
+}
+
+.post-form-header {
+  width: 100%;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #dbdbdb;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.post-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.post-user-info img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.post-user-info span {
+  font-weight: 500;
+  color: #262626;
+}
+
+.desc-with-emoji {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+#new-post-desc {
+  width: 100%;
+  min-height: 80px;
+  max-height: 150px;
+  padding: 8px 40px 8px 8px;
+  border: none;
+  border-radius: 4px;
+  resize: none;
+  font-size: 14px;
+  outline: none;
+  direction: ltr;
+  border-bottom: 1px solid #dbdbdb;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+}
+
+#new-post-desc[lang="he"] {
+  direction: rtl;
+}
+
+.create-emoji-button {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1;
+}
+
+.create-emoji-button svg {
+  fill: #8e8e8e;
+  width: 24px;
+  height: 24px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 8px 36px 8px 8px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  position: relative;
+  outline: none;
+  direction: ltr;
+}
+
+.input-field[lang="he"] {
+  direction: rtl;
+}
+
+.input-field-container {
+  position: relative;
+}
+
+.location-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden; /* מניעת גלילה אופקית */
+  display: none;
+  z-index: 10;
+}
+
+.location-suggestion {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.location-suggestion:hover {
+  background: #f1f1f1;
+}
+
+.share-to {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.share-to strong {
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.share-to label {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+  padding-bottom: 8px;
+}
+
+.share-to .profile-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.share-to .fb-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+
+.section-toggle {
+  margin-bottom: 15px;
+}
+
+.section-toggle button {
+  width: 100%;
+  padding: 8px;
+  background: none;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  text-align: left;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accessibility-content, .advanced-settings-content {
+  display: none;
+  margin-top: 10px;
+}
+
+.accessibility-content {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.accessibility-content p {
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-bottom: 0;
+}
+
+.alt-preview-small {
+  max-width: 60px;
+  max-height: 60px;
+  margin-top: 10px;
+  display: none;
+}
+
+.advanced-settings-content label {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.advanced-settings-content .setting-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.advanced-settings-content .setting-desc {
+  font-size: 12px;
+  color: #8e8e8e;
+  margin-top: 5px;
+}
+
+#submit-new-post {
+  width: 100%;
+  padding: 7px;
+  background: #0095f6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#close-create-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.arrow-down {
+  transition: transform 0.3s;
+}
+
+.arrow-down.rotated {
+  transform: rotate(180deg);
+}
+
+.location-icon {
+  position: absolute;
+  top: 40%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #000000;
+  width: 20px;
+  height: 20px;
+}
+
+.collaborator-icon {
+  position: absolute;
+  top: 40%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #000000;
+  width: 22px;
+  height: 22px;
+}
+
+.confirmation-modal {
+  width: 500px;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -90%);
+  background: #fff;
+  padding: 20px 0 0 0; /* פדינג רק למעלה */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  z-index: 2000;
+  text-align: center;
+  border: 0;
+  border-radius: 30px;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* בשביל שהרדיוס יעבוד מתחת */
+}
+
+.confirmation-modal p {
+  margin: 0 20px 20px 20px;
+  color: #646464;
+}
+
+.confirmation-modal #discardpostp {
+  color: #000000;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* קונטיינר הכפתורים */
+.confirmation-modal .confirmation-button-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-top: 1px solid #d3d3d3;
+  border-radius: 0 0 30px 30px;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+/* כל כפתור */
+.confirmation-modal .confirmation-button-container button {
+  width: 100%;
+  padding: 15px 0;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  border-bottom: none;
+  margin: 0;
+  border-radius: 0;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+/* בורדר מפריד בין הכפתורים - רק בכפתור הראשון */
+.confirmation-modal .confirmation-button-container button:first-child {
+  border-bottom: 1px solid #d3d3d3;
+  color: #ED4956;
+}
+
+/* הכפתור השני */
+.confirmation-modal .confirmation-button-container button:last-child {
+  color: #000000;
+}
+
+/* אפקט הובר */
+.confirmation-modal .confirmation-button-container button:hover {
+  background-color: #f7f7f7;
+}
+
+#confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* שחור חצי שקוף */
+  z-index: 1999; /* מתחת למודל */
+  display: none; /* מוסתר כברירת מחדל */
+}
+
+
+
+@keyframes ultraSubtleBounce {
+  0%   { transform: translate(-50%, -95%) scale(1); }
+  40%  { transform: translate(-50%, -98%) scale(1.01); }
+  60%  { transform: translate(-50%, -96%) scale(1); }
+  100% { transform: translate(-50%, -95%) scale(1); }
+}
+
+.confirmation-modal.visible {
+  display: block !important;
+  animation: ultraSubtleBounce 0.25s ease forwards;
+}
+
+
+.custom-filter {
+  position: relative;
+  margin: 0px 0 10px 870px;
+  top: 70px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  z-index: 10;
+}
+
+@media (width: 1920px) {
+.custom-filter {
+  position: relative;
+  margin: 0px 0 10px 1060px;
+  top: 70px;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  z-index: 10;
+  }
+}
+
+
+.filter-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  left: 40px;
+  top: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 5px;
+  z-index: 999;
+}
+
+.dropdown-option {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-option:hover {
+  background-color: #f0f0f0;
+}
+
+.more-menu {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 6px;
+  z-index: 100;
+  top: 40px;
+  right: 10px;
+}
+
+.delete-post-icon {
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+  filter: invert(21%) sepia(96%) saturate(7455%) hue-rotate(0deg) brightness(80%) contrast(115%);
+  transition: transform 0.2s ease;
+}
+
+.delete-post-icon:hover {
+  transform: scale(1.1);
+}
+
+.new-post {
+  border-bottom: 2px solid #ccc; /* או כל צבע אחר */
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+#create-post-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0); /* נתחיל בשקיפות */
+  display: none; /* מוסתר כברירת מחדל */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: background 0.15s ease;
+}
+#create-post-overlay.visible {
+  background: rgba(0, 0, 0, 0.5);
+}
