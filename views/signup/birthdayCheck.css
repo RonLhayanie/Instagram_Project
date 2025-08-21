@@ -1,0 +1,342 @@
+.main-div
+{
+    text-align: center;
+    border: 1px solid rgba(219,219,219,255);
+    margin: 10px auto;
+
+    width: 350px; 
+    height: 100%;
+    
+    
+}
+
+/*Cake icon from Insta website*/
+.cupcake-icon 
+{
+    width: 144px;
+    height: 96px;
+    display: inline-block;
+    margin-top: 5%;
+
+    background-image: url("https://static.cdninstagram.com/rsrc.php/v4/yz/r/H_-3Vh0lHeK.png");
+    background-repeat: no-repeat;
+    background-position: 0px -3011px; 
+    background-size: auto; 
+}
+
+/*some words under the icon + link*/
+#AddBirthdaySentence
+{
+    display: block;
+    text-align: center;
+    padding-left: 13%;
+    padding-right: 13%;
+
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    color: black;
+    font-size: 90%;
+
+    margin-bottom: 7%;
+
+}
+#whyBirthday
+{
+    display: block;
+    text-align: center;
+    padding-left: 10%;
+    padding-right: 10%;
+
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+    font-size: 90%;
+}
+#whyBirthdayButton
+{
+    display: block;
+    text-align: center;
+    margin-left: 12%;
+    border: none;
+
+    background-color: white;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: blue;
+    font-size: 90%;
+
+    cursor: pointer;
+}
+
+
+
+#BirthdayAlert-div
+{
+    position: fixed;
+    text-align: center;
+    margin-left: 14%;
+    background-color: white;
+}
+
+
+
+
+
+
+
+/*boxes to select your birthday*/
+.BirthdayInput-div 
+{
+    position: relative;
+    text-align: center;
+    width: 340px; 
+    display: flex;
+    justify-content: center;
+
+    margin-left: 2%;
+    margin-bottom: 2%;
+}
+.inputs 
+{
+    border: 1.5px solid rgb(227, 224, 224); 
+    font-family: Arial, Helvetica, sans-serif; 
+    margin-right: 10px; 
+    color: #767676;
+    
+}
+#MonthInput
+{
+    width: 25%;
+    height: 36px;
+    font-size: 13px;
+    background-color: white;
+    padding-left: 3px;
+
+}
+#DayInput
+{
+    width: 15%;
+    font-size: 13px;
+    background-color: white;
+    padding-left: 3px;
+}
+#YearInput
+{
+    width: 18%;
+    font-size: 13px;
+    background-color: white;
+    padding-left: 3px;
+
+}
+.inputs:active  /*animation when box been clicked*/
+{
+    border-color: rgb(237, 73, 86);
+}
+
+
+/*some instructions under the boxes*/
+.instructions
+{
+    text-align: center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 76%;
+    color: #767676;
+}
+#instructions2
+{
+    display: block;
+    text-align: center;
+    padding-left: 12%;
+    padding-right: 12%;
+
+    font-size: 74%;
+
+    margin-bottom: 5%;
+}
+
+
+
+/* "Next" button */
+#Next           
+{
+    border: 1px solid;
+    border-radius: 8px;
+    margin-top: 1%;
+    margin-bottom: 3%;
+    background-color: rgba(76,181,249,255);
+
+    width: 270px;
+    height: 35px;
+    color:white;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 100%;
+
+
+    transition: 0.3s ease;
+    cursor: pointer;
+
+}
+#Next:active
+{
+    transform: scale(0.995);
+}
+
+/* "Go back" button*/
+#goBack
+{
+    margin-bottom: 6%;
+    background: none;
+    border: none;
+    color: rgb(60, 60, 233);
+
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 90%;
+
+    cursor: pointer;
+}
+#goBack:hover
+{
+    color: rgb(7, 7, 156);
+}
+
+
+
+/* Have an account div */
+.second-div    
+{
+    text-align: center;
+    border: 1px solid rgba(219,219,219,255);
+    margin: 12px auto;
+
+    width: 350px; 
+    height: 60%;
+}
+#LogInButton     /* Log in button */  
+{
+    border: none;
+    background-color: white;
+
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    font-size: 100%;
+    color: rgb(59, 158, 251);
+
+    cursor: pointer;
+}
+#LogInButton:active
+{
+    color: rgba(180,205,247,255);
+}
+
+#haveAccount     /* have an account button */   
+{
+    margin-top: 6%;
+    margin-bottom: 5%;
+    font-weight: 300;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 87%;
+    letter-spacing: 0.2px;
+}
+
+
+/* Microsoft and Google Play logos */
+#shopButton-div           
+{
+    
+    text-align: center;
+    width: 350px; 
+    height: 100%;
+    margin: 15px auto;
+    margin-bottom: 6%;
+
+
+    font-size: 14px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+#googlePlay
+{
+    width: 40%;
+    height: 100%;
+}
+#microsoft
+{
+    width: 32.5%;
+}
+.shopLogos
+{
+    margin-right: 0.2%;
+    background:none;
+    cursor: pointer;
+    transition: filter 0.3s ease;
+}
+.shopLogos:active
+{
+    opacity: 0.5;
+}
+
+
+
+/* bottom links bar */
+#linksBar-div       
+{
+    text-align: center;
+    padding: 1%;
+
+    font-size: 4%;
+}
+.link       /* link design */
+{
+    border: none;
+    background-color: white;
+
+    font-size: 11px;
+    color: #767676;
+    margin-right: 0.05%;
+    letter-spacing: 0.3px;
+
+    cursor: pointer;
+}
+.link:hover
+{
+    text-decoration: underline;
+}
+.link:active
+{
+    color: rgba(216,216,216,255);
+}
+
+
+/* change language button */
+#lang-div  
+{
+    align-items: center; 
+    justify-content: center;
+    gap: 1%; 
+
+    display: flex;
+    font-family: sans-serif;
+}
+
+#language      
+{
+    text-align: right;
+    padding: 6px;
+    background-color:white;
+        border: none;
+
+
+    width: fit-content;
+    color: #767676;
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+/*copyright sentence design*/
+#copyright    
+{
+    margin: 0;
+
+    font-size: 12px;
+    color: #767676;
+}

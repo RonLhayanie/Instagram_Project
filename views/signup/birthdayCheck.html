@@ -1,0 +1,170 @@
+<!-- ron-lhayanie-329681662-or-benshoshan-333173045 -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="birthdayCheck.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up - Age &bull; Instagram </title>
+    <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1024px-Instagram_logo_2022.svg.png">
+</head>
+
+<body>
+
+    <div class="main-div">       
+        <div class="cupcake-icon"></div>
+        <br>
+        <span id="AddBirthdaySentence">Add Your Birthday</span>
+        <span id="whyBirthday">This won't be a part of your public profile.</span>
+        <button id="whyBirthdayButton">Why do i need to provide my birthday?</button>
+
+        <div id="BirthdayAlert-div">
+            <span id="BirthdaysTitle">Birthdays</span>
+            <br>
+            <div class="cupcake-icon"></div>
+
+
+        </div>
+        
+        
+        <br>
+
+
+    <div class="BirthdayInput-div">
+        <select id="MonthInput" class="inputs" required>
+            <option value="">Month</option>
+            <!-- חודשים ימולאו ב-JavaScript -->
+        </select>
+        
+        <select id="DayInput" class="inputs" required>
+            <option value="">Day</option>
+            <!-- ימים ימולאו ב-JavaScript -->
+        </select>
+
+        <select id="YearInput" class="inputs" required>
+            <option value="">Year</option>
+            <!-- שנים ימולאו ב-JavaScript -->
+        </select>
+        <span class="verificationAlert" id="BirthDateVer"></span>
+    </div>
+
+
+    <span class="instructions">You need to enter the date you were born</span>
+    <br> <br>
+    <span class="instructions" id="instructions2">Use your own birthday, even if this account is for a business, a pet, or something else</span>
+
+
+    <!-- sign up button -->
+    <button id="Next" onclick="checkAgeAndRedirect()"> <b>Next</b> </button>
+    <br>
+    <button id="goBack" onclick="GoBack()"> <b>Go back </b></button>
+
+
+</div>
+
+
+    
+
+
+    <!-- Log in button -->
+    <div class="second-div">
+        <p id="haveAccount">
+            Have an account? 
+            <br>
+            <button id="LogInButton" onclick="LogInButton()"> Log In </button>
+        </p>
+    </div>
+
+
+
+    <!-- Google Play and Microsoft buttons -->
+    <div id="shopButton-div">
+        Get the app.
+        <br> <br>
+        <img src="https://freelogopng.com/images/all_img/1664287128google-play-store-logo-png.png" class="shopLogos" id="googlePlay" onclick="openGoogleShop()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Get_it_from_Microsoft_Badge.svg/1024px-Get_it_from_Microsoft_Badge.svg.png" class="shopLogos" id="microsoft" onclick="openMicrosoftShop()">
+            
+    </div>
+
+
+
+    <!-- bottom links bar -->
+    <div id="linksBar-div">
+        <button class="link"> Meta </button>
+        <button class="link"> About </button>
+        <button class="link"> Blog </button>
+        <button class="link"> Jobs </button>
+        <button class="link"> Help </button>
+        <button class="link"> API </button>
+        <button class="link"> Privacy </button>
+        <button class="link"> Terms </button>
+        <button class="link"> Locations </button>
+        <button class="link"> Instagram Lite </button>
+        <button class="link"> Threads </button>
+        <button class="link"> Contact Uploading & Non-Users </button>
+        <button class="link"> Meta verified </button>
+        <button class="link"> Settlement Agreements </button>
+    
+    </div>
+
+
+    <!-- change language -->
+    <div id="lang-div">
+        
+        <select id="language">
+            <option value="african"> African </option>
+            <option value="arabic"> Arabic </option>
+            <option value="bengali"> Bengali </option>
+            <option value="bulgarian"> Bulgarian </option>
+            <option value="chinese"> Chinese </option>
+            <option value="czech"> Czech </option>
+            <option value="croatian"> Croatian </option>
+            <option value="danish"> Danish </option>
+            <option value="dutch"> Dutch </option>
+            <option value="english" selected> English </option>
+            <option value="englishUK"> English(UK) </option>
+            <option value="filipino"> Filipino </option>
+            <option value="finnish"> Finnish </option>
+            <option value="french"> French </option>
+            <option value="german"> German </option>
+            <option value="greek"> Greek </option>
+            <option value="hebrew"> Hebrew </option>
+            <option value="hindi"> Hindi </option>
+            <option value="hungarian"> Hungarian </option>
+            <option value="indonesian"> Indonesian </option>
+            <option value="italian"> Italian </option>
+            <option value="japanese"> Japanese </option>
+            <option value="korean"> Korean </option>
+            <option value="malay"> Malay </option>
+            <option value="malayalam"> Malayalam </option>
+            <option value="marathi"> Marathi </option>
+            <option value="nepali"> Nepali </option>
+            <option value="norwegian"> Norwegian </option>
+            <option value="persian"> Persian </option>
+            <option value="polish"> Polish </option>
+            <option value="portuguese"> Portuguese </option>
+            <option value="serbian"> Serbian </option>
+            <option value="sinhala"> Sinhala </option>
+            <option value="slovak"> Slovak </option>
+            <option value="russian"> Russian </option>
+            <option value="spanish"> Spanish </option>
+            <option value="swedish"> Swedish </option>
+            <option value="thai"> Thai </option>
+            <option value="turkish"> Turkish </option>
+            <option value="tamil"> Tamil </option>
+            <option value="telugu"> Telugu </option>
+            <option value="ukrainian"> Ukrainian </option>
+            <option value="vietnamese"> Vietnamese </option>
+        </select>
+
+        <!-- copyright -->
+        <p id="copyright"> © 2025 Instagram from Meta </p>  
+
+    </div>
+
+    <br> <br>
+    <script src="birthdayCheck.js"> </script>
+</body>
+
+</html>
