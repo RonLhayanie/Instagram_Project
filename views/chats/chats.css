@@ -1,0 +1,339 @@
+html, body {
+    padding: 0;
+    margin: 0;
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+#sidebar {
+    height: 100vh;
+    width: 75px;
+    border-right: 1px solid lightgrey;
+
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar ul {
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+#sidebar #upper-sidebar {
+    margin-top: 30%; 
+}
+
+#sidebar #mid-sidebar {
+    margin-top: 40%; 
+}
+
+#sidebar #lower-sidebar {
+    margin-top: auto;
+    margin-bottom: 30%;
+}
+
+#sidebar ul li {
+    width: 55px;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: background 0.2s ease;
+    cursor: pointer;
+}
+
+#sidebar ul li:hover {
+    background: #0000000a;
+}
+
+.pfp {
+    border-radius: 50%;
+    border: 1px solid lightgrey;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+#sidebar-pfp {
+    width: 30px;
+    height: 30px;
+}
+
+.pfp img {
+    width: 100%;
+}
+
+#content {
+    margin-left: 75px;
+    width: calc(100vw - 75px);
+    height: 100vh;
+    
+    display: flex;
+    flex-direction: row;
+}
+
+#navigation {
+    height: 100%;
+    width: 400px;
+    border-right: 1px solid lightgrey;
+    overflow: hidden;
+    padding: 20px;
+}
+
+#navigation header {
+    width: 100%;
+    height: 8%;
+    margin-top: 8px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#navigation header #username {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4em;
+    font-weight: 700;
+}
+
+#navigation header #new-message {
+    margin-left: auto;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+#navigation #search-box {
+    width: 100%;
+    height: 6%;
+    position: relative;
+    border-radius: 8px;
+
+    background: #f6f5fa;
+}
+
+#navigation #search-box input {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    outline: none;
+    background: none;
+
+    color: black;
+    font-size: 1.1em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding-left: 14%;
+}
+
+#navigation #search-box input::placeholder {
+    color: grey;
+}
+
+#navigation #search-box svg {
+    position: absolute;
+    top: 50%;
+    left: 6%;
+    translate: -50% -50%;
+}
+
+#navigation #chats-wrapper {
+    width: 100%;
+    min-height: 80%;
+}
+
+#navigation #chats-wrapper #notes {
+    width: fit-content;
+    height: 115px;
+    margin-top: 50px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+#navigation .note {
+    width: 100px;
+    height: 100%;
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#navigation .note .notes-pfp {
+    width: 80%;
+    aspect-ratio: 1/1;
+}
+
+#navigation .note .note-username {
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+#navigation .note #your-note {
+    color: grey;
+}
+
+#navigation .note .caption-bubble {
+    max-width: calc(100% - 20px);
+    width: fit-content;
+    height: 40%;
+    position: absolute;
+    top: -20%;
+    left: 0;
+    
+    background: #ffffff;
+    box-shadow: 0 0 20px  #00000024;
+    border-radius: 15px;
+    padding: 0 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bubble-decoration {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+
+    position: absolute;
+    left: 15px;
+    bottom: -10%;
+}
+
+#no-note {
+    font-size: 0.8em;
+    color: grey;
+}
+
+.caption {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.song-name {
+    width: 100%;
+    font-size: 0.7em;
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.song-name svg {
+    margin-right: 5px;
+}
+
+.song-name span {
+    width: calc(100% - 5px - 0.7em);
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.song-author {
+    color: grey;
+    font-size: 0.7em;
+}
+
+#navigation #chats-wrapper #chats {
+    width: 100%;
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#chats header span {
+    font-size: 1em;
+}
+
+#chats #scroller {
+    width: calc(100% + 40px);
+    height: 60vh;
+
+    overflow: auto;
+}
+
+.chat {
+    width: 100%;
+    height: 80px;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.chat:hover, .chat.active {
+    background: #0000000a;
+}
+
+.chat-pfp {
+    width: 14%;
+    aspect-ratio: 1/1;
+    margin: 20px;
+}
+
+.chat-pfp img {
+    width: 100%;
+}
+
+.chat-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-title {
+    color: black;
+}
+
+.chat-subtitle {
+    color: grey;
+}
+
+#messages {
+    height: 100%;
+    width: calc(100% - 435px);
+    background: #00000022;
+}
+
+#no-open-chat-poster {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
