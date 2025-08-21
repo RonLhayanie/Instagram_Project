@@ -117,12 +117,12 @@ function checkAgeAndRedirect() {
 
 function GoBack()
 {
-    window.location.href = "/signup.html";
+    window.location.href = "signup.html";
 }
 
 function LogInButton()
 {
-    window.location.href = "/login.html";
+    window.location.href = "/views/login/login.html";
 }
 
 /* Shop logos */

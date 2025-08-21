@@ -186,7 +186,7 @@ signUpBtn.addEventListener("click", (e) =>
     //If everything is valid - connect to feed
     if (allValid) 
     {
-        window.location.href = "/feed.html";
+        window.location.href = "birthdayCheck.html";
     }
 });
 
@@ -229,5 +229,5 @@ function openMicrosoftShop()
 //Log in button
 function LogInButton()
 {
-    window.location.href = "/login.html";
+    window.location.href = "/views/login/login.html";
 }
