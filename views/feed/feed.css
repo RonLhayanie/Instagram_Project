@@ -2276,20 +2276,18 @@ font-weight: 600;
 #logo-img-full,
 #logo-img-small {
   position: absolute;
-  left: 6px;
   margin-bottom: 14px;
   transition: opacity 0.3s ease;
 }
 
+
+
 #logo-img-full {
   height: auto;
-  width: 120px;
-
   opacity: 1;
 }
 
 #logo-img-small {
-  width: 32px;
   height: auto;
   opacity: 0;
 }
