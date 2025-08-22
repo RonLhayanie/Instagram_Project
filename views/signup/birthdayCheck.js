@@ -1,6 +1,4 @@
 
-
-
 //insert dates to select from
 function populateDateOptions() 
 {
@@ -81,49 +79,93 @@ window.onload = populateDateOptions;
 
 
 
-
-
-//Age validation
-function checkAgeAndRedirect() {
+//Check if the age is above 13(Instagram's limitation)
+function isAgeAbove13() 
+{
     const day = parseInt(document.getElementById("DayInput").value);
     const month = parseInt(document.getElementById("MonthInput").value);
     const year = parseInt(document.getElementById("YearInput").value);
 
 
-    if (!day || !month || !year) {
-        alert("Please select a full date.");
-        return;
-    }
-
-
-    const birthDate = new Date(year, month - 1, day); 
-    const today = new Date();
+    // calculate birthday
+    const birthDate = new Date(year, month - 1, day);
+    const today = new Date(); // Current date
     const minAgeDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
 
-
-    if (isNaN(birthDate.getTime())) {
-        alert("Invalid date.");
-        return;
+    // Check if it's a real date
+    if (isNaN(birthDate.getTime())) 
+    {
+        OpenVerification();
     }
 
-    if (birthDate <= minAgeDate) {
-        window.location.href = "feed.html";
-    } else {
-        alert("You must be at least 13 years old to proceed.");
+    // check if age above 13
+    if (birthDate <= minAgeDate)
+    {
+        window.location.href = "/views/feed/feed.html";     //move to Feed if age is valid
+    }
+    else
+    {
+        OpenVerification();     //pop verification if age isn't valid
     }
 }
 
 
 
+
+
+// Open/Close explanation div
+function OpenWhyBirthday() 
+{
+    const modal = document.querySelector('.birthdays-modal');
+    if (modal) 
+    {
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
+}
+function CloseWhyBirthday()
+{
+    const modal = document.querySelector('.birthdays-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
+
+// Open/Close verification div
+function OpenVerification()
+{
+    const modal = document.querySelector('.verification-modal');
+    if (modal)
+    {
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
+}
+function CloseVerification()
+{
+    const modal = document.querySelector('.verification-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
+
+//Navigate functions
 function GoBack()
 {
     window.location.href = "signup.html";
 }
-
 function LogInButton()
 {
     window.location.href = "/views/login/login.html";
 }
+
+
 
 /* Shop logos */
 function openGoogleShop()
