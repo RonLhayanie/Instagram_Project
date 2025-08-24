@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const users = require('../models/usersModel')
+const users = require('../models/chatsModel')
 
 const path = require('path')
 router.use(express.static(path.join(__dirname, 'public')))
