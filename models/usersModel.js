@@ -1,9 +1,23 @@
 const db = require('./../db')
+const collection = db.collection('users');
 
-// data base manipulation functions 
-// such as findUser() deleteUser()
+
+async function findByUsername(username)
+{
+    return await collection.findOne({username: username});
+}
+
+async function Create(userData) 
+{
+    await collection.insertOne(userData);
+}
+
+
 
 //export
-module.exports = {
-    // functions
+module.exports = 
+{
+    findByUsername,
+    Create
+
 }

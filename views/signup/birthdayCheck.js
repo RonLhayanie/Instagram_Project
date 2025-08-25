@@ -79,8 +79,12 @@ window.onload = populateDateOptions;
 
 
 
+
+
+
+
 //Check if the age is above 13(Instagram's limitation)
-function isAgeAbove13() 
+async function isAgeAbove13() 
 {
     const day = parseInt(document.getElementById("DayInput").value);
     const month = parseInt(document.getElementById("MonthInput").value);
@@ -96,17 +100,48 @@ function isAgeAbove13()
     if (isNaN(birthDate.getTime())) 
     {
         OpenVerification();
+        return;
     }
 
-    // check if age above 13
-    if (birthDate <= minAgeDate)
+
+    if (birthDate > minAgeDate)
     {
-        window.location.href = "/views/feed/feed.html";     //move to Feed if age is valid
+        OpenVerification();
+        return;
     }
-    else
-    {
-        OpenVerification();     //pop verification if age isn't valid
-    }
+
+    //get data from local storage
+    const data = JSON.parse(localStorage.getItem('signupData'));
+    data.birthDate = birthDate.toISOString();
+    localStorage.setItem('signupData', JSON.stringify(data));       //add birthday
+
+    console.log(data);
+    //Send to server
+    await fetch('/users/createAccount', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+
+    .then(res => {
+        if (res.ok)
+        {
+            localStorage.removeItem('signupData');
+            localStorage.setItem('username', data.username);
+            window.location.href = "/feed/feed.html";
+        }
+        else
+        {
+            alert("error creating account");
+        }
+    })
+
+    .catch(err => {
+        console.error(err);
+        alert("Server error");
+    });
+
+
 }
 
 
@@ -162,7 +197,7 @@ function GoBack()
 }
 function LogInButton()
 {
-    window.location.href = "/views/login/login.html";
+window.location.href = "/login/login.html";
 }
 
 
