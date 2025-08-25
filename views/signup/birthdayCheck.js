@@ -197,7 +197,7 @@ function GoBack()
 }
 function LogInButton()
 {
-window.location.href = "/login/login.html";
+    window.location.href = "/login/login.html";
 }
 
 

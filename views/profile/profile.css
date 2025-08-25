@@ -1,0 +1,95 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 10;
+}
+
+
+.sidebar-left {
+    z-index: 9999999;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    width: 210px;
+    background-color: #fff;
+    border-right: 1px solid #dbdbdb;
+    padding: 20px;
+    left: -5;
+    top: 0;
+    transition: border-color 0.15s ease;
+}
+
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+}
+
+.sidebar-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 95%;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-hoverable:hover {
+    background-color: #e3e3e383;
+}
+
+.sidebar-item img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+#pfp-l {
+    width: 30px;
+    height: 30px;
+}
+
+.logo-container {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#logo-img-full {
+    position: absolute;
+    left: 6px;
+    margin-bottom: 14px;
+    transition: opacity 0.3s ease;
+}
+
+#logo-img-full {
+    height: auto;
+    width: 120px;
+    opacity: 1;
+}
