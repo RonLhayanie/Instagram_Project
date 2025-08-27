@@ -99,6 +99,7 @@ function UsernameVerification()
 
 
 
+
 let usernameAvailable = false; // ברירת מחדל
 
 // Username availability check

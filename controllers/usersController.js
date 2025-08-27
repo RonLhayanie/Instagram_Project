@@ -26,7 +26,6 @@ router.post('/createAccount', async (req, res) => {
 });
 
 
-
 router.post('/check-username', async (req, res) => {
     try {
         const { username } = req.body;

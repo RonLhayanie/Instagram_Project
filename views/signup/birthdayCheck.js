@@ -113,7 +113,7 @@ async function isAgeAbove13()
     //get data from local storage
     const data = JSON.parse(localStorage.getItem('signupData'));
     data.birthDate = birthDate.toISOString();
-    localStorage.setItem('signupData', JSON.stringify(data));       //add birthday
+    localStorage.setItem('signupData', JSON.stringify(data));       //add Birthday
 
     console.log(data);
     //Send to server
