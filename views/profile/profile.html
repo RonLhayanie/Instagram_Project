@@ -83,7 +83,7 @@
                         <span>username</span>
                         <button class="edit-profile">Edit profile</button>
                         <button class="view-archive">View archive</button>
-                        <svg aria-label="Options" class="settings-profile" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Options</title><circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle><path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        <svg class="settings-profile" onclick="OpenSettings()" aria-label="Options" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Options</title><circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle><path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
                     </div>
                     <br>
                     <div class="stats-section">
@@ -110,13 +110,167 @@
 
 
 
-            <div class="postsAndSaved">
-                
-                <div class="photo-text">
-                    <h2>Share Photos</h2>
-                    <p>When you share photos, they will appear on your profile.</p>
+
+
+
+
+
+
+
+            <!-- settings button -->
+            <div class="settings-modal">
+                <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="bd-title">
+                    <div class="modal">
+                        <button class="settingsButtons" id="editProfile">Edit your profile</button>
+                        <button class="settingsButtons" id="deleteAccount">Delete your account</button>
+                        <button class="settingsButtons" id="logOut">Log out</button>
+                        <button class="settingsButtons" id="cancel" onclick="CloseSettings()">Cancel</button>
+                        
+                    
+                    </div>
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <br>
+
+
+            <div class="postsAndSaved">
+                <svg id="postsLogo" class="postsSavedTaggedLogos" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="--x-color: rgb(var(--ig-primary-icon));"><title>Posts</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" d="M3 3H21V21H3z"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" d="M9.01486 3 9.01486 21"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" d="M14.98514 3 14.98514 21"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" d="M21 9.01486 3 9.01486"></path><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" d="M21 14.98514 3 14.98514"></path></svg>
+                <svg id="savedLogo" class="postsSavedTaggedLogos" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="--x-color: rgb(var(--ig-secondary-icon));"><title>Saved</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px" d="M20 21 12 13.44 4 21 4 3 20 3 20 21z"></path></svg>
+                <svg id="taggedLogo" class="postsSavedTaggedLogos" viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style="--x-color: rgb(var(--ig-secondary-icon));"><title>Tagged</title><path d="M10.201 3.797 12 1.997l1.799 1.8a1.59 1.59 0 0 0 1.124.465h5.259A1.818 1.818 0 0 1 22 6.08v14.104a1.818 1.818 0 0 1-1.818 1.818H3.818A1.818 1.818 0 0 1 2 20.184V6.08a1.818 1.818 0 0 1 1.818-1.818h5.26a1.59 1.59 0 0 0 1.123-.465z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px"></path><g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2px"><path d="M18.598 22.002V21.4a3.949 3.949 0 0 0-3.948-3.949H9.495A3.949 3.949 0 0 0 5.546 21.4v.603" fill="none"></path><circle cx="12.07211" cy="11.07515" r="3.55556" fill="none"></circle></g></svg>
+            </div>
+
+            <div class="sp-div">
+                <div class="line"></div>
+            </div>
+
+            <div class="SharePhotos" id="share">
+                <svg class="shareIcon" aria-label="When you share photos, they will appear on your profile." class="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62"><title>When you share photos, they will appear on your profile.</title><circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"></circle><ellipse cx="48.002" cy="49.524" fill="none" rx="10.444" ry="10.476" stroke="currentColor" stroke-linejoin="round" stroke-width="2.095"></ellipse><path d="M63.994 69A8.02 8.02 0 0 0 72 60.968V39.456a8.023 8.023 0 0 0-8.01-8.035h-1.749a4.953 4.953 0 0 1-4.591-3.242C56.61 25.696 54.859 25 52.469 25h-8.983c-2.39 0-4.141.695-5.181 3.178a4.954 4.954 0 0 1-4.592 3.242H32.01a8.024 8.024 0 0 0-8.012 8.035v21.512A8.02 8.02 0 0 0 32.007 69Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <br><br>
+                <span class="shareHeader">Share Photos</span>
+                <br><br>
+                <span class="shareDescription">When you share photos, they will appear on your profile.</span>
+                <br><br>
+                <span class="shareLink">Share your first photo</span>
+            
+            </div>
+
+            <div class="SharePhotos" id="save">
+                <svg class="shareIcon" aria-label="Save" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62"><title>Save</title><circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle><path d="M66 68.685 49.006 51.657a1.42 1.42 0 0 0-2.012 0L30 68.685V27h36Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>                <br><br>
+                <span class="shareHeader" id="startSaving">Start Saving</span>
+                <br><br>
+                <span class="shareDescription" id="savingDescription">Save photos and videos to your collection.</span>
+                <br><br>
+                <span class="shareLink" id="savingLink">Add to collection</span>
+            </div>
+
+            <div class="SharePhotos" id="tag">
+                <svg class="shareIcon" aria-label="Photos of you" fill="currentColor" height="62" role="img" viewBox="0 0 96 96" width="62"><title>Photos of you</title><circle cx="48" cy="48" fill="none" r="47" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle><path d="M56.826 44.119a8.824 8.824 0 1 1-8.823-8.825 8.823 8.823 0 0 1 8.823 8.825Z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"></path><path d="M63.69 67.999a9.038 9.038 0 0 0-9.25-8.998H41.56A9.038 9.038 0 0 0 32.31 68" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M48 20.215c-2.94 0-7.125 8.76-11.51 8.785h-4.705A8.785 8.785 0 0 0 23 37.784v22.428a8.785 8.785 0 0 0 8.785 8.785h32.43A8.785 8.785 0 0 0 73 60.212V37.784A8.785 8.785 0 0 0 64.215 29h-4.704c-4.385-.026-8.57-8.785-11.511-8.785Z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="2"></path></svg>                
+                <br><br>
+                <span class="shareHeader" id="photosOfYou">Photos of you</span>
+                <br><br>
+                <span class="shareDescription" id="PhotosDescription">When people tag you in photos, they'll appear here.</span>
+            </div>
+
+            <br><br><br>
+
+
+            <!-- bottom links bar -->
+    <div id="linksBar-div">
+        <button class="link"> Meta </button>
+        <button class="link"> About </button>
+        <button class="link"> Blog </button>
+        <button class="link"> Jobs </button>
+        <button class="link"> Help </button>
+        <button class="link"> API </button>
+        <button class="link"> Privacy </button>
+        <button class="link"> Terms </button>
+        <button class="link"> Locations </button>
+        <button class="link"> Instagram Lite </button>
+        <button class="link"> Meta AI </button>
+        <button class="link"> Meta AI Arcticles </button>
+        <button class="link"> Threads </button>
+        <button class="link"> Contact Uploading & Non-Users </button>
+        <button class="link"> Meta verified </button>
+        <button class="link"> Settlement Agreements </button>
+    
+    </div>
+
+    <div id="lang-div">
+        
+        <!-- change language -->
+        <select id="language">
+            <option value="african"> African </option>
+            <option value="arabic"> Arabic </option>
+            <option value="bengali"> Bengali </option>
+            <option value="bulgarian"> Bulgarian </option>
+            <option value="chinese"> Chinese </option>
+            <option value="czech"> Czech </option>
+            <option value="croatian"> Croatian </option>
+            <option value="danish"> Danish </option>
+            <option value="dutch"> Dutch </option>
+            <option value="english" selected> English </option>
+            <option value="englishUK"> English(UK) </option>
+            <option value="filipino"> Filipino </option>
+            <option value="finnish"> Finnish </option>
+            <option value="french"> French </option>
+            <option value="german"> German </option>
+            <option value="greek"> Greek </option>
+            <option value="hebrew"> Hebrew </option>
+            <option value="hindi"> Hindi </option>
+            <option value="hungarian"> Hungarian </option>
+            <option value="indonesian"> Indonesian </option>
+            <option value="italian"> Italian </option>
+            <option value="japanese"> Japanese </option>
+            <option value="korean"> Korean </option>
+            <option value="malay"> Malay </option>
+            <option value="malayalam"> Malayalam </option>
+            <option value="marathi"> Marathi </option>
+            <option value="nepali"> Nepali </option>
+            <option value="norwegian"> Norwegian </option>
+            <option value="persian"> Persian </option>
+            <option value="polish"> Polish </option>
+            <option value="portuguese"> Portuguese </option>
+            <option value="serbian"> Serbian </option>
+            <option value="sinhala"> Sinhala </option>
+            <option value="slovak"> Slovak </option>
+            <option value="russian"> Russian </option>
+            <option value="spanish"> Spanish </option>
+            <option value="swedish"> Swedish </option>
+            <option value="thai"> Thai </option>
+            <option value="turkish"> Turkish </option>
+            <option value="tamil"> Tamil </option>
+            <option value="telugu"> Telugu </option>
+            <option value="ukrainian"> Ukrainian </option>
+            <option value="vietnamese"> Vietnamese </option>
+        </select>
+
+        <!-- copyright -->
+        <p id="copyright"> © 2025 Instagram from Meta </p>  
+
+    </div>
+
+
         </main>
     </div>
 
