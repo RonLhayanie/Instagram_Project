@@ -1,5 +1,3 @@
-  <!-- ron-lhayanie-329681662-or-benshoshan-333173045 -->
-
 <html>
 <head>
     <meta charset="UTF-8">
@@ -9,24 +7,17 @@
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" type="image/png">
 </head>
 
-
-
 <body>
-
     <div class="container">
-
-
-        <!-- left sidebar with logos -->
-        <aside class="sidebar-left dimmable">
+        <!-- Left Sidebar -->
+        <aside class="sidebar-left">
             <div class="sidebar-top">
-        
                 <div class="sidebar-item logo-container">
                     <img id="logo-img-full" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png" alt="Instagram Logo">
                 </div>
     
                 <div class="sidebar-item sidebar-hoverable" onclick="goToFeed()">
-                    <img id="left-sb-home" 
-                    src="https://cdn4.iconfinder.com/data/icons/top-search-7/128/_home_house_building_property_estate-512.png" alt="home">
+                    <img id="left-sb-home" src="https://cdn4.iconfinder.com/data/icons/top-search-7/128/_home_house_building_property_estate-512.png" alt="home">
                     <span>Home</span>
                 </div>
     
@@ -45,7 +36,7 @@
                     <span>Reels</span>
                 </div>
     
-                <div class="sidebar-item sidebar-hoverable">
+                <div class="sidebar-item sidebar-hoverable" onclick="goToMessages()">
                     <img src="https://static.thenounproject.com/png/3084968-200.png" alt="message">
                     <span>Messages</span>
                 </div>
@@ -77,13 +68,58 @@
                     <span>More</span>
                 </div>
             </div>
-        </aside>  
+        </aside>
 
 
 
- 
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="profile-header">
+                <div class="profile-pic">
+                    <img src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" class="profile-pic-placeholder">
+                </div>
+                <div class="profile-info">
+                    <div class="username-section">
+                        <span>username</span>
+                        <button class="edit-profile">Edit profile</button>
+                        <button class="view-archive">View archive</button>
+                        <svg aria-label="Options" class="settings-profile" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Options</title><circle cx="12" cy="12" fill="none" r="8.635" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></circle><path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    </div>
+                    <br>
+                    <div class="stats-section">
+                        <span><span class="statsCount" id="NumOfPosts">0</span> posts</span>
+                        <span><span class="statsCount" id="NumOfFollowers">0</span> followers</span>
+                        <span><span class="statsCount" id="NumOfFollowing">0</span> following</span>
+                    </div>
+                    <br>
+                    <div class="threads-section">
+                        <span id="fullName">full name</span>
+                        <span id="threadsPart"><img id="threadsLogo" src="https://cdn4.iconfinder.com/data/icons/threads-by-instagram/128/threads-logo-brand-sign-rounded-1024.png">threads name (username)</span>
+                        <span id="profileBio">bio</span>
+                    </div>
+                </div>
+            </div>
+            
+
+            
+
+            <div class="highlights-section">
+                <img src="https://cdn4.iconfinder.com/data/icons/navigation-40/24/add-256.png" id="plusIcon">
+                <span>New</span>
+            </div>
+
+
+
+            <div class="postsAndSaved">
+                
+                <div class="photo-text">
+                    <h2>Share Photos</h2>
+                    <p>When you share photos, they will appear on your profile.</p>
+                </div>
+            </div>
+        </main>
     </div>
 
-  <script src="profile.js"></script>
-  </body>
-  </html> 
+    <script src="profile.js"></script>
+</body>
+</html>
