@@ -60,46 +60,29 @@ function CloseSettings()
 
 
 
-
-
-
-
-window.addEventListener('DOMContentLoaded', () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        // אם אין משתמש מחובר, תוכל להפנות ל-login או feed
-        window.location.href = "/feed/feed.html";
+async function loadProfile() 
+{
+    const username = localStorage.getItem('currentUser');
+    if (!username) {
+        window.location.href = "/login.html"; // אם אין משתמש מחובר
         return;
     }
 
-    // עדכון תמונת פרופיל
-    const profilePicEl = document.querySelector('.profile-pic img');
-    if (profilePicEl) profilePicEl.src = currentUser.profilePic;
+    try {
+        const res = await fetch(`/users/getByUsername/${username}`);
+        if (!res.ok) throw new Error("User not found");
 
-    // עדכון שם משתמש
-    const usernameEl = document.querySelector('.username-section span');
-    if (usernameEl) usernameEl.textContent = currentUser.username;
+        const user = await res.json();
 
-    // עדכון full name
-    const fullNameEl = document.getElementById('fullName');
-    if (fullNameEl) fullNameEl.textContent = currentUser.fullName;
+        // כאן מציגים בדף את המידע מהשרת
+        document.getElementById("ProfileUsername").innerText = user.username;
+        document.getElementById("fullName").innerText = user.fullName;
+        document.getElementById("profileBio").innerText = user.bio;
+        document.getElementById('threadsPart').innerHTML = `<img id="threadsLogo" src="https://cdn4.iconfinder.com/data/icons/threads-by-instagram/128/threads-logo-brand-sign-rounded-1024.png">${user.username}`;
 
-    // עדכון bio
-    const bioEl = document.getElementById('profileBio');
-    if (bioEl) bioEl.textContent = currentUser.bio;
-
-    // עדכון Threads username
-    const threadsPartEl = document.getElementById('threadsPart');
-    if (threadsPartEl) {
-        threadsPartEl.innerHTML = `<img id="threadsLogo" src="https://cdn4.iconfinder.com/data/icons/threads-by-instagram/128/threads-logo-brand-sign-rounded-1024.png">${currentUser.username}`;
+    } catch (err) {
+        console.error(err);
+        alert("Failed to load profile");
     }
-
-    // עדכון סטטיסטיקות בסיסיות (אם שמרת אותם)
-    const numOfPostsEl = document.getElementById('NumOfPosts');
-    const numOfFollowersEl = document.getElementById('NumOfFollowers');
-    const numOfFollowingEl = document.getElementById('NumOfFollowing');
-
-    if (numOfPostsEl) numOfPostsEl.textContent = currentUser.posts.length;
-    if (numOfFollowersEl) numOfFollowersEl.textContent = currentUser.followers ? currentUser.followers.length : 0;
-    if (numOfFollowingEl) numOfFollowingEl.textContent = currentUser.following ? currentUser.following.length : 0;
-});
+}
+document.addEventListener("DOMContentLoaded", loadProfile);

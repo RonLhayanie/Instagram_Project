@@ -111,7 +111,7 @@ async function isAgeAbove13() {
 
         if (res.ok) {
             const createdUser = await res.json();
-            localStorage.setItem('currentUser', JSON.stringify(createdUser));
+            localStorage.setItem('currentUser', createdUser.username);
             localStorage.removeItem('signupData');
             window.location.href = "/profile/profile.html";
         } else {
