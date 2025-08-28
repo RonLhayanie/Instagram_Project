@@ -3,29 +3,53 @@ const router = express.Router();
 const usersModel = require('./../models/usersModel');
 
 
+
 //create a new account
 router.post('/createAccount', async (req, res) => {
-    try {
-        const userData = req.body;
+    try{
+        const { username, password, fullName, email, phone, birthDate } = req.body;
 
-        console.log(userData);
-
-        const existingUser = await usersModel.findByUsername(userData.username);
-        if (existingUser)
-        {
-            return res.status(400).send('Username exists');
+        //check if already exists
+        const existingUser = await usersModel.findByUsername(username);
+        if (existingUser) {
+            return res.status(400).json({ error: "Username already exists" });
         }
 
+        // User's fields
+        const newUser = {
+            username,
+            password,
+            fullName,
+            email,
+            phone,
+            birthDate,
 
-        usersModel.Create(userData);
-        res.status(200).send('User created');
+            // adding default fields
+            bio: "",
+            profilePic: "https://cdn-icons-png.flaticon.com/512/12225/12225935.png",
+            posts: [],
+            saved: [],
+            lastSeen: new Date(),
+        };
+
+        // insert to mongo
+        const created = await usersModel.Create(newUser);
+
+        //return the created user
+        const userFromDb = await usersModel.findByUsername(username);
+        res.status(201).json(newUser);
+
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error creating user');
+        res.status(500).json({ error: "Server error" });
     }
+
+
 });
 
 
+
+//check if username is available or not
 router.post('/check-username', async (req, res) => {
     try {
         const { username } = req.body;
@@ -40,6 +64,7 @@ router.post('/check-username', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 
 

@@ -6,7 +6,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .container {
@@ -17,7 +17,7 @@ html, body {
 
 
 .sidebar-left {
-    z-index: 9999999;
+    z-index: 9998;
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -281,4 +281,267 @@ html, body {
     letter-spacing: 0.5px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     cursor: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* pop up settings */
+.settings-modal
+{
+    display: none;      
+}
+
+.no-scroll      /* block scroll if div is shown */ 
+{
+    overflow: hidden;
+}
+
+.overlay     /* dark backround */
+{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+
+    background: rgba(0, 0, 0, 0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modal     /* White box */
+{
+    margin-bottom: 220px;
+    background: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    z-index: 9999;
+
+
+    width: 560px;
+    height: 200px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.settingsButtons
+{
+    display: block;
+    width: 560px;
+    height: 50px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+#editProfile, #deleteAccount, #logOut
+{
+    border-bottom: 1px solid #d3d1d1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* small logos between higlights ad posts */
+.postsAndSaved
+{
+    width: 100%;
+}
+.postsSavedTaggedLogos
+{
+    color: #959595;
+    margin-top: 80px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+.postsSavedTaggedLogos.active
+{
+    border-bottom: 2px solid black;
+    color: black;
+}
+#postsLogo      
+{
+    margin-left: 22%;
+}
+#savedLogo
+{
+    margin-left: 8%;
+}
+#taggedLogo
+{
+    margin-left: 8%;
+}
+
+
+.sp-div     /* grey line under the small logos */     
+{
+    align-items: center;
+    margin: auto;
+    margin-top: -4px;
+
+    width: 1000px;
+    display: flex;
+}
+.line       
+{
+    align-items: center;
+    border: none;
+    border-top: 1px solid rgba(219,219,219,255);
+    margin: 0 20px;
+    margin-left: -25%;
+
+    width: 100%;
+}
+
+
+
+/* posts/saved/tagged section */
+.shareIcon      /* icon */
+{
+    margin-top: 3.5%;
+    margin-left: 34.5%;
+}
+.shareHeader        /* rext header */
+{
+    margin-left: 31%;
+    font-size: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 900;
+}
+.shareDescription   /* sentence describing the page */
+{
+    margin-left: 26%;
+    font-size: 14px;
+}
+.shareLink      /* link to create/save */
+{
+    margin-left: 32.5%;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    color: #361aec;
+}
+
+/* small placing adjustments */
+#startSaving    /* saving adjustment */
+{
+    margin-left: 31.5%;
+}
+#savingDescription
+{
+    margin-left: 29%;
+}
+#savingLink
+{
+    margin-left: 33%;
+}
+
+#photosOfYou    /* tagging adjustment */
+{
+    margin-left: 30.8%;
+}
+#PhotosDescription
+{
+    margin-left: 27.8%;
+}
+
+/* show div based of users decision(js) */
+.SharePhotos 
+{
+    display: none;
+}
+
+.SharePhotos.active 
+{
+    display: block;
+}
+
+
+
+
+/* bottom linksbar */
+#linksBar-div    
+{
+    margin-left: 3%;
+    padding: 1%;
+
+
+    font-size: 4%;
+}
+
+.link       
+{
+    border: none;
+    background-color: white;
+
+    font-size: 11px;
+    color: #767676;
+    margin-right: 0.05%;
+    letter-spacing: 0.3px;
+
+    cursor: pointer;
+}
+.link:hover
+{
+    text-decoration: underline;
+}
+.link:active
+{
+    color: rgba(216,216,216,255);
+}
+
+
+
+#lang-div     /* change language button */
+{
+    margin-left: -28%;
+    align-items: center; 
+    justify-content: center;
+    gap: 1%; 
+
+    display: flex;
+    font-family: sans-serif;
+}
+
+#language      
+{
+    text-align: right;
+    padding: 6px;
+    background-color:white;
+        border: none;
+
+
+    width: fit-content;
+    color: #767676;
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+#copyright    
+{
+    margin: 0;
+
+    font-size: 12px;
+    color: #767676;
 }

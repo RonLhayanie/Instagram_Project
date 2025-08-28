@@ -256,6 +256,17 @@ signUpBtn.addEventListener("click", (e) =>
         }
     });
 
+
+
+    // if user is taken
+    if (!usernameAvailable) 
+    {
+        allValid = false;
+        showError("UsernameVer", "username already exists");
+        document.getElementById("UsernameInput").classList.add("invalid");
+    }
+
+
     //If everything is valid - connect to feed
     if (allValid) 
     {
