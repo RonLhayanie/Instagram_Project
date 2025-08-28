@@ -5,6 +5,10 @@ window.addEventListener('load', () => {
   }, 2000); 
 });
 
+document.getElementById('messages-icon').addEventListener('click', () => {
+  window.location.href = '../chats/chats.html'
+})
+
 // toggle dark mode
 const toggle = document.getElementById('darkModeToggle');
 toggle.addEventListener('change', () => {

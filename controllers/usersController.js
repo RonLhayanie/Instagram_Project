@@ -25,8 +25,6 @@ router.post('/createAccount', async (req, res) => {
     }
 });
 
-
-
 router.post('/check-username', async (req, res) => {
     try {
         const { username } = req.body;
@@ -41,6 +39,52 @@ router.post('/check-username', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+
+router.post('/getAvatarByUsername', async (req, res) => {
+    try {
+        const { username } = req.body 
+        const user = await usersModel.findByUsername(username)
+        res.json({
+            avatar: user.profilePic
+        })
+    }
+
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+
+})
+
+router.post('/getFullnameByUsername', async (req, res) => {
+    try {
+        
+        const { username } = req.body 
+        const user = await usersModel.findByUsername(username)
+        res.json({
+            fullname: user.fullName
+        })
+    }
+
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+
+})
+
+router.post('/search20', async (req, res) => {
+    try {
+        const search_string = req.body.search_string
+        const results = await usersModel.search20(search_string)
+        res.json(results)
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+})
 
 
 
