@@ -258,7 +258,7 @@
 
 
 /* "Next" button */
-#Next           
+#Finish           
 {
     border: 1px solid;
     border-radius: 8px;
@@ -276,7 +276,7 @@
     transition: 0.3s ease;
     cursor: pointer;
 }
-#Next:active
+#Finish:active
 {
     transform: scale(0.995);
 }

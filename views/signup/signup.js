@@ -99,6 +99,7 @@ function UsernameVerification()
 
 
 
+
 let usernameAvailable = false; // ברירת מחדל
 
 // Username availability check
@@ -254,6 +255,17 @@ signUpBtn.addEventListener("click", (e) =>
             inputEl.classList.add("invalid");
         }
     });
+
+
+
+    // if user is taken
+    if (!usernameAvailable) 
+    {
+        allValid = false;
+        showError("UsernameVer", "username already exists");
+        document.getElementById("UsernameInput").classList.add("invalid");
+    }
+
 
     //If everything is valid - connect to feed
     if (allValid) 

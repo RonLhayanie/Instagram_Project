@@ -84,64 +84,43 @@ window.onload = populateDateOptions;
 
 
 //Check if the age is above 13(Instagram's limitation)
-async function isAgeAbove13() 
-{
+async function isAgeAbove13() {
     const day = parseInt(document.getElementById("DayInput").value);
     const month = parseInt(document.getElementById("MonthInput").value);
     const year = parseInt(document.getElementById("YearInput").value);
 
-
-    // calculate birthday
     const birthDate = new Date(year, month - 1, day);
-    const today = new Date(); // Current date
+    const today = new Date();
     const minAgeDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
 
-    // Check if it's a real date
-    if (isNaN(birthDate.getTime())) 
-    {
+    if (isNaN(birthDate.getTime()) || birthDate > minAgeDate) {
         OpenVerification();
         return;
     }
 
-
-    if (birthDate > minAgeDate)
-    {
-        OpenVerification();
-        return;
-    }
-
-    //get data from local storage
     const data = JSON.parse(localStorage.getItem('signupData'));
     data.birthDate = birthDate.toISOString();
-    localStorage.setItem('signupData', JSON.stringify(data));       //add birthday
+    localStorage.setItem('signupData', JSON.stringify(data));
 
-    console.log(data);
-    //Send to server
-    await fetch('/users/createAccount', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    })
+    try {
+        const res = await fetch('/users/createAccount', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-    .then(res => {
-        if (res.ok)
-        {
+        if (res.ok) {
+            const createdUser = await res.json();
+            localStorage.setItem('currentUser', JSON.stringify(createdUser));
             localStorage.removeItem('signupData');
-            localStorage.setItem('username', data.username);
-            window.location.href = "/feed/feed.html";
+            window.location.href = "/profile/profile.html";
+        } else {
+            alert("Error creating account");
         }
-        else
-        {
-            alert("error creating account");
-        }
-    })
-
-    .catch(err => {
+    } catch (err) {
         console.error(err);
         alert("Server error");
-    });
-
-
+    }
 }
 
 
