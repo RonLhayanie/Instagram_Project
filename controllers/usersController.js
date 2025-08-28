@@ -33,9 +33,12 @@ router.post('/createAccount', async (req, res) => {
         };
 
         // insert to mongo
-        await usersModel.Create(newUser);
+        const created = await usersModel.Create(newUser);
 
-        res.status(201).json({ message: "User created successfully" });
+        //return the created user
+        const userFromDb = await usersModel.findByUsername(username);
+        res.status(201).json(newUser);
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server error" });
@@ -46,8 +49,7 @@ router.post('/createAccount', async (req, res) => {
 
 
 
-
-
+//check if username is available or not
 router.post('/check-username', async (req, res) => {
     try {
         const { username } = req.body;
@@ -62,6 +64,7 @@ router.post('/check-username', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 
 
 
