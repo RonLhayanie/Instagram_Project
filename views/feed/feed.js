@@ -2330,6 +2330,53 @@ function createPost({ username, avatar, image, likes, text, commentsCount, time,
       </div>
     </div>
   `;
+
+  // const postdata = {
+  //   username: document.getElementsByClassName("user-name").value,
+  //   avatar: document.getElementsByClassName("user-avatar").value,
+  //   image: document.getElementsByClassName("post-image").value,
+  //   likes: 0,
+  //   text: document.getElementsByClassName("full-text").value,
+  //   commentsCount: 0,
+  //   time: document.getElementsByClassName("time").value,
+  //   date: document.querySelector("date"),
+  // }
+
+  const postdata = {
+  username,
+  avatar,
+  image,
+  likes,
+  text,
+  commentsCount,
+  time,
+  date,
+};
+
+
+  localStorage.setItem('postsData', JSON.stringify(postdata));
+    fetch('/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(postdata)
+    })
+
+    .then(res => {
+        if (res.ok)
+        {
+            localStorage.removeItem('postsData');
+        }
+        else
+        {
+            alert("Error uploading post");
+        }
+    })
+
+    .catch(err => {
+        console.error(err);
+        alert("Server error");
+    });
+
   return post;
 }
 
