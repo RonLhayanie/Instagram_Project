@@ -16,10 +16,11 @@ router.post('/getArray', async (req, res) => {
     
 })
 
-router.post('/isOwner', async (req, res) => {
+router.post('/findById', async (req, res) => {
     try {
-        const isOwner = await chats.isOwner(req.body.username, req.body.id)
-        res.json({isOwner})
+        const { _id } = req.body
+        const chat = await chats.findByID(_id)
+        res.json(chat)
     }
     catch (err) {
         console.error(err);
@@ -29,10 +30,11 @@ router.post('/isOwner', async (req, res) => {
 
 router.post('/createIfNotExists', async (req, res) => {
     try {
-        const {chat} = req.body
-        const foundChat = chats.Findchat(chat.members)
+        const chat = req.body
+        const foundChat = await chats.Findchat(chat.members)
+
         if(!foundChat) {
-            chats.create(chat)
+            await chats.create(chat)
             res.json({
                 chat: chat,
                 found: false
@@ -51,6 +53,19 @@ router.post('/createIfNotExists', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 
+})
+
+router.patch('/changeName', async (req, res) => {
+    try { 
+        const new_name = req.body.new_name
+        const _id = req.body._id
+        const updateResults = await chats.updateName(_id, new_name)
+        res.json(updateResults)
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
 })
 
 module.exports = router

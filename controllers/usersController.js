@@ -97,6 +97,21 @@ router.post('/getFullnameByUsername', async (req, res) => {
 
 })
 
+router.post('/getLastseenByUsername', async (req, res) => {
+    try {    
+        const { username } = req.body 
+        const user = await usersModel.findByUsername(username)
+        res.json({
+            date: user.lastSeen
+        })
+    }
+
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+})
+
 router.post('/search20', async (req, res) => {
     try {
         const search_string = req.body.search_string
@@ -108,6 +123,7 @@ router.post('/search20', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 })
+
 
 
 

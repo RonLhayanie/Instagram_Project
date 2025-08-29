@@ -418,6 +418,8 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    overflow: hidden;
 }
 
 .chat:hover {
@@ -428,22 +430,16 @@ body {
     background: #f0f0f0;
 }
 
-/* 
-">" means inside => 
-<.chat>
-    <.group-chat-pfp>
-        <.group-chat-img2>
-        ...
-        </>
-    </>
-</>
-*/
-.chat:hover > .group-chat-pfp .group-chat-img2 {
+.chat:hover .group-chat-pfp .group-chat-img2 {
     border: 2px solid #f4f4f4;
 }
 
+.chat.active .group-chat-pfp .group-chat-img2 {
+    border: 2px solid #f0f0f0;
+}
+
 .chat-pfp {
-    width: 14%;
+    height: 48px;
     aspect-ratio: 1/1;
     margin-left: 20px;
     margin-right: 10px;
@@ -455,7 +451,7 @@ body {
     border-radius: 0 !important;
 }
 
-.group-chat .group-chat-pfp .group-chat-img1 {
+.group-chat-pfp .group-chat-img1 {
     z-index: 1;
     width: 70%;
     aspect-ratio: 1/1;
@@ -466,7 +462,7 @@ body {
     translate: -50% -50%;
 }
 
-.group-chat  .group-chat-pfp .group-chat-img2 {
+.group-chat-pfp .group-chat-img2 {
     z-index: 2;
     width: 70%;
     aspect-ratio: 1/1;
@@ -487,11 +483,15 @@ body {
 .chat-title {
     color: black;
     white-space: nowrap;
+
+    font-size: 0.9em;
 }
 
 .chat-subtitle {
     color: grey;
     white-space: nowrap;
+
+    font-size: 0.8em;
 }
 
 #messages {
@@ -581,6 +581,7 @@ body {
 
     margin-left: auto;
     margin-right: 40px;
+    background: #fff;
 
     display: flex;
     flex-direction: row;
@@ -593,16 +594,16 @@ body {
 }
 
 #open-chat-pfp {
-    width: 50px;
+    height: 50px;
 }
 
 #open-chat-title {
-    font-size: 1.1em;
+    font-size: 0.9em;
     font-weight: 600;
 }
 
 #open-chat-subtitle {
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 #open-chat-content {
@@ -874,7 +875,12 @@ body {
 
 .chat-member-pfp {
     width: 60px;
+    height: 60px;
     margin-left: 15px;
+}
+
+#members-wrapper ul li .chat-title {
+    font-size: 1.1em;
 }
 
 .owner-privileges-member-settings {
@@ -1161,6 +1167,7 @@ body {
 
 .new-message-pfp {
     width: 45px;
+    height: 45px;
 }
 
 #new-message-results ul {
@@ -1311,12 +1318,12 @@ body {
 }
 
 #change-group-name-input label.filled-input {
-    transform: translateY(-50%);
+    transform: translateY(-80%);
     font-size: 0.6em;
 }
 
 #change-group-name-input label.filled-input + input {
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 #change-group-name-save {
