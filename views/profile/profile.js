@@ -8,6 +8,11 @@ function goToMessages()
     window.location.href = "../chats/chats.html";
 }
 
+function EditProfile()
+{
+    window.location.href = "editProfile.html";
+}
+
 
 
 
@@ -55,3 +60,12 @@ function CloseSettings()
         document.body.classList.remove('no-scroll');
     }
 }
+
+
+
+
+
+
+
+
+
