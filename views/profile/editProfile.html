@@ -1,0 +1,205 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="editProfile.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram &bull; edit profile</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" type="image/png">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar-left">
+            <div class="sidebar-top">
+                <div class="sidebar-item logo-container">
+                    <img id="logo-img-full" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png" alt="Instagram Logo">
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable" onclick="goToFeed()">
+                    <img id="left-sb-home" src="https://cdn4.iconfinder.com/data/icons/top-search-7/128/_home_house_building_property_estate-512.png" alt="home">
+                    <span>Home</span>
+                </div>
+    
+                <div id="search-toggle" class="sidebar-item sidebar-hoverable">
+                    <img src="https://cdn-icons-png.flaticon.com/256/54/54481.png" alt="searchbar">
+                    <span>Search</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable">
+                    <img src="https://www.svgrepo.com/show/26523/explore-tool.svg" alt="explore">
+                    <span>Explore</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzafXPewDK-Ks8yO73WkQ4_AXYo4-IDE_h2w&s" alt="reel">
+                    <span>Reels</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable" onclick="goToMessages()">
+                    <img src="https://static.thenounproject.com/png/3084968-200.png" alt="message">
+                    <span>Messages</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable">
+                    <img src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png" alt="notif">
+                    <span>Notifications</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable" id="create-post-button">
+                    <img src="https://cdn-icons-png.flaticon.com/128/10103/10103630.png" alt="create">
+                    <span>Create</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable">
+                    <img id="pfp-l" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="pfp">
+                    <span><b>Profile</b></span>
+                </div>
+            </div>
+    
+            <div class="sidebar-bottom">
+                <div class="sidebar-item sidebar-hoverable">
+                    <img src="https://cdn-icons-png.flaticon.com/128/12105/12105337.png" alt="threads">
+                    <span>Threads</span>
+                </div>
+    
+                <div class="sidebar-item sidebar-hoverable">
+                    <img src="https://cdn-icons-png.flaticon.com/128/9091/9091427.png" alt="more">
+                    <span>More</span>
+                </div>
+            </div>
+        </aside>
+
+
+
+
+
+
+        <div id="editSection">
+            <!-- header -->
+            <span id="editProfileHeader">Edit profile</span>
+
+            <br><br>
+
+            <!-- change profile picture section -->
+            <div id="changePhoto">   
+                <img id="profilePicPreview" src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" class="profile-pic-placeholder">   <!-- current picture -->
+                <span id="profilePicUsername">username</span>
+                <span id="profilePicFullName">full name</span>
+
+                <input type="file" id="profilePicInput" accept="image/*" hidden>        <!-- to brose picture from desktop -->
+                <button id="profilePicChangePhoto">Change Photo</button>
+            </div>
+            
+            <br><br>
+
+            <!-- change bio section -->
+            <div id="changeBio">
+                <span class="headers">Bio</span>
+                <br>
+                <div id="bioInputDiv">
+                    <textarea type="text" class="changeInputs" id="bioText" placeholder="Bio" maxlength="150"></textarea>    <!-- input box to bio -->
+                    <span class="charCounter">0 / 150</span>       <!-- char limit 150 -->
+                </div>
+            </div>
+
+            <br><br>
+
+            <!-- show Threads badge -->
+            <div id="showThreads">
+                <span class="headers">Show Threads badge</span>
+                <br>
+                <span class="showThreadsClass" id="showThreadsDescription">Show Threads badge</span>
+
+                <!-- on/off button -->
+                 <div class="toggle-switch">
+                    <input type="checkbox" id="switch" class="toggle-input">
+                    <label for="switch" class="toggle-label"></label>
+                </div>
+            </div>
+
+            <br><br>
+
+            <!-- change username section -->
+            <div class="userAndFullName" id="changeUsername">
+                <span class="headers">Username</span>
+                <br>
+                <div id="usernameInputDiv">
+                    <textarea type="text" class="changeInputs" id="usernameText" placeholder="Username" maxlength="25"></textarea>    <!-- input box to username -->
+                    <span class="charCounter">0 / 25</span>       <!-- char limit 25 -->
+                </div>
+                <span class="verificationAlert" id="UsernameVer"></span>
+
+            </div>
+
+            <br><br>
+
+            <!-- change full name -->
+            <div class="userAndFullName" id="changeFullName">
+                <span class="headers">Full name</span>
+                <br>
+                <div id="fullnameInputDiv">
+                    <textarea type="text" class="changeInputs" id="fullnameText" placeholder="Full Name" maxlength="25"></textarea>    <!-- input box to full name -->
+                    <span class="charCounter">0 / 25</span>       <!-- char limit 25 -->
+                </div>
+                <span class="verificationAlert" id="FullNameVer"></span>
+
+            </div>
+
+            <br><br>
+
+            <!-- change email -->
+            <div id="changeEmail">
+                <span class="headers">Email</span>
+                <br>
+                <div id="emailInputDiv">
+                    <textarea type="text" class="changeInputs" id="emailText" placeholder="Email"></textarea>    <!-- input box to email -->
+                </div>
+                <span class="verificationAlert" id="EmailVer"></span>
+            </div>
+
+            <br><br>
+
+            <!-- change phone -->
+            <div id="changePhone">
+                <span class="headers">Phone</span>
+                <br>
+                <div id="phoneInputDiv">
+                    <textarea type="text" class="changeInputs" id="phoneText" placeholder="Phone"></textarea>    <!-- input box to phone -->
+                </div>
+                <span class="verificationAlert" id="PhoneVer"></span>
+            </div>
+
+            <br><br>
+
+            <!-- change password -->
+            <div id="changePassword">
+                <span class="headers">Password</span>
+                <br>
+                <div id="phoneInputDiv">
+                    <textarea type="password" class="changeInputs" id="passwordText" placeholder="Password"></textarea>    <!-- input box to password -->
+                </div>
+                <span class="verificationAlert" id="PasswordVer"></span>
+
+            </div>
+
+            <br><br>
+
+            <button id="submit">Submit</button>
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+    <script src="editProfile.js"></script>
+</body>
+</html>

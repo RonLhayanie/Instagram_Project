@@ -13,6 +13,18 @@ async function Create(userData)
     await collection.insertOne(userData);
 }
 
+
+async function updateByUsername(currentUsername, updatedData) 
+{
+    return await collection.updateOne({ username: currentUsername }, { $set: updatedData });
+}
+
+async function deleteByUsername(username) 
+{
+    return await collection.deleteOne({ username: username });
+}
+
+
 // return 20 rondomly sorted usernames which contains the search_string
 // regardless of upper/lower cases
 async function search20(search_string) {
@@ -23,10 +35,14 @@ async function search20(search_string) {
     ]).toArray()
 }
 
+
 //export
 module.exports = 
 {
     findByUsername,
     Create,
+    updateByUsername,
+    deleteByUsername,
     search20,
+
 }
