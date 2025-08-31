@@ -10,17 +10,6 @@ textareas.forEach(textarea => {
     textarea.addEventListener("input", () => {
         let length = textarea.value.length;
         if (counter) counter.textContent = `${length} / ${maxLength}`;
-
-        if (length >= maxLength) {
-            textarea.style.border = "1px solid red";
-            if (counter) counter.style.color = "red";
-        } else if (length === 0) {
-            textarea.style.border = "1px solid #dde1e5";
-            if (counter) counter.style.color = "#888";
-        } else {
-            textarea.style.border = "1px solid black";
-            if (counter) counter.style.color = "#888";
-        }
     });
 });
 
@@ -110,84 +99,6 @@ function clearError(spanId) {
 }
 
 // ===========================
-// USERNAME SERVER CHECK
-// ===========================
-let usernameAvailable = false;
-
-document.getElementById("usernameText").addEventListener("blur", async function () {
-    const username = this.value.trim();
-    if (!username) {
-        clearError("UsernameVer");
-        usernameAvailable = false;
-        return;
-    }
-
-    const clientValidation = UsernameVerification();
-    if (clientValidation !== true) {
-        showError("UsernameVer", clientValidation);
-        usernameAvailable = false;
-        return;
-    }
-
-    try {
-        const res = await fetch("/users/check-username", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username }),
-        });
-
-        const data = await res.json();
-        if (data.available) {
-            clearError("UsernameVer");
-            this.style.borderColor = "lightgreen";
-            this.style.borderWidth = "1.5px";
-            usernameAvailable = true;
-        } else {
-            showError("UsernameVer", "Username already exists");
-            this.style.borderColor = "red";
-            this.style.borderWidth = "1.5px";
-            usernameAvailable = false;
-        }
-    } catch (err) {
-        console.error(err);
-        showError("UsernameVer", "Server error");
-        usernameAvailable = false;
-    }
-});
-
-// ===========================
-// BLUR EVENTS FOR FIELDS
-// ===========================
-const fields = [
-    { inputId: "phoneText", verifyFn: PhoneVerification, spanId: "PhoneVer" },
-    { inputId: "emailText", verifyFn: EmailVerification, spanId: "EmailVer" },
-    { inputId: "passwordText", verifyFn: PasswordVerification, spanId: "PasswordVer" },
-    { inputId: "fullnameText", verifyFn: FullNameVerification, spanId: "FullNameVer" }
-];
-
-fields.forEach(field => {
-    const inputEl = document.getElementById(field.inputId);
-    inputEl.addEventListener("blur", () => {
-        const value = inputEl.value.trim();
-        if (value !== "") {
-            const result = field.verifyFn();
-            if (result === true) {
-                clearError(field.spanId);
-                inputEl.classList.add("validd");
-                inputEl.classList.remove("invalid");
-            } else {
-                showError(field.spanId, result);
-                inputEl.classList.add("invalid");
-                inputEl.classList.remove("validd");
-            }
-        } else {
-            clearError(field.spanId);
-            inputEl.classList.remove("invalid", "validd");
-        }
-    });
-});
-
-// ===========================
 // SUBMIT BUTTON
 // ===========================
 const submitBtn = document.getElementById("submit");
@@ -195,51 +106,92 @@ const submitBtn = document.getElementById("submit");
 submitBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
-    // Validate fields
     let allValid = true;
-    fields.forEach(field => {
-        const inputEl = document.getElementById(field.inputId);
-        const value = inputEl.value.trim();
-        if (value !== "") {
-            const result = field.verifyFn();
-            if (result !== true) {
+    const usernameEl = document.getElementById("usernameText");
+    const currentUsername = localStorage.getItem('currentUser');
+    const newUsername = usernameEl.value.trim();
+    let usernameAvailable = false;
+
+    // Validate username locally
+    const usernameValidation = UsernameVerification();
+    if (usernameValidation !== true) {
+        allValid = false;
+        showError("UsernameVer", usernameValidation);
+        usernameEl.classList.add("invalid");
+    } else {
+        // Check username availability only if changed
+        if (newUsername !== currentUsername) {
+            try {
+                const res = await fetch("/users/check-username", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: newUsername }),
+                });
+                const data = await res.json();
+                if (data.available) {
+                    usernameAvailable = true;
+                    clearError("UsernameVer");
+                    usernameEl.classList.add("validd");
+                    usernameEl.classList.remove("invalid");
+                } else {
+                    allValid = false;
+                    showError("UsernameVer", "Username already exists");
+                    usernameEl.classList.add("invalid");
+                }
+            } catch (err) {
+                console.error(err);
                 allValid = false;
-                showError(field.spanId, result);
-                inputEl.classList.add("invalid");
+                showError("UsernameVer", "Server error");
             }
         } else {
+            // לא שינה את ה־username → אוטומטית זמין
+            usernameAvailable = true;
+            clearError("UsernameVer");
+            usernameEl.classList.add("validd");
+            usernameEl.classList.remove("invalid");
+        }
+    }
+
+    // Validate other fields
+    const fields = [
+        { inputId: "phoneText", verifyFn: PhoneVerification, spanId: "PhoneVer" },
+        { inputId: "emailText", verifyFn: EmailVerification, spanId: "EmailVer" },
+        { inputId: "passwordText", verifyFn: PasswordVerification, spanId: "PasswordVer" },
+        { inputId: "fullnameText", verifyFn: FullNameVerification, spanId: "FullNameVer" }
+    ];
+
+    fields.forEach(field => {
+        const inputEl = document.getElementById(field.inputId);
+        const result = field.verifyFn();
+
+        if (result === true) {
+            clearError(field.spanId);
+            inputEl.classList.remove("invalid");
+            inputEl.classList.add("validd");
+        } else {
             allValid = false;
-            showError(field.spanId, "This field is required");
+            showError(field.spanId, result);
+            inputEl.classList.remove("validd");
             inputEl.classList.add("invalid");
         }
     });
 
-    const fullNameResult = FullNameVerification();
-    if (fullNameResult !== true) allValid = false;
-
-    if (!usernameAvailable) {
-        allValid = false;
-        showError("UsernameVer", "Username already exists");
-        document.getElementById("usernameText").classList.add("invalid");
-    }
-
     if (!allValid) return;
-
-    // Get current logged-in user from localStorage
-    const currentUsername = localStorage.getItem('username');
 
     // Prepare updated user object
     const updatedUser = {
         currentUsername: currentUsername,
-        username: document.getElementById("usernameText").value.trim(),
+        username: newUsername,
         fullName: document.getElementById("fullnameText").value.trim(),
         bio: document.getElementById("bioText").value.trim(),
         email: document.getElementById("emailText").value.trim(),
         phone: document.getElementById("phoneText").value.trim(),
-        profilePic: profilePicImg.src
+        profilePic: document.querySelector("#changePhoto .profile-pic-placeholder").src,
+        password: document.getElementById("passwordText").value.trim(),
+        hasThreads: document.getElementById('switch').checked
     };
 
-    // Send to server
+    // Send update to server
     try {
         const res = await fetch('/users/updateProfile', {
             method: 'POST',
@@ -249,10 +201,7 @@ submitBtn.addEventListener("click", async (e) => {
 
         const data = await res.json();
         if (data.success) {
-            // update localStorage username if it changed
-            localStorage.setItem('username', updatedUser.username);
-            localStorage.setItem('profileData', JSON.stringify(updatedUser));
-
+            localStorage.setItem('currentUser', updatedUser.username);
             window.location.href = '/profile/profile.html';
         } else {
             alert('Error updating profile: ' + data.message);
@@ -260,5 +209,46 @@ submitBtn.addEventListener("click", async (e) => {
     } catch (err) {
         console.error(err);
         alert('Server error');
+    }
+});
+
+// ===========================
+// LOAD EXISTING DATA
+// ===========================
+document.addEventListener("DOMContentLoaded", async () => {
+    const currentUsername = localStorage.getItem("currentUser");
+
+    if (!currentUsername) {
+        alert("No user logged in!");
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+        const response = await fetch(`/users/getByUsername/${currentUsername}`);
+        if (!response.ok) {
+            throw new Error("Failed to load user data");
+        }
+        const user = await response.json();
+
+        // מכניסים את הנתונים לתיבות
+        document.getElementById("profilePicUsername").innerHTML = user.username;
+        document.getElementById("profilePicFullName").innerHTML = user.fullName;
+
+        document.getElementById("usernameText").value = user.username || "";
+        document.getElementById("fullnameText").value = user.fullName || "";
+        document.getElementById("emailText").value = user.email || "";
+        document.getElementById("phoneText").value = user.phone || "";
+        document.getElementById("bioText").value = user.bio || "";
+        document.getElementById("passwordText").value = user.password || "";
+        document.getElementById("profilePicPreview").src = user.profilePic || "https://cdn-icons-png.flaticon.com/512/12225/12225935.png";
+
+        // עדכון ה-toggle switch לפי hasThreads
+        const threadsSwitch = document.getElementById("switch");
+        threadsSwitch.checked = user.hasThreads;
+
+    } catch (err) {
+        console.error(err);
+        alert("Failed to load profile for editing.");
     }
 });

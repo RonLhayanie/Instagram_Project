@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use('/users', usersRouter)
 
 app.get('/', (req, res) => {
-    res.redirect('signup/signup.html')
+    res.redirect('login/login.html')
 })
 
 app.listen(3000)

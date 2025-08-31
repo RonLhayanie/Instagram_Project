@@ -70,6 +70,7 @@ html, body {
 #pfp-l {
     width: 30px;
     height: 30px;
+    border-radius: 50%;
 }
 
 .logo-container {
@@ -134,6 +135,7 @@ html, body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 /* profile data */
@@ -246,6 +248,11 @@ html, body {
     background-color: #e3e3e3;
 }
 
+#profileBio {
+    max-width: 40%;  
+    white-space: normal;
+    overflow-wrap: break-word;
+}
 
 /* highlights icon */
 .highlights-section
@@ -341,21 +348,112 @@ html, body {
     border: none;
     cursor: pointer;
 }
-
-
 #editProfile, #deleteAccount, #logOut
 {
     border-bottom: 1px solid #d3d1d1;
 }
 
 
+.delete-modal
+{
+    position: relative;
+    display: none;
+}
+.deleteQuestions
+{
+    display: block;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+}
+#deleteQuestion1
+{
+    margin-top: 2%;
+    margin-bottom: 1%;
+    font-size: 20px;
+}
+#deleteQuestion2
+{
+    font-size: 16px;
+}
+.deleteButtons
+{
+    position: absolute;
+    display: flex;
+    top: 41%;
+
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 0.70%;
+    padding-bottom: 0.75%;
+
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+}
+#yesDelete
+{
+    left: 51%;
+    background-color: rgb(216, 47, 47);
+}
+#noDelete
+{
+    left: 38%;
+    font-size: 20px;
+    background-color: rgb(196, 224, 247);
+}
 
 
 
+.logout-modal
+{
+    position: relative;
+    display: none;
+}
+#logoutQuestion
+{
+    display: block;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    font-size: 20px;
+}
+.logoutButtons
+{
+    position: absolute;
+    display: flex;
+    top: 41%;
 
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 0.70%;
+    padding-bottom: 0.75%;
 
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: none;
+    border-radius: 12px;
 
-
+    cursor: pointer;
+}
+#yeslogout
+{
+    left: 51%;
+    background-color: rgb(216, 47, 47);
+}
+#nologout
+{
+    left: 38%;
+    font-size: 20px;
+    background-color: rgb(196, 224, 247);
+}
 
 
 

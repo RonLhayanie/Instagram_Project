@@ -127,7 +127,7 @@ async function isAgeAbove13()
         if (res.ok)
         {
             localStorage.removeItem('signupData');
-            localStorage.setItem('username', data.username);
+            localStorage.setItem('currentUser', data.username);
             window.location.href = "/profile/profile.html";
         }
         else

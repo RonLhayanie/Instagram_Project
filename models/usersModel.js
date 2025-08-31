@@ -13,8 +13,15 @@ async function Create(userData)
     await collection.insertOne(userData);
 }
 
+async function updateByUsername(currentUsername, updatedData) 
+{
+    return await collection.updateOne({ username: currentUsername }, { $set: updatedData });
+}
 
-
+async function deleteByUsername(username) 
+{
+    return await collection.deleteOne({ username: username });
+}
 
 
 
@@ -23,5 +30,7 @@ module.exports =
 {
     findByUsername,
     Create,
+    updateByUsername,
+    deleteByUsername,
 
 }
