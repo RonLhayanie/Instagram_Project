@@ -65,8 +65,10 @@
                 </div>
             </header>
             <div class="search-box">
-                <input type="text" name="search" class="search-input" placeholder="Search">
-                <svg aria-label="Search" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16" color="grey"><title>Search</title><path d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="16.511" x2="22" y1="16.511" y2="22"></line></svg>
+                <input type="text" id="search-groups" class="search-input" placeholder="Search groups">
+                <svg aria-label="Back"  class="search-box-arrow hidden" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Back</title><polyline fill="none" points="16.502 3 7.498 12 16.502 21" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polyline></svg>
+                <svg aria-label="Search" class="search-box-magniglass" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16" color="grey"><title>Search</title><path d="M19 10.5A8.5 8.5 0 1 1 10.5 2a8.5 8.5 0 0 1 8.5 8.5Z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="16.511" x2="22" y1="16.511" y2="22"></line></svg>
+                <svg aria-label="Filter" class="search-box-filter hidden" xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/></svg>
             </div>
             <div id="chats-wrapper">
                 <div id="notes-wrapper">
@@ -202,6 +204,9 @@
                     <div id="scroller"></div>
                 </div>
             </div>
+            <div id="chats-search-results-wrapper" class="hidden">
+                <ul></ul>
+            </div>
         </nav>
         <main id="messages">
             <div id="no-open-chat-poster">
@@ -301,7 +306,7 @@
 
     <div id="new-message-modal" class="hidden">
         <header>
-            <h3 class="new-message-modal-message-mode">New message</h3>
+            <h3>New message</h3>
             <svg aria-label="Close" id="new-message-x" fill="currentColor" height="18" role="img" viewBox="0 0 24 24" width="18"><title>Close</title><polyline fill="none" points="20.643 3.357 12 12 3.353 20.647" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline><line fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" x1="20.649" x2="3.354" y1="20.649" y2="3.354"></line></svg>
         </header>
         <div id="new-message-search-box">
@@ -312,7 +317,7 @@
             <div id="new-message-suggested"><h4>Suggested</h4></div>
             <ul></ul>
         </div>
-        <button id="new-message-button" class="new-message-modal-message-mode">Chat</button>
+        <button id="new-message-button">Chat</button>
     </div>
 
     <div id="change-group-name-modal" class="hidden">
@@ -329,6 +334,53 @@
         </div>
         <div id="change-group-name-save">
             <button class="locked">Save</button>
+        </div>
+    </div>
+
+    <div class="hidden" id="filter-dropdown">
+        <h2>Filters</h2>
+        <div class="dropdown-content">
+    
+            <div class="filter-group">
+                <h4>Manage</h4>
+                <label>
+                    <input type="checkbox" id="onlyMyGroups">
+                    Only groups I manage
+                </label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Members</h4>
+                <label>
+                    <input type="checkbox" value="3-5" id="filter3-5"> 3-5
+                </label>
+                <label>
+                    <input type="checkbox" value="5-10" id="filter5-10"> 6-10
+                </label>
+                <label>
+                    <input type="checkbox" value="10-20" id="filter10-20"> 10-20
+                </label>
+                <label>
+                    <input type="checkbox" value="20+" id="filter20+"> 20+
+                </label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Activity</h4>
+                <label>
+                    <input type="radio" value="any" id="activity-any" name="activity" checked> Any
+                </label>
+                <label>
+                    <input type="radio" value="high" id="activity-high" name="activity"> High
+                </label>
+                <label>
+                    <input type="radio" value="medium" id="activity-mid" name="activity"> Medium
+                </label>
+                <label>
+                    <input type="radio" value="low" id="activity-low" name="activity"> Low
+                </label>
+            </div>
+
         </div>
     </div>
 

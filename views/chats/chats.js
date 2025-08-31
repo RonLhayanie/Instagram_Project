@@ -5,12 +5,24 @@ const sidebarSearchInput             = document.getElementById('sidebar-search-i
 const newMessageModal                = document.getElementById('new-message-modal')
 const changeGroupNameModal           = document.getElementById('change-group-name-modal')
 
-let currentChatMembers               = []
+let   currentSelctedUsers             = []
 const Account                        = JSON.parse(localStorage.getItem('currentUser'))
-const AccountUsername                = '_idoHaize_' //Account.username
+const AccountUsername                = Account.username
 
-const debounceSearch_newMessageModal = debounce(uploadSearchResults_NewMessageModal, 200)
-const debounceSearch_searchModal     = debounce(uploadSearchResults_searchModal, 200)
+const debounceSearch_newMessageModal = debounce(uploadSearchResults_NewMessageModal, 400)
+const debounceSearch_searchModal     = debounce(uploadSearchResults_searchModal,     400)
+const debounceSearch_navingation     = debounce(uploadSearchResults_navigation,      400)
+
+const groupSearchFilters = {
+    Imanage: false,
+    membersCount: {
+        _3_5: false,
+        _5_10: false,
+        _10_20: false,
+        _20plus: false,
+    },
+    activityLevel: "any"
+}
 
 console.log(AccountUsername + "'s console")
 
@@ -81,13 +93,85 @@ document.getElementById('profile').addEventListener('click', () => {
     window.location.href = '../profile/profile.html'
 })
 
+// open group search
+document.getElementById('search-groups').addEventListener('click', async () => {
+    if(document.getElementById('chats-search-results-wrapper').classList.contains('hidden')) {
+        // open results section
+        document.getElementById('chats-search-results-wrapper').classList.remove('hidden')
+        document.getElementById('chats-wrapper').classList.add('hidden')
+
+        document.querySelector('.search-box-magniglass').classList.add('hidden')
+        document.querySelector('.search-box-arrow').classList.remove('hidden')
+        document.querySelector('.search-box-filter').classList.remove('hidden')
+        document.getElementById('search-groups').classList.add('searching')
+
+        await debounceSearch_navingation('')
+    }
+})
+
+// close group search
+document.querySelector('.search-box-arrow').addEventListener('click', async () => {  
+        
+    document.getElementById('chats-search-results-wrapper').classList.add('hidden')
+    document.getElementById('chats-wrapper').classList.remove('hidden')
+
+    document.querySelector('.search-box-magniglass').classList.remove('hidden')
+    document.querySelector('.search-box-arrow').classList.add('hidden')
+    document.querySelector('.search-box-filter').classList.add('hidden')
+    document.getElementById('search-groups').classList.remove('searching')
+
+    document.getElementById('filter-dropdown').classList.add('hidden')
+    document.getElementById('activity-any').checked = true
+    document.getElementById('onlyMyGroups').checked = false
+    document.getElementById('filter3-5').checked = false
+    document.getElementById('filter5-10').checked = false
+    document.getElementById('filter10-20').checked = false
+    document.getElementById('filter20+').checked = false
+
+    document.getElementById('search-groups').value = ''
+})
+
+// group search search
+document.getElementById('search-groups').addEventListener("input", () => {
+    // erase every kind of space 
+    const search_string = document.getElementById('search-groups').value.replace(/\s+/g, "");
+    debounceSearch_navingation(search_string)
+});
+
+// open/close filters
+document.querySelector('.search-box-filter').addEventListener("click", () => {
+    document.getElementById('filter-dropdown').classList.toggle('hidden')
+})
+
+// filters update + search
+document.getElementById('filter-dropdown').addEventListener('change', () => {
+    groupSearchFilters.Imanage = document.getElementById('onlyMyGroups').checked
+
+    groupSearchFilters.membersCount._3_5 = document.getElementById('filter3-5').checked
+    groupSearchFilters.membersCount._5_10 = document.getElementById('filter5-10').checked
+    groupSearchFilters.membersCount._10_20 = document.getElementById('filter10-20').checked
+    groupSearchFilters.membersCount._20plus = document.getElementById('filter20+').checked
+
+    groupSearchFilters.activityLevel = document.querySelector('input[name="activity"]:checked').value
+
+    const search_string = document.getElementById('search-groups').value.replace(/\s+/g, "");
+    debounceSearch_navingation(search_string)
+})
+
 // open/close search bar
 document.getElementById('search-icon').addEventListener('click', ()=> {
     searchModel.classList.toggle('search-modal-collapsed')
     overlay.classList.toggle('hidden')
 
-    document.getElementById('sidebar').style.zIndex = '5'
-    searchModel.style.zIndex = '4'
+    if(overlay.classList.contains('hidden')) {
+        document.getElementById('sidebar').style.zIndex = '3'
+        searchModel.style.zIndex = '2'
+    }
+
+    else {
+        document.getElementById('sidebar').style.zIndex = '5'
+        searchModel.style.zIndex = '4'
+    }
 })
 
 // click on overlay close modals
@@ -96,8 +180,8 @@ overlay.addEventListener('click', (event) => {
     {
         searchModel.classList.add('search-modal-collapsed')
 
-        searchModel.style.zIndex = '0'
-        document.getElementById('sidebar').style.zIndex = '1'
+        searchModel.style.zIndex = '2'
+        document.getElementById('sidebar').style.zIndex = '3'
 
         overlay.classList.add('hidden')
     }
@@ -108,7 +192,7 @@ overlay.addEventListener('click', (event) => {
         overlay.classList.add('hidden')
         overlay.classList.remove('darken')
 
-        currentChatMembers = []
+        currentSelctedUsers = []
     }
 })
 
@@ -140,9 +224,15 @@ document.getElementById('sidebar-search-input').addEventListener("input", () => 
     debounceSearch_searchModal(search_string)
 });
 
-// open new message modal
+// new message modal open
 document.querySelector('#no-open-chat-poster button').addEventListener('click', async () => {
+    newMessageModal.classList.add('NM-mode')
+    newMessageModal.classList.add('AP-mode')
     newMessageModal.classList.remove('hidden')
+
+    newMessageModal.querySelector('h3').innerText     = 'New message'
+    newMessageModal.querySelector('button').innerText = 'Chat'
+
     overlay.classList.remove('hidden')
     overlay.classList.add('darken')
 
@@ -156,19 +246,31 @@ document.getElementById('new-message-x').addEventListener('click', () => {
     overlay.classList.remove('darken')
 
     document.getElementById('new-message-search-input').value = ''
-    currentChatMembers = []
+    currentSelctedUsers = []
 })
 
-// new message modal - create/open chat
+// 1. new message modal - create/open chat
+// 2. add people modal  - add
 document.getElementById('new-message-button').addEventListener('click', async () => {
-    await createOrOpenChat(currentChatMembers)
+    if(newMessageModal.classList.contains('NM-mode')) {
+        await createOrOpenChat(currentSelctedUsers)
+    }   
+    else {
+        await addPeopleToGroup(document.getElementById('open-chat').dataset._id)
 
-    // close modal
-    newMessageModal.classList.add('hidden')
-    overlay.classList.add('hidden')
-    overlay.classList.remove('darken')
+        // close details
+        document.getElementById('open-chat-details').classList.add('hidden')
+        document.getElementById('chat-details-icon').classList.remove('hidden')
+        document.getElementById('chat-details-icon-fill').classList.add('hidden')
+    }
 
-    currentChatMembers = []
+        // close modal
+        newMessageModal.classList.add('hidden')
+        overlay.classList.add('hidden')
+        overlay.classList.remove('darken')
+
+        currentSelctedUsers = []
+
 })
 
 // new message modal search
@@ -302,7 +404,7 @@ document.getElementById('chat-details-icon').addEventListener('click', async () 
             </div>
             <div class="chat-description">
                 <span class="chat-title">${otherMember}</span>
-                <span class="chat-subtitle">${await last_activation(otherMember)}</span>
+                <span class="chat-subtitle">${await fullnameOf(otherMember)}</span>
             </div>
         </li>
         `
@@ -319,18 +421,12 @@ document.getElementById('chat-details-icon').addEventListener('click', async () 
         // dialog - does not allow adding people
         const addPeople = document.getElementById('open-chat-add-people')
         addPeople.classList.add('hidden')
-
-        // change styling and title
-        addPeople.style.cursor = 'not-allowed'
-        addPeople.title = ''
     }
 
     else {
-        let admin = '', memberSettings = 'hidden'
-        if(AccountUsername === chat.owner) {
-            admin = 'Admin &bull; '
+        let memberSettings = 'hidden'
+        if(AccountUsername === chat.owner) 
             memberSettings = ''
-        }
 
         document.querySelector('#members-wrapper ul').innerHTML = `
         <li id="chat-member-me">
@@ -339,28 +435,31 @@ document.getElementById('chat-details-icon').addEventListener('click', async () 
             </div>
             <div class="chat-description">
                 <span class="chat-title">${AccountUsername}</span>
-                <span class="chat-subtitle">${admin + await fullnameOf(AccountUsername)}</span>
+                <span class="chat-subtitle">${await fullnameOf(AccountUsername)}</span>
             </div>
         </li>        
         `
 
-        chat.members.filter(m => m != AccountUsername).forEach(async (member) => {
-            if(member === chat.owner) admin = 'Admin &bull;'
-            else                      admin = ''
+        if(AccountUsername === chat.owner) 
+            document.querySelector('#chat-member-me .chat-subtitle').innerHTML = 'Admin &bull; ' + document.querySelector('#chat-member-me .chat-subtitle').innerText
 
-            const li =document.createElement('li')
+        chat.members.filter(m => m != AccountUsername).forEach(async (member) => {
+            const li = document.createElement('li')
             li.innerHTML = `
                 <div class="chat-member-pfp chat-pfp pfp">
                     <img src="${await avatarOf(member)}" alt="profile not found">
                 </div>
                 <div class="chat-description">
                     <span class="chat-title">${member}</span>
-                    <span class="chat-subtitle">${admin + await fullnameOf(member)}</span>
+                    <span class="chat-subtitle">${await fullnameOf(member)}</span>
                 </div>
                 <svg aria-label="Member settings" class="owner-privileges-member-settings ${memberSettings}" fill="currentColor" height="24" role="img" viewBox="0 0 24 24" width="24"><title>Member settings</title><circle cx="12" cy="12" r="1.5"></circle><circle cx="12" cy="6" r="1.5"></circle><circle cx="12" cy="18" r="1.5"></circle></svg>
             `
 
-        document.querySelector('#members-wrapper ul').appendChild(li)
+            if(member === chat.owner) 
+            li.querySelector('.chat-subtitle').innerHTML = 'Admin &bull; ' + li.querySelector('.chat-subtitle').innerText
+
+            document.querySelector('#members-wrapper ul').appendChild(li)
         })
 
         // group - allow adding people
@@ -369,15 +468,37 @@ document.getElementById('chat-details-icon').addEventListener('click', async () 
 
         // owner privileges in group
         if(chat.owner === AccountUsername) { 
+            document.querySelector('#change-chat-name button').style.cursor = 'pointer'
             document.querySelector('#change-chat-name button').style.color = '#000'
             document.querySelector('#change-chat-name button').title = ''
             document.querySelector('#change-chat-name button').disabled = false
 
-            // change styling and title
+            // change styling and title of add people
             const addPeople = document.getElementById('open-chat-add-people')
-            addPeople.style.color  = 'blue'
             addPeople.style.cursor = 'pointer'
-            addPeople.title = ''
+            addPeople.style.color  = '#00f'
+
+            if(!chat.name) {
+                addPeople.disabled = true
+                addPeople.title    = 'You cannot add people until the group has a name'
+            }
+            else {
+                addPeople.disabled = false
+                addPeople.title    = ''
+            }
+        }
+
+        else {
+            document.querySelector('#change-chat-name button').style.cursor = 'not-allowed'
+            document.querySelector('#change-chat-name button').style.color  = '#cecece'
+            document.querySelector('#change-chat-name button').title        = 'Only group owner can change group name'
+            document.querySelector('#change-chat-name button').disabled     = true
+
+            const addPeople = document.getElementById('open-chat-add-people')
+            addPeople.style.cursor  = 'auto'
+            addPeople.style.color   = '#7373b8'
+            addPeople.disabled      = true
+            addPeople.title         = 'Only group owner can add people'
         }
     }
 })
@@ -474,13 +595,53 @@ document.querySelector('#change-group-name-save button').addEventListener('click
     // update page
     document.getElementById('open-chat-title').innerText = newName
     document.querySelector('.chat.active .chat-title').innerText = newName
-    console.log('made there')
+
+    // allow adding people
+    document.getElementById('open-chat-add-people').disabled = false
+    document.getElementById('open-chat-add-people').title    = ''
+})
+
+// add people open
+document.getElementById('open-chat-add-people').addEventListener('click', (event) => {
+    // if account is not the owner
+    if(document.getElementById('open-chat-add-people').disabled)
+        return;
+
+    newMessageModal.classList.add('AP-mode')
+    newMessageModal.classList.remove('NM-mode')
+    newMessageModal.classList.remove('hidden')
+
+    newMessageModal.querySelector('h3').innerText     = 'Add people'
+    newMessageModal.querySelector('button').innerText = 'Add'
+
+    overlay.classList.remove('hidden')
+    overlay.classList.add('darken')
+
+    debounceSearch_newMessageModal('', event.target)
+})
+
+// leave chat
+document.querySelector('#open-chat-leave button').addEventListener('click', async () => {
+    await fetch('/chats/removeMember', {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            _id: document.getElementById('open-chat').dataset._id,
+            username: AccountUsername
+        })
+    })
+    
+    // close chat
+    console.log('cont')
+    document.querySelector(`.chat[data-_id="${document.getElementById('open-chat').dataset._id}"]`).remove()
+    document.getElementById('open-chat-wrapper').classList.add('hidden')
+    document.getElementById('no-open-chat-poster').classList.remove('hidden')
 
 })
 
 // functions
-async function groupchatHTML(ownerAvatar, viceownerAvatar, chatName, currentChatMembers) {
-    chatName = chatName.length > 50 ? chatName.slice(0, 49)+'...' : chatName
+async function groupchatHTML(ownerAvatar, viceownerAvatar, chatName, memebrsWithoutAccount, maxLetters=50) {
+    chatName = chatName.length > 50 ? chatName.slice(0, maxLetters)+'...' : chatName
     return `
         <div class="chat-pfp group-chat-pfp">
             <img class="pfp group-chat-img1" src="${viceownerAvatar}" alt="not found">
@@ -488,7 +649,7 @@ async function groupchatHTML(ownerAvatar, viceownerAvatar, chatName, currentChat
         </div>
         <div class="chat-description">
             <span class="chat-title">${chatName}</span>
-            <span class="chat-subtitle">${await last_activation(currentChatMembers)}</span>
+            <span class="chat-subtitle">${await last_activation(memebrsWithoutAccount)}</span>
         </div>
         `
 }
@@ -529,18 +690,63 @@ async function fullnameOf(username) {
     return data.fullname
 }
 
-let currentController = null;
-async function liveUsersSearch(searchString) {
+let currentUsersController = null;
+async function liveUsersSearch(searchString, eventTarget) {
     // if a former fetch is still running - shut it off
-    if(currentController)
-        currentController.abort()
+    if(currentUsersController)
+        currentUsersController.abort()
 
 
     // signal to shut off fetchs which take too long
-    currentController = new AbortController()
-    const signal = currentController.signal
+    currentUsersController = new AbortController()
+    const signal = currentUsersController.signal
     try {
-    const response = await fetch('/users/search20', {
+    const response = await fetch('/users/search', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            search_string: searchString
+        }),
+        signal: signal
+    })
+    let searchResultData  = await response.json()
+
+    // dont show chat members when trying to add people
+    if(eventTarget === document.getElementById('open-chat-add-people')) {
+        const chatRespose = await fetch('/chats/findById', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                _id: document.getElementById('open-chat').dataset._id
+            })
+        }) 
+        const chat = await chatRespose.json()
+
+        searchResultData = searchResultData.filter(res => !chat.members.includes(res))
+    }
+
+    return searchResultData.filter(res => res.username != AccountUsername).slice(0, 20)
+    }
+
+    catch(err) {
+        // if we caught an abort - its ok we sent it
+        if(err.name ==="AbortError") return 
+        console.error("Live Search Failed:", err)
+    }
+}
+
+let currentGroupsController = null
+async function liveGroupsSearch(searchString) {
+    // if a former fetch is still running - shut it off
+    if(currentGroupsController)
+        currentGroupsController.abort()
+
+
+    // signal to shut off fetchs which take too long
+    currentGroupsController = new AbortController()
+    const signal = currentGroupsController.signal
+    try {
+    const response = await fetch('/chats/search', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -551,24 +757,76 @@ async function liveUsersSearch(searchString) {
 
 
     let searchResultData  = await response.json()
-    return searchResultData.filter(res => res.username != AccountUsername)
+
+    //filters
+    if(groupSearchFilters.Imanage) {
+        searchResultData = searchResultData.filter(res => res.owner === AccountUsername)
+    }
+
+    if(groupSearchFilters.membersCount._3_5 || groupSearchFilters.membersCount._5_10 ||
+     groupSearchFilters.membersCount._10_20 || groupSearchFilters.membersCount._20plus) {
+        if(!groupSearchFilters.membersCount._3_5)
+            searchResultData = searchResultData.filter(res => !(res.members.length <= 5))
+
+        if(!groupSearchFilters.membersCount._5_10)
+            searchResultData = searchResultData.filter(res => !(res.members.length > 5 && res.members.length <= 10))
+
+        if(!groupSearchFilters.membersCount._10_20)
+            searchResultData = searchResultData.filter(res => !(res.members.length > 10 && res.members.length <= 20))
+
+        if(!groupSearchFilters.membersCount._20plus)
+            searchResultData = searchResultData.filter(res => !(res.members.length >= 20))
+    }
+
+
+    let activityPercentageRange = [100, 0]
+    switch(groupSearchFilters.activityLevel) {
+        case 'any': activityPercentageRange    = [1.0, 0.0]; break;
+        case 'high': activityPercentageRange   = [1.0, 0.75]; break;
+        case 'medium': activityPercentageRange = [0.75, 0.25]; break;
+        case 'low': activityPercentageRange    = [0.25, 0.0]; break;
+    }
+
+    let finalsearchResultData = []
+    const promises = searchResultData.map(res => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lastActivation = await last_activation(res.members)
+                const seenToday = parseInt(lastActivation.replace(/\D/g, ""))
+                const activityPercentage = seenToday / res.members.length
+                if(activityPercentage <= activityPercentageRange[0] && activityPercentage >= activityPercentageRange[1])
+                    finalsearchResultData.push(res)
+
+                // ends promise
+                resolve()
+            }
+            catch(err) {
+                reject(err)
+            }
+        })
+    })
+
+    // all promises are done
+    await Promise.all(promises)
+    return finalsearchResultData
     }
 
     catch(err) {
+        // if we caught an abort - its ok we sent it
         if(err.name ==="AbortError") return 
         console.error("Live Search Failed:", err)
     }
-
 }
 
-async function uploadSearchResults_NewMessageModal(searchString) {
-    const searchResultData = await liveUsersSearch(searchString)
+async function uploadSearchResults_NewMessageModal(searchString, eventTarget=null) {
+    const searchResultData = await liveUsersSearch(searchString, eventTarget)
 
     let resultsContainer = document.querySelector('#new-message-results ul')
     resultsContainer.innerHTML = ``
 
     // render to HTML
     searchResultData.forEach(async (result) => {
+        // if its add people mode and this username is already in group - don't show it
         const li = document.createElement('li') 
         li.dataset.username = result.username
             li.innerHTML = `
@@ -589,14 +847,14 @@ async function uploadSearchResults_NewMessageModal(searchString) {
 
             // add selected username to currentChatMembers or remove it if its already there
             const selectedUsername = li.dataset.username
-            if(currentChatMembers.includes(selectedUsername))
-                currentChatMembers.splice(currentChatMembers.indexOf(selectedUsername), 1)
+            if(currentSelctedUsers.includes(selectedUsername))
+                currentSelctedUsers.splice(currentSelctedUsers.indexOf(selectedUsername), 1)
 
             else
-                currentChatMembers.push(selectedUsername)
+                currentSelctedUsers.push(selectedUsername)
 
             // locking and unlocking the button
-            if(currentChatMembers.length > 0)
+            if(currentSelctedUsers.length > 0)
                 document.getElementById('new-message-button').classList.add('unlock')
 
             else
@@ -604,7 +862,7 @@ async function uploadSearchResults_NewMessageModal(searchString) {
         })
 
         // if selected
-        if(currentChatMembers.indexOf(result.username) !== -1) {
+        if(currentSelctedUsers.indexOf(result.username) !== -1) {
             li.classList.add('selected')
         }
     })
@@ -620,15 +878,13 @@ async function uploadSearchResults_searchModal(searchString) {
         const li = document.createElement('li') 
         li.dataset.username = result.username
             li.innerHTML = `
-            <li>
-                <div class="pfp search-result-account-pfp">
-                    <img src="${await avatarOf(result.username)}" alt="not found">
-                </div>
-                <div class="search-result-account-description">
-                    <div class="search-result-account-username">${result.username}</div>
-                        <div class="search-result-account-fullname">${await fullnameOf(result.username)}</div>
-                </div>
-            </li>
+            <div class="pfp search-result-account-pfp">
+                <img src="${await avatarOf(result.username)}" alt="not found">
+            </div>
+            <div class="search-result-account-description">
+                <div class="search-result-account-username">${result.username}</div>
+                <div class="search-result-account-fullname">${await fullnameOf(result.username)}</div>
+            </div>
         `
 
         resultsContainer.appendChild(li) 
@@ -646,7 +902,77 @@ async function uploadSearchResults_searchModal(searchString) {
     })
 }
 
-// to ease the search for the server - send req 0.2s after the user stop typing
+async function uploadSearchResults_navigation(searchString) {
+    const searchResultData = await liveGroupsSearch(searchString)
+    let resultsContainer = document.querySelector('#chats-search-results-wrapper ul')
+    resultsContainer.innerHTML = ``
+    // render to HTML
+    searchResultData.forEach(async (result) => {
+        const GroupClass = result.members.includes(AccountUsername) ? 'opened-group' : 'join-group'
+        const button = (GroupClass === 'opened-group')  ? '' : `<button>Join</button>`
+
+        const li = document.createElement('li') 
+        li.classList.add(GroupClass)
+        li.dataset._id = result._id
+
+        li.innerHTML = await groupchatHTML(await avatarOf(result.owner), await avatarOf(result.viceowner),
+            result.name || result.members.join(', '), result.members, 25) + button
+        
+
+        resultsContainer.appendChild(li) 
+        
+        
+        // event listeners to select groups to join
+        li.addEventListener('click', async () => {
+            let chatDiv;
+
+            // join and add chat to HTML
+            if(li.classList.contains('join-group')) {
+                // join
+                addToGroup(result._id, AccountUsername)
+
+                // HTML
+                chatDiv = document.createElement('div')
+                chatDiv.classList.add('chat', 'group-chat')
+                chatDiv.dataset._id = result._id
+
+                const resultName = result.name || result.members.filter(m => m != AccountUsername).join(', ')
+
+                chatDiv.innerHTML = await groupchatHTML(await avatarOf(result.owner), await avatarOf(result.viceowner), resultName, result.members.filter(m => m != AccountUsername))
+
+                // pushes at the top of the element
+                document.getElementById('scroller').prepend(chatDiv)
+                chatDiv.addEventListener('click', () => {
+                    openChat(chatDiv, result) 
+                })
+            }
+
+            // find chat at the HTML
+            else {
+                document.querySelectorAll('.chat.group-chat').forEach(chat => {
+                    if(chat.dataset._id === result._id)
+                        chatDiv = chat
+                })
+            }
+
+            // close group search
+            document.getElementById('chats-search-results-wrapper').classList.add('hidden')
+            document.getElementById('chats-wrapper').classList.remove('hidden')
+
+            document.querySelector('.search-box-magniglass').classList.remove('hidden')
+            document.querySelector('.search-box-arrow').classList.add('hidden')
+            document.querySelector('.search-box-filter').classList.add('hidden')
+            document.getElementById('search-groups').classList.remove('searching')
+
+            document.getElementById('search-groups').value = ''
+
+            // open selected group
+            openChat(chatDiv, result)
+        })
+    })
+}
+
+// to ease the search for the server - send the last req 0.4s after the user stop typing
 function debounce(fn, delay_MS) {
     let timer;
 
@@ -735,10 +1061,7 @@ async function countNowsAndTodays(members) {
 
             // added a check if its secends and the before the s is a digit
             else if(( /\d/.test(shortdate.at(-6)) && shortdate.endsWith('s ago')) || shortdate.endsWith('min ago') || shortdate.endsWith('h ago'))
-            {   
                 ++todays 
-                console.log(shortdate, todays)
-            } 
         }))
     return {nows, todays}
 }
@@ -755,7 +1078,7 @@ async function renderChat(chatDiv, chat) {
     if(chatDiv.classList.contains('group-chat')) {
         document.getElementById('open-chat-pfp').innerHTML   =   `
             <img class="pfp group-chat-img1" src="${await avatarOf(chat.viceowner)}" alt="not found">
-            <img class="pfp group-chat-img2" src="${await avatarOf(chat.viceowner)}" alt="not found">
+            <img class="pfp group-chat-img2" src="${await avatarOf(chat.owner)}" alt="not found">
         `
 
         document.getElementById('open-chat-pfp').classList.remove('pfp')
@@ -805,7 +1128,6 @@ async function createOrOpenChat(members) {
             members: [AccountUsername, ...members]
         })
     })
-
     const newChatData = await response.json()
     const chat = newChatData.chat
 
@@ -813,8 +1135,8 @@ async function createOrOpenChat(members) {
         const owner = chat.owner, viceowner = chat.viceowner 
         const chatName = chat.name || members.join(', ')
 
-        // is group
-        if(members.length > 2) {
+        // is group (members without this account)
+        if(members.length >= 2) {
             const chatDiv = document.createElement('div')
             chatDiv.classList.add('chat', 'group-chat')
 
@@ -840,6 +1162,7 @@ async function createOrOpenChat(members) {
                 openChat(chatDiv, chat)
             })
 
+            chatDiv.dataset._id = chat._id
             openChat(chatDiv, chat)
         }
     }
@@ -851,6 +1174,25 @@ async function createOrOpenChat(members) {
             }
         })
     }
+}
+
+async function addToGroup(chatId, username) {
+    const response = await fetch('/chats/addMember', {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            _id: chatId,
+            username: username
+        })
+    })
+
+    return await response.json()
+}
+
+async function addPeopleToGroup(groupId) {
+    currentSelctedUsers.forEach(async (selectedUser) => {
+        addToGroup(groupId, selectedUser)
+    })
 }
 
 

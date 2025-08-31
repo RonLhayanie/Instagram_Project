@@ -68,4 +68,53 @@ router.patch('/changeName', async (req, res) => {
     }
 })
 
+router.post('/search', async (req, res) => {
+        try {
+            const search_string = req.body.search_string
+            const results = await chats.search(search_string)
+            res.json(results)
+        }
+        catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Server error' });
+        }
+})
+
+router.patch('/addMember', async (req, res) => {
+    try {
+        const {_id, username} = req.body
+        await chats.addMember(_id, username) 
+
+        res.end()
+    }
+    catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+    }
+})
+
+router.patch('/removeMember', async (req, res) => {
+    try {
+        const {_id, username} = req.body
+        await chats.removeMember(_id, username) 
+
+        const chat = await chats.findByID(_id)
+
+        if(chat.owner === username)
+            chats.updateOwners(_id, 'owner')
+
+        if(chat.viceowner === username)
+            chats.updateOwners(_id, 'viceowner')
+
+        if(chat.members.length === 1)
+            chats.deleteChat(_id)
+
+        res.end()
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+})
+
 module.exports = router

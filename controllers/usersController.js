@@ -112,10 +112,10 @@ router.post('/getLastseenByUsername', async (req, res) => {
     }
 })
 
-router.post('/search20', async (req, res) => {
+router.post('/search', async (req, res) => {
     try {
         const search_string = req.body.search_string
-        const results = await usersModel.search20(search_string)
+        const results = await usersModel.search(search_string)
         res.json(results)
     }
     catch (err) {
