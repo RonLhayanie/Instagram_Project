@@ -84,43 +84,64 @@ window.onload = populateDateOptions;
 
 
 //Check if the age is above 13(Instagram's limitation)
-async function isAgeAbove13() {
+async function isAgeAbove13() 
+{
     const day = parseInt(document.getElementById("DayInput").value);
     const month = parseInt(document.getElementById("MonthInput").value);
     const year = parseInt(document.getElementById("YearInput").value);
 
+
+    // calculate birthday
     const birthDate = new Date(year, month - 1, day);
-    const today = new Date();
+    const today = new Date(); // Current date
     const minAgeDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
 
-    if (isNaN(birthDate.getTime()) || birthDate > minAgeDate) {
+    // Check if it's a real date
+    if (isNaN(birthDate.getTime())) 
+    {
         OpenVerification();
         return;
     }
 
+
+    if (birthDate > minAgeDate)
+    {
+        OpenVerification();
+        return;
+    }
+
+    //get data from local storage
     const data = JSON.parse(localStorage.getItem('signupData'));
     data.birthDate = birthDate.toISOString();
-    localStorage.setItem('signupData', JSON.stringify(data));
+    localStorage.setItem('signupData', JSON.stringify(data));       //add birthday
 
-    try {
-        const res = await fetch('/users/createAccount', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
+    console.log(data);
+    //Send to server
+    await fetch('/users/createAccount', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
 
-        if (res.ok) {
-            const createdUser = await res.json();
-            localStorage.setItem('currentUser', JSON.stringify(createdUser));
+    .then(res => {
+        if (res.ok)
+        {
             localStorage.removeItem('signupData');
+            localStorage.setItem('currentUser', data.username);
             window.location.href = "/profile/profile.html";
-        } else {
-            alert("Error creating account");
         }
-    } catch (err) {
+        else
+        {
+            alert("error creating account");
+        }
+    })
+
+    .catch(err => {
         console.error(err);
         alert("Server error");
-    }
+    });
+
+
 }
 
 

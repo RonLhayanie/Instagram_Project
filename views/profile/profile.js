@@ -8,7 +8,10 @@ function goToMessages()
     window.location.href = "../chats/chats.html";
 }
 
-
+function EditProfile()
+{
+    window.location.href = "editProfile.html";
+}
 
 
 const logos = document.querySelectorAll('.postsSavedTaggedLogos');
@@ -56,50 +59,128 @@ function CloseSettings()
     }
 }
 
+// Open/Close delete account confirmation div
+function OpenDelete()
+{
+    const modal = document.querySelector('.delete-modal');
+    if (modal)
+    {
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
+}
+function CloseDelete()
+{
+    const modal = document.querySelector('.delete-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
+// Open/Close Log out div
+function OpenLogout()
+{
+    const modal = document.querySelector('.logout-modal');
+    if (modal)
+    {
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
+}
+function CloseLogout()
+{
+    const modal = document.querySelector('.logout-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
 
 
 
 
 
 
-
-
-window.addEventListener('DOMContentLoaded', () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        // אם אין משתמש מחובר, תוכל להפנות ל-login או feed
-        window.location.href = "/feed/feed.html";
+async function loadProfile() 
+{
+    const username = localStorage.getItem('currentUser');
+    if (!username) 
+        {
+        window.location.href = "/login.html"; 
         return;
     }
 
-    // עדכון תמונת פרופיל
-    const profilePicEl = document.querySelector('.profile-pic img');
-    if (profilePicEl) profilePicEl.src = currentUser.profilePic;
+    try {
+        const res = await fetch(`/users/getByUsername/${username}`);
 
-    // עדכון שם משתמש
-    const usernameEl = document.querySelector('.username-section span');
-    if (usernameEl) usernameEl.textContent = currentUser.username;
+        console.log(localStorage.getItem('currentUser'));
 
-    // עדכון full name
-    const fullNameEl = document.getElementById('fullName');
-    if (fullNameEl) fullNameEl.textContent = currentUser.fullName;
+        if (!res.ok) throw new Error("User not found");
+        const user = await res.json();
 
-    // עדכון bio
-    const bioEl = document.getElementById('profileBio');
-    if (bioEl) bioEl.textContent = currentUser.bio;
+        // כאן מציגים בדף את המידע מהשרת
+        document.getElementById("ProfileUsername").innerText = user.username;
+        document.getElementById("fullName").innerText = user.fullName;
+        document.getElementById("profileBio").innerText = user.bio;
+        document.getElementById('threadsPart').innerHTML = `<img id="threadsLogo" src="https://cdn4.iconfinder.com/data/icons/threads-by-instagram/128/threads-logo-brand-sign-rounded-1024.png">${user.username}`;
+        document.querySelector('.profile-pic-placeholder').src = user.profilePic;
+        document.getElementById("pfp-l").src = user.profilePic;
 
-    // עדכון Threads username
-    const threadsPartEl = document.getElementById('threadsPart');
-    if (threadsPartEl) {
-        threadsPartEl.innerHTML = `<img id="threadsLogo" src="https://cdn4.iconfinder.com/data/icons/threads-by-instagram/128/threads-logo-brand-sign-rounded-1024.png">${currentUser.username}`;
+        const threadsPart = document.getElementById("threadsPart");
+        if (user.hasThreads === true) 
+        {
+            threadsPart.style.display = 'flex';
+        } 
+        else 
+            {
+            threadsPart.style.display = 'none';
+        }
+
+
+
+    } 
+    catch (err) {
+        console.error(err);
+        alert("Failed to load profile");
     }
+}
+document.addEventListener("DOMContentLoaded", loadProfile);
 
-    // עדכון סטטיסטיקות בסיסיות (אם שמרת אותם)
-    const numOfPostsEl = document.getElementById('NumOfPosts');
-    const numOfFollowersEl = document.getElementById('NumOfFollowers');
-    const numOfFollowingEl = document.getElementById('NumOfFollowing');
 
-    if (numOfPostsEl) numOfPostsEl.textContent = currentUser.posts.length;
-    if (numOfFollowersEl) numOfFollowersEl.textContent = currentUser.followers ? currentUser.followers.length : 0;
-    if (numOfFollowingEl) numOfFollowingEl.textContent = currentUser.following ? currentUser.following.length : 0;
-});
+
+
+
+
+/* Delete Account */
+async function DeleteAccount() 
+{
+
+    try {
+        //save the username to delete
+        const username = localStorage.getItem("currentUser");
+
+        const res = await fetch(`/users/delete/${username}`, {method: 'DELETE'});
+
+        if (res.ok) {
+            alert("Account deleted successfully");
+            localStorage.clear(); // Delete current username
+            window.location.href = "/login/login.html"; // return to login
+        } else {
+            const data = await res.json();
+            alert("Failed to delete account: " + data.error);
+        }
+    } catch (err) {
+        console.error("Error deleting account:", err);
+        alert("Something went wrong.");
+    }
+}
+
+/* Log Out */
+async function LogOut() 
+{
+    localStorage.removeItem("currentUser");
+    window.location.href = "/login/login.html"
+}
