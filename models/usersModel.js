@@ -1,3 +1,4 @@
+const { Collection } = require('mongodb');
 const db = require('./../db')
 const collection = db.collection('users');
 
@@ -26,13 +27,15 @@ async function deleteByUsername(username)
 
 
 
-
 // return 20 rondomly sorted usernames which contains the search_string
+// return rondomly sorted usernames which contains the search_string
 // regardless of upper/lower cases
-async function search20(search_string) {
-    return await db.collection('users').aggregate([
+async function search(search_string) {
+    const total = await collection.countDocuments()
+
+    return await collection.aggregate([
         {$match: {username: {$regex: search_string, $options: 'i'}}},
-        {$sample: { size: 20 } },
+        {$sample: { size: total } },
         {$project: {username: 1, _id: 0}}
     ]).toArray()
 }
@@ -43,7 +46,9 @@ module.exports =
 {
     findByUsername,
     Create,
+    search,
     updateByUsername,
     deleteByUsername,
     search20,
+
 }
