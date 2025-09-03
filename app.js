@@ -1,23 +1,25 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-const cors = require('cors'); // להתקנה: npm install cors
+const express = require('express')
+const app = express()
 
-const postsRouter = require('./controllers/postsController');
-const usersRouter = require('./controllers/usersController');
+const usersRouter = require('./controllers/usersController')
+const chatsRouter = require('./controllers/chatsController')
+const postsRouter = require('./controllers/postsController')
 
-app.use(cors()); // אפשר בקשות ממקורות שונים
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const path = require('path')
 
-app.use('/posts', postsRouter);
-app.use('/users', usersRouter);
+app.use(express.json())
+app.use(express.static('views'))
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+
+app.use('/users', usersRouter)
+app.use('/chats', chatsRouter)
+app.use('/posts', postsRouter)
+
 
 app.get('/', (req, res) => {
-    res.redirect('/login/login.html');
-});
+    res.redirect('login/login.html')
+})
 
-app.listen(3000, () => {
-    console.log('✅ Server running on http://localhost:3000');
-});
+app.listen(3000)

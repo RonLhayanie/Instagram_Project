@@ -1,8 +1,4 @@
 const connectDB = require('./../db');
+const collection = db.collection('posts');
 
-async function getUsersCollection() {
-    const db = await connectDB();
-    return db.collection('posts');
-}
-
-module.exports = { getUsersCollection };
+module.exports = {};
