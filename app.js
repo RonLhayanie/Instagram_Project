@@ -3,6 +3,9 @@ const app = express()
 
 const usersRouter = require('./controllers/usersController')
 const chatsRouter = require('./controllers/chatsController')
+const postsRouter = require('./controllers/postsController')
+const weatherRouter = require('./controllers/weatherController');
+
 
 const path = require('path')
 
@@ -14,6 +17,9 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use('/users', usersRouter)
 app.use('/chats', chatsRouter)
+app.use('/posts', postsRouter)
+app.use('/weather', weatherRouter);
+
 
 app.get('/', (req, res) => {
     res.redirect('login/login.html')

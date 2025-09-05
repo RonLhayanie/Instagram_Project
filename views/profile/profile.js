@@ -400,6 +400,57 @@ function CloseLogout()
 
 
 
+// Open/Close weather div
+async function OpenWeather() {
+    const modal = document.querySelector('.weather-modal');
+    const cityEl = document.getElementById("UsersCity");
+    const weatherEl = document.getElementById("UsersWeather");
+
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
+
+    navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+            const response = await fetch("/weather", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ lat, lon })
+            });
+
+            const data = await response.json();
+
+            cityEl.textContent = `City: ${data.city}`;
+            weatherEl.textContent = `Weather: ${data.temp}°C, ${data.description}`;
+        } catch (err) {
+            cityEl.textContent = "שגיאה בקבלת המידע";
+            weatherEl.textContent = "";
+            console.error(err);
+        }
+    }, (error) => {
+        cityEl.textContent = "לא ניתן לקבל את המיקום שלך.";
+        weatherEl.textContent = "";
+        console.error(error);
+    });
+}
+
+function CloseWeather()
+{
+    const modal = document.querySelector('.weather-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
+
 
 
 //Load profile data to screen
