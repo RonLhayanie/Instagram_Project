@@ -5,8 +5,7 @@ const sidebarSearchInput             = document.getElementById('sidebar-search-i
 const newMessageModal                = document.getElementById('new-message-modal')
 const changeGroupNameModal           = document.getElementById('change-group-name-modal')
 
-let   currentSelctedUsers            = []
-const AccountUsername                = JSON.parse(localStorage.getItem('currentUsername'))
+const AccountUsername                = localStorage.getItem('currentUser')
              
 
 const debounceSearch_newMessageModal = debounce(uploadSearchResults_NewMessageModal, 400)

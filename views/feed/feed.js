@@ -1582,7 +1582,8 @@ function checkForChanges() {
   formElements.forEach(element => {
     if (element.type === 'checkbox') {
       if (element.checked !== originalValues[element.id]) changed = true;
-    } else if (element.value !== originalValues[element.id]) changed = true;
+    } 
+    else if (element.value !== originalValues[element.id]) changed = true;
   });
   if (previewImg.style.display === 'block' && fileInput.files.length === 0 && !urlInput.value) changed = true;
   return changed;
