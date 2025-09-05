@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instagram &bull; Feed</title>
   <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" type="image/png">
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
   </head>
 
     <body>
@@ -824,11 +825,21 @@
   </div>
   </div>
 
+  <div id="map-overlay" style="display: none;">
+    <div id="map-wrapper">
+      <div id="map-modal" style="background: #0000ff0a;"></div>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" id="exit-map" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
+      <button id="save-map-marker">Save</button>
+    </div>
+  </div>
+
   <!-- jump messages -->
   <div id="toast-message" class="toast-hidden">Message sent!</div>
   <div id="toast-comment" class="toast-hidden">Comment posted!</div>
     </div>
-  </div>> 
+  </div>
   <script src="feed.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="map.js" type="module"></script>
   </body>
   </html> 

@@ -5,6 +5,7 @@ const sidebarSearchInput             = document.getElementById('sidebar-search-i
 const newMessageModal                = document.getElementById('new-message-modal')
 const changeGroupNameModal           = document.getElementById('change-group-name-modal')
 
+
 let   currentSelctedUsers             = []
 const AccountUsername                 = localStorage.getItem('currentUser')
 
@@ -76,6 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const avatar = await avatarOf(AccountUsername)
     document.querySelector('#my-note img').src = avatar
     document.querySelector('#profile img').src = avatar
+    console.log(avatar)
 
     document.querySelector('#username p').innerText = AccountUsername
 })
@@ -631,7 +633,6 @@ document.querySelector('#open-chat-leave button').addEventListener('click', asyn
     })
     
     // close chat
-    console.log('cont')
     document.querySelector(`.chat[data-_id="${document.getElementById('open-chat').dataset._id}"]`).remove()
     document.getElementById('open-chat-wrapper').classList.add('hidden')
     document.getElementById('no-open-chat-poster').classList.remove('hidden')

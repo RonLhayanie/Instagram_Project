@@ -1562,9 +1562,9 @@ createModal.innerHTML = `
 
       <!-- Location -->
       <div class="input-field-container">
-        <input type="text" id="location-input" class="input-field" placeholder="Add location" />
+        <input type="text" id="location-input" class="input-field" placeholder="Add location" list="places"/>
         <svg class="location-icon" aria-label="Add location" class="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>Add location</title><path d="M12.053 8.105a1.604 1.604 0 1 0 1.604 1.604 1.604 1.604 0 0 0-1.604-1.604Zm0-7.105a8.684 8.684 0 0 0-8.708 8.66c0 5.699 6.14 11.495 8.108 13.123a.939.939 0 0 0 1.2 0c1.969-1.628 8.109-7.424 8.109-13.123A8.684 8.684 0 0 0 12.053 1Zm0 19.662C9.29 18.198 5.345 13.645 5.345 9.66a6.709 6.709 0 0 1 13.417 0c0 3.985-3.944 8.538-6.709 11.002Z"></path></svg>
-        <div id="location-suggestions" class="location-suggestions"></div>
+        <div class="location-suggestions" id="places"></div>
       </div>
 
       <!-- Collaborators -->
@@ -1930,82 +1930,9 @@ createModal.querySelector('#close-image').addEventListener('click', () => {
 });
 
 
-// Location suggestions (dummy data)
+// Location suggestions
 const locationInput = createModal.querySelector('#location-input');
-const locationSuggestions = createModal.querySelector('#location-suggestions');
-const locations = [
-  "Tel Aviv, Israel",
-  "Jerusalem, Israel",
-  "Haifa, Israel",
-  "Eilat, Israel",
-  "Netanya, Israel",
-  "Rishon LeZion, Israel",
-  "Petah Tikva, Israel",
-  "Ashdod, Israel",
-  "Beer Sheva, Israel",
-  "Holon, Israel",
-  "Bnei Brak, Israel",
-  "Ramat Gan, Israel",
-  "Bat Yam, Israel",
-  "Rehovot, Israel",
-  "Herzliya, Israel",
-  "Kfar Saba, Israel",
-  "Modi'in-Maccabim-Re'ut, Israel",
-  "Ra'anana, Israel",
-  "Nahariya, Israel",
-  "Acre (Akko), Israel",
-  "Tiberias, Israel",
-  "Safed (Tzfat), Israel",
-  "Ashkelon, Israel",
-  "Kiryat Ata, Israel",
-  "Kiryat Gat, Israel",
-  "Dimona, Israel",
-  "Yehud, Israel",
-  "Ramat HaSharon, Israel",
-  "Karmiel, Israel",
-  "Ness Ziona, Israel",
-  "Ma'alot-Tarshiha, Israel",
-  "Or Akiva, Israel",
-  "Kiryat Yam, Israel",
-  "Sderot, Israel",
-  "Kiryat Bialik, Israel",
-  "Nof HaGalil, Israel",
-  "Givatayim, Israel",
-  "Tirat Carmel, Israel",
-  "Afula, Israel",
-  "Arad, Israel",
-  "Migdal HaEmek, Israel",
-  "Beit Shemesh, Israel",
-  "Ofakim, Israel",
-  "Kiryat Motzkin, Israel",
-  "Kadima-Zoran, Israel",
-  "Giv'at Shmuel, Israel"
-];
-
-locationInput.addEventListener('input', () => {
-  const value = locationInput.value.toLowerCase();
-  locationSuggestions.innerHTML = '';
-  if (value) {
-    const filtered = locations.filter(loc => loc.toLowerCase().includes(value));
-    if (filtered.length > 0) {
-      filtered.forEach(loc => {
-        const div = document.createElement('div');
-        div.className = 'location-suggestion';
-        div.textContent = loc;
-        div.addEventListener('click', () => {
-          locationInput.value = loc;
-          locationSuggestions.style.display = 'none';
-        });
-        locationSuggestions.appendChild(div);
-      });
-      locationSuggestions.style.display = 'block';
-    } else {
-      locationSuggestions.style.display = 'none';
-    }
-  } else {
-    locationSuggestions.style.display = 'none';
-  }
-});
+const locationSuggestions = createModal.querySelector('.location-suggestions');
 
 const textInputs = [createModal.querySelector('#new-post-desc'), locationInput, createModal.querySelector('.accessibility-content .input-field')];
 textInputs.forEach(input => {
