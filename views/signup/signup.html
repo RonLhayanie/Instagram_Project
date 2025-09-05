@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="signup.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign up &bull; Instagram </title>
+    <title>Instagram &bull; Sign Up</title>
     <link rel="icon" type="image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/1024px-Instagram_logo_2022.svg.png">
 </head>
 
@@ -55,15 +55,17 @@
     
         <!-- Full name -->
         <div class="input-group">
-            <input type="text" id="FullNameInput" class="inputs" placeholder="" required>
+            <input type="text" id="FullNameInput" class="inputs" maxlength="25" placeholder="" required>
             <label id="FullNameLabel" class="labels" for="FullNameInput">Full name</label>
+            <span class="charCounter">0 / 25</span>       <!-- char limit 25 -->
             <span class="verificationAlert" id="FullNameVer"></span>
         </div>
     
         <!-- Username -->
         <div class="input-group">
-            <input type="text" id="UsernameInput" class="inputs" placeholder="" required>
+            <input type="text" id="UsernameInput" class="inputs" maxlength="25" placeholder="" required>
             <label id="UsernameLabel" class="labels" for="UsernameInput">Username</label>
+            <span class="charCounter">0 / 25</span>       <!-- char limit 25 -->
             <span class="verificationAlert" id="UsernameVer"></span>
         </div>
 

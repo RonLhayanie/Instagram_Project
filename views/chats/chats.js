@@ -6,8 +6,7 @@ const newMessageModal                = document.getElementById('new-message-moda
 const changeGroupNameModal           = document.getElementById('change-group-name-modal')
 
 let   currentSelctedUsers             = []
-const Account                        = JSON.parse(localStorage.getItem('currentUser'))
-const AccountUsername                = Account.username
+const AccountUsername                 = localStorage.getItem('currentUser')
 
 const debounceSearch_newMessageModal = debounce(uploadSearchResults_NewMessageModal, 400)
 const debounceSearch_searchModal     = debounce(uploadSearchResults_searchModal,     400)

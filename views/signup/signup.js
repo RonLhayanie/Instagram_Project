@@ -77,7 +77,7 @@ function FullNameVerification()
 function UsernameVerification() 
 {
     const username = document.getElementById("UsernameInput").value.trim();
-    const PatternUsername = /[A-Za-z]/;     //Contains at least 1 character.        EXAMPLE: a
+        const PatternUsername = /^[A-Za-z0-9_]+$/;      //Contains at least 1 character with no spaces.        EXAMPLE: a
 
     const pass = document.getElementById("PasswordInput").value;
     if (username == pass)
@@ -145,7 +145,20 @@ document.getElementById("UsernameInput").addEventListener("blur", async function
 
 
 
+// ===========================
+// CHAR COUNTER FOR TEXTAREAS
+// ===========================
+const textareas = document.querySelectorAll(".inputs");
 
+textareas.forEach(textarea => {
+    const counter = textarea.parentElement.querySelector(".charCounter");
+    const maxLength = textarea.getAttribute("maxlength");
+
+    textarea.addEventListener("input", () => {
+        let length = textarea.value.length;
+        if (counter) counter.textContent = `${length} / ${maxLength}`;
+    });
+});
 
 
 
