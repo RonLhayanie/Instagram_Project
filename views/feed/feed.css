@@ -90,6 +90,11 @@
     body.dark-mode .confirmation-modal button:hover
     {
       background-color: #2e2e2e !important;
+    }   
+
+
+    body.dark-mode .sidebar-item #pfp-l {
+      filter: invert(0);
     }
     
 
@@ -193,9 +198,11 @@ body.dark-mode #scrollToTopBtn {
     }
 
     body.dark-mode .share-action span,
-    body.dark-mode .custom-filter img{
+    body.dark-mode .custom-filter img
+    {
       filter: invert(1);
     }
+
 
     body.dark-mode .share-action img{
       filter: invert(1);
@@ -528,6 +535,7 @@ body.dark-mode #scrollToTopBtn img {
   #pfp-l {
   width: 30px;
   height: 30px;
+  border-radius: 50%;
   }
   
   #lftlogo {
@@ -896,11 +904,11 @@ body.dark-mode #scrollToTopBtn img {
     gap: 25px;
     /* אין top ואין transform */
     margin-left: 72%;
-    margin-top: -3860px;
+    margin-top: -3200px;
   }
 
     .sidebar-right.hide-0 {
-    margin-top: -3860px;
+    margin-top: -3200px;
   }
   .sidebar-right.hide-1 {
     margin-top: -1397px;
@@ -1049,6 +1057,8 @@ body.dark-mode #scrollToTopBtn img {
   .follow-btn:hover {
   color: #005289;
   }
+
+  
 
   .profile-picture {
       width: 40px; /* או 45px או מה שמתאים לך */
@@ -2276,20 +2286,18 @@ font-weight: 600;
 #logo-img-full,
 #logo-img-small {
   position: absolute;
-  left: 6px;
   margin-bottom: 14px;
   transition: opacity 0.3s ease;
 }
 
+
+
 #logo-img-full {
   height: auto;
-  width: 120px;
-
   opacity: 1;
 }
 
 #logo-img-small {
-  width: 32px;
   height: auto;
   opacity: 0;
 }

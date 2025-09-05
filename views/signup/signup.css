@@ -163,6 +163,19 @@ input:not(:placeholder-shown)
 }
 
 
+
+.charCounter        /* char counter */
+{
+    position: absolute;
+    display: inline-block;
+    bottom: 10%;
+    right: 15%;
+
+    font-size: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #888;
+}
+
 /* alert if input is invalid*/
 .verificationAlert  
 {

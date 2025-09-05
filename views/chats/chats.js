@@ -5,9 +5,9 @@ const sidebarSearchInput             = document.getElementById('sidebar-search-i
 const newMessageModal                = document.getElementById('new-message-modal')
 const changeGroupNameModal           = document.getElementById('change-group-name-modal')
 
-let   currentSelctedUsers            = []
-const AccountUsername                = JSON.parse(localStorage.getItem('currentUsername'))
-             
+
+let   currentSelctedUsers             = []
+const AccountUsername                 = localStorage.getItem('currentUser')
 
 const debounceSearch_newMessageModal = debounce(uploadSearchResults_NewMessageModal, 400)
 const debounceSearch_searchModal     = debounce(uploadSearchResults_searchModal,     400)
@@ -1194,5 +1194,3 @@ async function addPeopleToGroup(groupId) {
         addToGroup(groupId, selectedUser)
     })
 }
-
-

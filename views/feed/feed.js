@@ -1,13 +1,220 @@
+//sidebar navigation
+function gettomessages() {
+  window.location.href = '../chats/chats.html';
+}
+function gotoprofile() {
+window.location.href = '../profile/profile.html';
+} 
+
+// loading screen
 window.addEventListener('load', () => {
   const loader = document.getElementById('loading-screen');
+  const loadertxt = document.getElementById('loading-from-text');
+  const loaderimg = document.getElementById('loading-from-image');
+
   setTimeout(() => {
-    loader.style.display = 'none';
+    if (loader) loader.style.display = 'none';
+    if (loadertxt) loadertxt.style.display = 'none';
+    if (loaderimg) loaderimg.style.display = 'none';
   }, 2000); 
 });
 
-document.getElementById('messages-icon').addEventListener('click', () => {
-  window.location.href = '../chats/chats.html'
-})
+
+// load posts from server
+async function loadPosts() {
+  try {
+    const res = await fetch('/posts/getAllPosts');
+    if (!res.ok) throw new Error('Failed to fetch posts');
+    const posts = await res.json();
+    console.log(posts);
+
+    const postsWrapper = document.querySelector('.posts-list');
+    if (!postsWrapper) return;
+    postsWrapper.innerHTML = '';
+
+    posts.forEach(post => {
+      // --- normalize type ---
+      const isVideoDataUrl = typeof post.image === 'string' && post.image.startsWith('data:video');
+      let type = post.type || (post.videoUrl || post.video || isVideoDataUrl ? 'video' : (post.image ? 'image' : 'text'));
+
+      // class by type (for styling, if you use it)
+      const postTypeClass = type === 'video' ? 'videotype' : (type === 'text' ? 'texttype' : 'imgtype');
+
+      // Comments preview
+      const commentsPreview = Array.isArray(post.comments) && post.comments.length
+        ? `<p class="view-comments"><span class="view-comments-text">View all ${post.comments.length} comments</span></p>`
+        : '';
+
+      // Mini images (likes preview)
+      const miniImages = Array.isArray(post.likedBy)
+        ? post.likedBy.slice(0, 2).map(u =>
+            `<img src="${u.profilePic || ''}" alt="${u.username || ''}" class="mini-image">`
+          ).join('')
+        : '';
+
+      // --- media (image/video) ---
+      let mediaHtml = '';
+      if (type === 'image' && post.image) {
+        // post.image יכול להיות data URL (base64) או URL רגיל
+        mediaHtml = `<div class="post-image"><img src="${post.image}" alt="Post Image" loading="lazy" /></div>`;
+      } else if (type === 'video') {
+        const videoSrc = post.videoUrl || post.video || (isVideoDataUrl ? post.image : '');
+        if (videoSrc) {
+          mediaHtml = `
+            <div class="post-video">
+              <video width="100%" height="auto" controls muted loop>
+                <source src="${videoSrc}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          `;
+        }
+      }
+
+      // --- build post element ---
+      const postEl = document.createElement('div');
+      postEl.className = `post ${postTypeClass}`;
+      postEl.dataset.type = type; // לשימוש בפילטר
+
+      postEl.innerHTML = `
+        <div class="post-header">
+          <div class="post-user">
+            <div class="avatar-wrapper">
+              <img src="${post.avatar || ''}" alt="User Avatar" class="user-avatar">
+            </div>
+            <div class="user-details">
+              <span class="user-name">${post.username || 'Unknown'}</span>
+              <span class="dot">•</span>
+              <span class="time" title="${post.date || ''}">${post.time || ''}</span>
+            </div>
+          </div>
+          <button class="more-options">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#" viewBox="0 0 24 24">
+              <circle cx="6" cy="12" r="1.5"></circle>
+              <circle cx="12" cy="12" r="1.5"></circle>
+              <circle cx="18" cy="12" r="1.5"></circle>
+            </svg>
+          </button>
+        </div>
+        ${mediaHtml}
+        <div class="post-actions">
+          <div class="left-actions">
+            <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn" title="Like">
+            <img class="comment" src="https://cdn-icons-png.flaticon.com/256/5948/5948565.png" alt="commentbtn" title="Comment">
+            <img class="share" src="https://static.thenounproject.com/png/3084968-200.png" alt="sharebtn" title="Share">
+          </div>
+          <img class="save" src="https://static.thenounproject.com/png/bookmark-icon-809338-512.png" alt="savebtn" title="Save">
+        </div>
+        <div class="post-description">
+          <div class="likes-row">
+            <div class="mini-images">${miniImages}</div>
+            <span class="likes-count">${post.likes ?? 0} likes</span>
+          </div>
+          <p class="post-text">
+            <span class="user-name">${post.username || 'Unknown'}</span>
+            <span class="short-text">${post.text || ''}</span>
+          </p>
+          <div class="comment-section">
+            ${commentsPreview}
+            <div class="comments-list"></div>
+            <div class="comment-row">
+              <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
+              <span class="post-button">Post</span>
+              <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
+                <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      `;
+
+    const firstPost = postsWrapper.querySelector('.post');
+    if (firstPost) {
+      postsWrapper.insertBefore(postEl, firstPost);
+    } else {
+      postsWrapper.appendChild(postEl);
+    }
+    });
+
+    const noPostsMsg = document.getElementById('no-posts-message');
+    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
+
+  } catch (err) {
+    console.error(err);
+    const noPostsMsg = document.getElementById('no-posts-message');
+    if (noPostsMsg) noPostsMsg.style.display = 'block';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadPosts);
+
+
+
+
+
+// syncing profile picture
+document.addEventListener('DOMContentLoaded', function() {
+  const username = localStorage.getItem('currentUser') || '';
+  let avatar = 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
+  const pfpImg = document.getElementById('pfp-l');
+
+  if (username) {
+    fetch('/users/getAvatarByUsername', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    })
+    .then(res => res.json())
+    .then(result => {
+      avatar = result.avatar || avatar;
+      if (pfpImg) pfpImg.src = avatar;
+    });
+  } else {
+    if (pfpImg) pfpImg.src = avatar;
+  }
+});
+
+// setting user info in create post modal
+document.addEventListener('DOMContentLoaded', function() {
+  const username = localStorage.getItem('currentUser') || '';
+  let avatar = 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
+
+  const pfpImg = document.getElementById('pfp-r');
+  const usernameSpan = document.querySelector('.right-pfp-name .username');
+  const nameSpan = document.querySelector('.right-pfp-name .name');
+
+  if (username) {
+    // Avatar
+    fetch('/users/getAvatarByUsername', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    })
+    .then(res => res.json())
+    .then(result => {
+      avatar = result.avatar || avatar;
+      if (pfpImg) pfpImg.src = avatar;
+    });
+
+    // Username
+    if (usernameSpan) usernameSpan.textContent = username;
+
+    // Full name
+    fetch('/users/getFullnameByUsername', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    })
+    .then(res => res.json())
+    .then(result => {
+      if (nameSpan) nameSpan.textContent = result.fullname || username;
+    });
+  } else {
+    if (pfpImg) pfpImg.src = avatar;
+    if (usernameSpan) usernameSpan.textContent = 'Guest';
+    if (nameSpan) nameSpan.textContent = '';
+  }
+});
 
 // toggle dark mode
 const toggle = document.getElementById('darkModeToggle');
@@ -1229,6 +1436,11 @@ if (!mainfeed || !createBtn) {
   console.error('Missing required elements');
 }
 
+const username = localStorage.getItem('currentUser') || '';
+let avatar = 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
+
+
+
 const createModal = document.createElement('div');
 createModal.className = 'create-post-modal';
 createModal.innerHTML = `
@@ -1256,8 +1468,7 @@ createModal.innerHTML = `
 
       <!-- User Info -->
       <div class="post-user-info">
-        <img src="https://cdn-icons-png.flaticon.com/512/12225/12225935.png" alt="User Avatar" />
-        <span>_ron_lhayanie</span>
+        
       </div>
 
       <!-- Description Textarea + Emoji -->
@@ -1454,48 +1665,95 @@ createModal.innerHTML = `
 `;
 document.body.appendChild(createModal);
 
+if (username) {
+  // Fetch avatar from server
+  fetch('/users/getAvatarByUsername', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username })
+  })
+  .then(res => res.json())
+  .then(result => {
+    avatar = result.avatar || avatar;
+    // Now set modal content
+    createModal.querySelector('.post-user-info').innerHTML = `
+      <img src="${avatar}" alt="User Avatar" />
+      <span>${username}</span>
+    `;
+  });
+} else {
+  // Fallback if not logged in
+  createModal.querySelector('.post-user-info').innerHTML = `
+    <img src="${avatar}" alt="User Avatar" />
+    <span>Guest</span>
+  `;
+}
+
 
 const fileInput = createModal.querySelector('#upload-file');
 const urlInput = createModal.querySelector('#upload-url');
-const previewImg = createModal.querySelector('#post-image-preview');
+let previewImg = createModal.querySelector('#post-image-preview');
 const createEmojiBtn = createModal.querySelector('.create-unique-emoji-button');
 const createEmojiPicker = createModal.querySelector('#create-unique-emoji-picker');
 const textArea = createModal.querySelector('#new-post-desc');
 
-function updatePreview(src) {
+function updatePreview(src, type) {
   const previewImg = createModal.querySelector('#post-image-preview');
+  let previewVideo = createModal.querySelector('#post-video-preview');
   const uploadOptions = createModal.querySelector('#upload-options');
   const closeImage = createModal.querySelector('#close-image');
-  const errorMessage = createModal.querySelector('#error-message');
-  const uploadUrl = createModal.querySelector('#upload-url');
 
-  previewImg.src = src;
-  previewImg.style.display = 'block';
+  // קודם נסתיר הכל
+  previewImg.style.display = 'none';
+  if (previewVideo) previewVideo.style.display = 'none';
+
+  if (type === 'image') {
+    previewImg.src = src;
+    previewImg.style.display = 'block';
+  } else if (type === 'video') {
+    if (!previewVideo) {
+      const videoEl = document.createElement('video');
+      videoEl.id = 'post-video-preview';
+      videoEl.controls = true;
+      videoEl.width = 300;
+      previewImg.parentElement.appendChild(videoEl);
+      previewVideo = videoEl;
+    }
+    previewVideo.src = src;
+    previewVideo.style.display = 'block';
+  }
+
   uploadOptions.style.display = 'none';
   closeImage.style.display = 'block';
-  errorMessage.style.display = 'none'; // איפוס הודעת שגיאה
-  uploadUrl.style.border = 'none'; // איפוס הגבול למצב הרגיל המוגדר ב-CSS
 }
 
 fileInput.addEventListener('change', () => {
   const file = fileInput.files[0];
+  const errorMessage = createModal.querySelector('#error-message');
+  const uploadUrl = createModal.querySelector('#upload-url');
+
   if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        updatePreview(e.target.result);
+    const fileType = file.type;
+
+    if (fileType.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        updatePreview(e.target.result, 'image');
       };
-      img.onerror = () => {
-        const errorMessage = createModal.querySelector('#error-message');
-        const uploadUrl = createModal.querySelector('#upload-url');
-        errorMessage.textContent = 'Invalid image file. Please try again.';
-        errorMessage.style.display = 'block';
-        uploadUrl.style.border = '2px solid red'; // הגדרת גבול אדום בשגיאה
+      reader.readAsDataURL(file);
+
+    } else if (fileType.startsWith('video/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        updatePreview(e.target.result, 'video');
       };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+
+    } else {
+      errorMessage.textContent = 'Invalid file type. Please upload image or video.';
+      errorMessage.style.display = 'block';
+      uploadUrl.style.border = '2px solid red';
+    }
   }
 });
 
@@ -1503,46 +1761,46 @@ urlInput.addEventListener('input', () => {
   const url = urlInput.value.trim();
   const errorMessage = createModal.querySelector('#error-message');
   const uploadUrl = createModal.querySelector('#upload-url');
-  const previewImg = createModal.querySelector('#post-image-preview');
   const uploadOptions = createModal.querySelector('#upload-options');
   const closeImage = createModal.querySelector('#close-image');
 
   if (url) {
-    const img = new Image();
-    img.onload = () => {
-      updatePreview(url);
-      uploadUrl.style.border = 'none'; // איפוס הגבול לאחר הצלחה
-    };
-    img.onerror = () => {
-      errorMessage.textContent = 'Invalid image URL. Please try again.';
+    if (url.match(/\.(jpeg|jpg|png|gif)$/i)) {
+      // תמונה
+      let img = new Image();
+      img.onload = () => {
+        updatePreview(url, 'image');
+        uploadUrl.style.border = 'none';
+        errorMessage.style.display = 'none';
+      };
+      img.onerror = () => {
+        errorMessage.textContent = 'Invalid image URL. Please try again.';
+        errorMessage.style.display = 'block';
+        uploadUrl.style.border = '2px solid red';
+      };
+      img.src = url;
+
+    } else if (url.match(/\.(mp4|webm|ogg)$/i)) {
+      // וידאו
+      updatePreview(url, 'video');
+      uploadUrl.style.border = 'none';
+      errorMessage.style.display = 'none';
+
+    } else {
+      errorMessage.textContent = 'Invalid file URL. Please upload image or video.';
       errorMessage.style.display = 'block';
-      uploadUrl.style.border = '2px solid red'; // הגדרת גבול אדום בשגיאה
-    };
-    img.src = url;
+      uploadUrl.style.border = '2px solid red';
+    }
   } else {
+    // ריק
     previewImg.style.display = 'none';
+    const previewVideo = createModal.querySelector('#post-video-preview');
+    if (previewVideo) previewVideo.style.display = 'none';
+
     uploadOptions.style.display = 'block';
     closeImage.style.display = 'none';
     errorMessage.style.display = 'none';
-    uploadUrl.style.border = 'none'; // איפוס הגבול כאשר השדה ריק
-  }
-});
-
-urlInput.addEventListener('input', () => {
-  const url = urlInput.value.trim();
-  if (url) {
-    const img = new Image();
-    img.onload = () => updatePreview(url);
-    img.onerror = () => {
-      createModal.querySelector('#error-message').textContent = 'Invalid image URL. Please try again.';
-      createModal.querySelector('#error-message').style.display = 'block';
-    };
-    img.src = url;
-  } else {
-    previewImg.style.display = 'none';
-    createModal.querySelector('#upload-options').style.display = 'block';
-    createModal.querySelector('#close-image').style.display = 'none';
-    createModal.querySelector('#error-message').style.display = 'none';
+    uploadUrl.style.border = 'none';
   }
 });
 
@@ -1786,14 +2044,14 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
 });
 
 
-let leftSidebarOffset = -3860;
+let leftSidebarOffset = -3200;
 let textPostsCount = 0; 
 let imagePostsCount = 0; 
 let videoPostsCount = 0; 
 let commentData2 = {}; 
 
 function resizeImage(src, callback) {
-  const img = new Image();
+  let img = new Image();
   img.crossOrigin = "Anonymous";
   img.onload = function() {
     const canvas = document.createElement('canvas');
@@ -1839,31 +2097,96 @@ function addPost(image, text) {
   }
 
   // עיבוד תמונה אם קיימת
-  if (image) {
-    resizeImage(image, (resizedImage) => {
-      processedImage = resizedImage;
-      createAndSetupPost(processedImage);
-    });
+if (image) {
+  if (image.endsWith('.mp4')) {
+    // זה וידאו – אין שינוי גודל, שלח ישר
+    createAndSetupPost(image);
   } else {
-    createAndSetupPost(null);
+    // זה תמונה – שנה גודל עם canvas
+    resizeImage(image, (resizedImage) => {
+      createAndSetupPost(resizedImage);
+    });
+  }
+} else {
+  createAndSetupPost(null);
+}
+
+function dataURLtoBlob(dataurl) {
+  const arr = dataurl.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+}
+
+async function createAndSetupPost(image) {
+  const username = localStorage.getItem('currentUser');
+  const postId = `post-${Date.now()}`;
+  const text = document.getElementById('new-post-desc').value.trim();
+
+  // Fetch avatar from server
+  const res = await fetch('/users/getAvatarByUsername', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username })
+  });
+  const result = await res.json();
+  const avatar = result.avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
+  const userId = result._id;
+
+  let type = "text";
+  let formData = new FormData();
+
+  if (image) {
+    type = "image";
+  }
+  if (image && image.endsWith(".mp4")) {
+    type = "video";
   }
 
-  function createAndSetupPost(image) {
-    const postId = `post-${Date.now()}`;
-    const newPost = createPost({
-      username: '_ron_lhayanie',
-      avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
-      image: image,
-      likes: 0,
-      text: text,
-      commentsCount: 0,
-      time: 'Just now',
-      date: new Date().toDateString(),
-    });
+  const data = {
+    username,
+    avatar,
+    userId,
+    image,
+    likes: 0,
+    text: text,
+    commentsCount: 0,
+    time: 'Just now',
+    date: new Date().toDateString(),
+    type
+  };
 
-    newPost.id = postId;
-    // הכנס את הפוסט כראשון אחרי ה-.custom-filter
-    postsWrapper.insertBefore(newPost, customFilter.nextSibling || postsWrapper.firstChild.nextSibling);
+  // const blob = dataURLtoBlob(image);
+  // const formData = new FormData();
+  // formData.append('media', blob, 'image.jpg'); // או 'image.png'
+  // formData.append('username', username);
+  // formData.append('avatar', avatar);
+  // formData.append('text', text);
+  // formData.append('type', 'image');
+
+  // await fetch('/posts/createPost', {
+  //   method: 'POST',
+  //   body: formData
+  // });
+
+  // Send to server
+  await fetch('/posts/createPost', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  const newPost = createPost(data);
+  newPost.id = postId;
+  newPost.dataset.type = type;
+  postsWrapper.insertBefore(newPost, customFilter.nextSibling || postsWrapper.firstChild.nextSibling);
+
+
 
     // אירועי לייק
     const likeBtn = newPost.querySelector('.like');
@@ -2151,7 +2474,9 @@ function addPost(image, text) {
     showNotice();
     newPost.classList.add('highlight');
     setTimeout(() => newPost.classList.remove('highlight'), 2000);
+    
   }
+  
 }
 
 // פונקציה חיצונית לעדכון מרג'ין עם פרמטר מרחק
@@ -2190,18 +2515,15 @@ function showNotice() {
     notice.style.animation = 'fadeSlideOut 0.4s ease-out forwards';
     setTimeout(() => {
       notice.style.display = 'none';
-    }, 400);
+    }, 400);  
   }, 2000);
 }
 
-function createPost({ username, avatar, image, likes, text, commentsCount, time, date }) {
+function createPost({ username, avatar, userId, image, likes, text, commentsCount, time, date, type }) {
   const post = document.createElement('div');
-
-  const postType = image ? 'imgtype' : 'texttype';
+  const postType = type === 'video' ? 'videotype' : (type === 'image' ? 'imgtype' : 'texttype');
   post.className = `post ${postType}`;
-
-  const isLongText = text.length > 30;
-  const shortText = text.substring(0, 30);
+  post.setAttribute('data-user-id', userId);
 
   post.innerHTML = `
     <div class="post-header">
@@ -2226,10 +2548,19 @@ function createPost({ username, avatar, image, likes, text, commentsCount, time,
         <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
       </div>
     </div>
-    ${image ? `
-      <div class="post-image">
-        <img src="${image}" alt="Post Image">
-      </div>` : ''}
+    ${
+      type === "image" ? `
+        <div class="post-image">
+          <img src="${image}" alt="Post Image">
+        </div>` :
+      type === "video" ? `
+        <div class="post-video">
+          <video controls>
+            <source src="${image}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>` : ""
+    }
     <div class="post-actions">
       <div class="left-actions">
         <img class="like" src="https://cdn-icons-png.flaticon.com/256/130/130195.png" alt="likebtn">
@@ -2261,8 +2592,10 @@ function createPost({ username, avatar, image, likes, text, commentsCount, time,
       </div>
     </div>
   `;
+
   return post;
 }
+
 
 function filterPostsByType(type) {
   const allPosts = document.querySelectorAll('.post');

@@ -118,7 +118,7 @@
 
 
             <!-- settings button -->
-            <div class="settings-modal">
+            <nav class="settings-modal">
                 <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="bd-title">
                     <div class="modal">
                         <button class="settingsButtons" id="editProfile" onclick="EditProfile()">Edit your profile</button>
@@ -127,7 +127,7 @@
                         <button class="settingsButtons" id="cancel" onclick="CloseSettings()">Cancel</button>
                     </div>
                 </div>
-            </div>
+            </nav>
 
 
 
@@ -147,6 +147,7 @@
 
 
 
+
             <!-- Log out -->
             <div class="logout-modal">
                 <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="bd-title">
@@ -158,6 +159,31 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <!-- search user -->
+            <div id="search-modal" class="search-modal-collapsed" style="z-index: 4;">
+                    <div id="search-header">
+                        <h3>Search</h3>
+                        <div class="search-box" id="sidebar-search">
+                            <input type="text" name="search" class="search-input" placeholder="Search" id="sidebar-search-input" fdprocessedid="1ejw1">
+                            <svg id="clear-search" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"></path></svg>
+                        </div>
+                    </div>
+                    <div id="results">
+                        <div id="pre-search" class="">
+                            <h4 style="font-weight:500">Recent</h4>
+                            <div class="search-results">
+                                <span class="no-recent-search" id="recent-searches">No recent searches.</span>
+                            </div>
+                        </div>
+                        <div id="post-search" class="hidden">
+                            <ul id="search-results-list"></ul>
+                        </div>
+                    </div>
+            </div>
+
 
 
             <br>
@@ -275,13 +301,15 @@
         </select>
 
         <!-- copyright -->
-        <p id="copyright"> © 2025 Instagram from Meta </p>  
+        <footer id="copyright"> © 2025 Instagram from Meta </footer>  
 
     </div>
 
 
         </main>
     </div>
+
+    <div id="overlay2" class="hidden"></div>
 
     <script src="profile.js"></script>
 </body>
