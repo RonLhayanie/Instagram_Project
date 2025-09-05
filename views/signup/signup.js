@@ -1,5 +1,3 @@
-
-
 // Phone number Validation
 function PhoneVerification() 
 {
@@ -35,17 +33,29 @@ function EmailVerification()
 // Password Validation
 function PasswordVerification() 
 {
-    const pass = document.getElementById("PasswordInput").value;
-    const PatternPassword = /^[^\s]{6,}$/;         //contains at least 6 characters.        EXAMPLE: abcdef
-    
-    if (PatternPassword.test(pass)) 
-    {
-        return true;
-    } 
-    else 
-    {
-        return "Create a password at least 6 characters long.";
+ const pass = document.getElementById("PasswordInput").value.trim();
+    const username = document.getElementById("UsernameInput").value.trim();
+    const fullname = document.getElementById("FullNameInput").value.trim();
+
+    const PatternPassword = /^[^\s]{6,}$/; // at least 6 chars, no spaces
+
+    if (!PatternPassword.test(pass)) {
+        return "Create a password at least 6 characters long without spaces.";
     }
+
+    // check if password contains username
+    if (username && pass.toLowerCase() === username.toLowerCase()) 
+    {
+        return "Password cannot be the same as your username.";
+    }
+
+    // check if password contains full name
+    if (fullname && pass.toLowerCase() === fullname.toLowerCase()) 
+    {
+        return "Password cannot be the same as your full name.";
+    }
+
+    return true;
 }
 
 // Full Name Validation
@@ -67,7 +77,14 @@ function FullNameVerification()
 function UsernameVerification() 
 {
     const username = document.getElementById("UsernameInput").value.trim();
-    const PatternUsername = /[A-Za-z]/;     //Contains at least 1 character.        EXAMPLE: a
+        const PatternUsername = /^[A-Za-z0-9_]+$/;      //Contains at least 1 character with no spaces.        EXAMPLE: a
+
+    const pass = document.getElementById("PasswordInput").value;
+    if (username == pass)
+    {
+        return ""
+    }
+
 
     if (PatternUsername.test(username)) 
     {
@@ -80,8 +97,77 @@ function UsernameVerification()
 }
 
 
+
+
+
+let usernameAvailable = false; // ברירת מחדל
+
+// Username availability check
+document.getElementById("UsernameInput").addEventListener("blur", async function () {
+    const username = this.value.trim();
+    const span = document.getElementById("UsernameVer");
+
+    if (!username) {
+        clearError("UsernameVer");
+        usernameAvailable = false;
+        return;
+    }
+
+    try {
+        const res = await fetch("/users/check-username", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username }),
+        });
+
+        const data = await res.json();
+
+        if (data.available) {
+            clearError("UsernameVer");
+            this.style.borderColor = "lightgreen";
+            this.style.borderWidth = "1.5px";
+            usernameAvailable = true;
+        } else {
+            showError("UsernameVer", "username already exists");
+            this.style.borderColor = "red";
+            this.style.borderWidth = "1.5px";
+            usernameAvailable = false;
+        }
+    } catch (err) {
+        console.error(err);
+        showError("UsernameVer", "server error");
+        usernameAvailable = false;
+    }
+});
+
+
+
+
+
+
+// ===========================
+// CHAR COUNTER FOR TEXTAREAS
+// ===========================
+const textareas = document.querySelectorAll(".inputs");
+
+textareas.forEach(textarea => {
+    const counter = textarea.parentElement.querySelector(".charCounter");
+    const maxLength = textarea.getAttribute("maxlength");
+
+    textarea.addEventListener("input", () => {
+        let length = textarea.value.length;
+        if (counter) counter.textContent = `${length} / ${maxLength}`;
+    });
+});
+
+
+
+
+
+
+
 //Create / Remove Error notification Functions:
-function showError(spanId, message, iconId) 
+function showError(spanId, message) 
 {
     const span = document.getElementById(spanId);
 
@@ -183,10 +269,34 @@ signUpBtn.addEventListener("click", (e) =>
         }
     });
 
+
+
+    // if user is taken
+    if (!usernameAvailable) 
+    {
+        allValid = false;
+        showError("UsernameVer", "username already exists");
+        document.getElementById("UsernameInput").classList.add("invalid");
+    }
+
+
     //If everything is valid - connect to feed
     if (allValid) 
     {
-        window.location.href = "/feed.html";
+
+        //Save the data
+        const data = {
+        username: document.getElementById("UsernameInput").value,
+        password: document.getElementById("PasswordInput").value,
+        fullName: document.getElementById("FullNameInput").value,
+        email: document.getElementById("EmailAddressInput").value,
+        phone: document.getElementById("PhoneNumberInput").value            
+        }
+
+        localStorage.setItem('signupData', JSON.stringify(data));
+
+
+        window.location.href = "birthdayCheck.html";    //sent to birthday check
     }
 });
 
@@ -229,5 +339,5 @@ function openMicrosoftShop()
 //Log in button
 function LogInButton()
 {
-    window.location.href = "/login.html";
+    window.location.href = "/login/login.html";
 }
