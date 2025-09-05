@@ -1193,5 +1193,3 @@ async function addPeopleToGroup(groupId) {
         addToGroup(groupId, selectedUser)
     })
 }
-
-
