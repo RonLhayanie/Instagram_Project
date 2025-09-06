@@ -4,6 +4,9 @@ const postsModel = require('./../models/postsModel');
 const multer = require('multer');
 const path = require('path');
 
+const { fileTypeFromBuffer } = require('file-type')
+const fs = require('fs')
+
 // הגדרת איפה Multer ישמור את הקבצים
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -15,14 +18,16 @@ const storage = multer.diskStorage({
   }
 });
 
-// פילטר לקבצי תמונה ווידאו בלבד
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|mp4/;
+  const allowedMime = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
   const ext = path.extname(file.originalname).toLowerCase();
-  if (allowedTypes.test(ext)) {
+  const allowedExt = [".jpeg", ".jpg", ".png", ".gif", ".mp4"];
+
+  if (allowedMime.includes(file.mimetype) && allowedExt.includes(ext)) {
     cb(null, true);
-  } else {
-    cb(new Error('Only images and mp4 videos are allowed'));
+  } 
+  else {
+    cb(new Error("Only jpeg, jpg, png, gif, mp4 allowed"), false);
   }
 };
 
@@ -40,20 +45,22 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 
     if (!file) return res.status(400).json({ error: 'No file uploaded' });
 
-    let type = 'text';
-    if (file.mimetype.startsWith('image')) type = 'image';
-    if (file.mimetype.startsWith('video')) type = 'video';
+    console.log(`/uploads/${file.filename}`)
+    const buffer = await fs.promises.readFile(`uploads/${file.filename}`)
+    const type = await fileTypeFromBuffer(buffer) 
+
+    console.log(type.ext)
 
     const newPost = {
-      username,
-      avatar,
+      username: username,
+      avatar: avatar,
       image: `/uploads/${file.filename}`,
       likes: 0,
       text: text || '',
-      commentsCount: 0,
+      comments: [],
       time: 'Just now',
       date: new Date().toDateString(),
-      type
+      type: type.mime.split('/')[0]
     };
 
     await postsModel.Create(newPost);
