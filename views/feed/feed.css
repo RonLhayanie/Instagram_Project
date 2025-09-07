@@ -9,6 +9,7 @@
         overflow: hidden; /* ביטול גלילה רגילה */
     }
     
+    
     .container{
     justify-content: space-between;
     align-items: flex-start; /* כדי ששניהם יהיו למעלה */
@@ -68,7 +69,7 @@
       border-radius: 50%;
       padding: 10px;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 999;
       display: block;
     }
 
@@ -475,7 +476,7 @@ body.dark-mode #scrollToTopBtn img {
   /* left side bar */
   
   .sidebar-left {
-    z-index: 9999999;
+    z-index: 999;
     position: fixed;
   display: flex;
   flex-direction: column;
@@ -568,8 +569,10 @@ body.dark-mode #scrollToTopBtn img {
   .sidebar-bottom .sidebar-item {
   margin-top: 12px;
   }
+
   
-  .share-overlay {
+  
+  .share-overlay,.comment-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -580,9 +583,7 @@ body.dark-mode #scrollToTopBtn img {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
-    opacity: 0;
+  opacity: 0;
   transition: opacity 0.15s ease;
   pointer-events: none;
 }
@@ -823,35 +824,13 @@ body.dark-mode #scrollToTopBtn img {
 }
 
 
-.dimmed::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* החשכה */
-  z-index: 1000; /* שיהיה מעל אבל לא מעל המודל */
-  pointer-events: none; /* שימנע בעיות קליקים */
-  border-radius: inherit; /* אם יש רדיוס – שישמר */
-}
 
 .dimmable.dimmed::after {
   opacity: 0.5;   
 }
 
 
-.dimmable::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 1); /* שחור מלא – לא משנה, נשלוט באופסיטי */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  border-radius: inherit;
-  z-index: 1000; /* מעל התוכן, מתחת למודלים */
-}
+
 
 
 
@@ -1595,17 +1574,19 @@ cursor: pointer;
 
 .comment-modal {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 50%; 
+  left: 50%;
   background: rgba(0,0,0,0.6);
-  display: none; /* נתחיל סגור */
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   font-family: 'Arial', sans-serif;
-  background-color: rgba(0, 0, 0, 0.5); /* החשכה */
+  background-color: rgba(0, 0, 0, 0.5); 
   opacity: 0;
   transition: opacity 0.15s ease;
-  pointer-events: none; /* לא לאפשר אינטראקציה כשהוא נסגר */
+  pointer-events: none; 
+  translate: -50% -50%;
 }
 .comment-modal.active {
   display: flex;
@@ -1667,8 +1648,8 @@ cursor: pointer;
 .modal-close {
   background: transparent;
   border: none;
-  color: white;
-  font-size: 28px;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
   font-weight: bold;
   cursor: pointer;
   padding: 0 8px;
@@ -1676,8 +1657,8 @@ cursor: pointer;
   user-select: none;
   transition: color 0.3s ease;
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: -60px;
+  right: -280px;
   z-index: 10;
 }
 

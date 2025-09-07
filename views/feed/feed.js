@@ -24,21 +24,30 @@ window.addEventListener('load', () => {
 async function loadPosts() {
   try {
     const res = await fetch('/posts/getAllPosts');
-    console.log(res);
-    if (!res.ok) throw new Error('Failed to fetch posts');
+    if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
     const posts = await res.json();
-    console.log(posts);
+    console.log('Loaded posts:', posts);
 
     const postsWrapper = document.querySelector('.posts-list');
-    if (!postsWrapper) return;
-    postsWrapper.innerHTML = '';
+    if (!postsWrapper) {
+      console.error('Error: .posts-list not found in DOM');
+      return;
+    }
+    postsWrapper.innerHTML = ''; // ניקוי הרשימה הקיימת
+
+    if (!Array.isArray(posts) || posts.length === 0) {
+      console.warn('No posts received from server');
+      const noPostsMsg = document.getElementById('no-posts-message');
+      if (noPostsMsg) noPostsMsg.style.display = 'block';
+      return;
+    }
 
     posts.forEach(post => {
       // --- normalize type ---
       const isVideoDataUrl = typeof post.image === 'string' && post.image.startsWith('data:video');
       let type = post.type || (post.videoUrl || post.video || isVideoDataUrl ? 'video' : (post.image ? 'image' : 'text'));
 
-      // class by type (for styling, if you use it)
+      // class by type (for styling)
       const postTypeClass = type === 'video' ? 'videotype' : (type === 'text' ? 'texttype' : 'imgtype');
 
       // Comments preview
@@ -56,26 +65,24 @@ async function loadPosts() {
       // --- media (image/video) ---
       let mediaHtml = '';
       if (type === 'image' && post.image) {
-        // post.image יכול להיות data URL (base64) או URL רגיל
         mediaHtml = `<div class="post-image"><img src="${post.image}" alt="Post Image" loading="lazy" /></div>`;
-      } else if (type === 'video') {
-        const videoSrc = post.image
-        if (videoSrc) {
-          mediaHtml = `
-            <div class="post-video">
-              <video width="100%" height="auto" controls loop>
-                <source src="${videoSrc}" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          `;
-        }
+      } else if (type === 'video' && post.image) {
+        mediaHtml = `
+          <div class="post-video">
+            <video width="100%" height="auto" controls loop>
+              <source src="${post.image}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        `;
       }
 
       // --- build post element ---
       const postEl = document.createElement('div');
       postEl.className = `post ${postTypeClass}`;
-      postEl.dataset.type = type; // לשימוש בפילטר
+      postEl.dataset.type = type;
+      postEl.dataset.id = post._id;
+      postEl.id = post._id;
 
       postEl.innerHTML = `
         <div class="post-header">
@@ -96,6 +103,9 @@ async function loadPosts() {
               <circle cx="18" cy="12" r="1.5"></circle>
             </svg>
           </button>
+          <div class="more-menu" style="display: none;">
+            <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
+          </div>
         </div>
         ${mediaHtml}
         <div class="post-actions">
@@ -113,14 +123,16 @@ async function loadPosts() {
           </div>
           <p class="post-text">
             <span class="user-name">${post.username || 'Unknown'}</span>
-            <span class="short-text">${post.text || ''}</span>
+            <span class="short-text">${post.text?.substring(0, 30) || ''}${post.text?.length > 30 ? '...' : ''}</span>
+            <span class="full-text" style="display: none;">${post.text || ''}</span>
+            ${post.text?.length > 30 ? '<span class="more">more</span>' : ''}
           </p>
           <div class="comment-section">
             ${commentsPreview}
             <div class="comments-list"></div>
             <div class="comment-row">
               <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
-              <span class="post-button">Post</span>
+              <span class="post-button disabled">Post</span>
               <svg aria-label="Emoji" class="emoji" fill="currentColor" height="13" role="img" viewBox="0 0 24 24" width="13">
                 <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
               </svg>
@@ -129,26 +141,203 @@ async function loadPosts() {
         </div>
       `;
 
-    const firstPost = postsWrapper.querySelector('.post');
-    if (firstPost) {
-      postsWrapper.insertBefore(postEl, firstPost);
-    } else {
-      postsWrapper.appendChild(postEl);
-    }
+      postsWrapper.appendChild(postEl); // הוספה בסוף הרשימה
+      setupPostListeners(postEl, post); // חיבור event listeners
     });
 
     const noPostsMsg = document.getElementById('no-posts-message');
     if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
 
+    enableScrollAutoplay();
   } catch (err) {
-    console.error(err);
+    console.error('Error loading posts:', err);
     const noPostsMsg = document.getElementById('no-posts-message');
     if (noPostsMsg) noPostsMsg.style.display = 'block';
   }
-  
-  enableScrollAutoplay();
-
 }
+
+function setupPostListeners(postEl, postData) {
+  const postId = postEl.dataset.id || postEl.id;
+
+  // לייקים (מקומי זמני, עד שהחבר שלך יוסיף fetch)
+  const likeBtn = postEl.querySelector('.like');
+  likeBtn.addEventListener('click', () => {
+    const likesCountSpan = postEl.querySelector('.likes-count');
+    if (!likesCountSpan) {
+      console.error('likes-count element not found');
+      return;
+    }
+    // הסרת "likes" והפסיקים כדי לקבל מספר נקי
+    let likesText = likesCountSpan.textContent.replace('likes', '').replace(/,/g, '').trim();
+    let currentLikes = parseInt(likesText, 10) || 0;
+    const isLiked = likeBtn.src.includes('2107845.png');
+
+    if (!isLiked) {
+      likeBtn.src = 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png';
+      likeBtn.classList.add('liked');
+      likesCountSpan.textContent = (currentLikes + 1).toLocaleString() + ' likes';
+    } else {
+      likeBtn.src = 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
+      likeBtn.classList.remove('liked');
+      likesCountSpan.textContent = Math.max(0, currentLikes - 1).toLocaleString() + ' likes';
+    }
+    likeBtn.classList.add('pop');
+    setTimeout(() => likeBtn.classList.remove('pop'), 400);
+  });
+
+  // שמירה
+  const saveBtn = postEl.querySelector('.save');
+  saveBtn.addEventListener('click', () => {
+    const isSaved = saveBtn.classList.contains('saved');
+    saveBtn.classList.toggle('saved');
+    saveBtn.src = isSaved
+      ? 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png'
+      : 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png';
+  });
+
+  // שיתוף
+  const shareBtn = postEl.querySelector('.share');
+  shareBtn.addEventListener('click', opensharemodal);
+
+  // אפשרויות נוספות ומחיקה
+  const moreOptionsBtn = postEl.querySelector('.more-options');
+  const moreMenu = postEl.querySelector('.more-menu');
+  const deleteIcon = postEl.querySelector('.delete-post-icon');
+  moreOptionsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
+  });
+  deleteIcon.addEventListener('click', async () => {
+    try {
+      const res = await fetch(`/posts/${postId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete post');
+      postEl.remove();
+      // עדכון מרג'ין לפי סוג הפוסט
+      updateSidebarMargin(postData.type === 'text' ? -260 : -670);
+    } catch (err) {
+      console.error('Error deleting post:', err);
+      alert('Failed to delete post. Please try again.');
+    }
+  });
+
+  // כפתור תגובות (פתיחת מודל)
+  const commentBtn = postEl.querySelector('.comment');
+  commentBtn.addEventListener('click', () => {
+    openCommentsModal(postEl, postData);
+  });
+
+  // טקסט "View all X comments" (פתיחת מודל)
+  const viewCommentsText = postEl.querySelector('.view-comments-text');
+  if (viewCommentsText) {
+    viewCommentsText.addEventListener('click', () => {
+      openCommentsModal(postEl, postData);
+    });
+  }
+
+  // הוספת תגובה ישירות מהפוסט
+  const addCommentBox = postEl.querySelector('.add-comment-box');
+  const postButton = postEl.querySelector('.post-button');
+  const commentsList = postEl.querySelector('.comments-list');
+
+  // הפעלה/השבתת כפתור התגובה בהתאם לקלט
+  addCommentBox.addEventListener('input', () => {
+    postButton.classList.toggle('disabled', !addCommentBox.value.trim());
+  });
+
+  postButton.addEventListener('click', async () => {
+    const text = addCommentBox.value.trim();
+    if (!text) return;
+
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+      alert('Please log in to comment.');
+      return;
+    }
+
+    try {
+      // שליפת אווטאר של המשתמש הנוכחי
+      const avatarRes = await fetch('/users/getAvatarByUsername', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: currentUser })
+      });
+      const avatarData = await avatarRes.json();
+      const userProfilePic = avatarData.avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
+
+      // שליחת התגובה לשרת
+      const res = await fetch(`/posts/${postId}/add-comment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: currentUser, avatar: userProfilePic, text })
+      });
+      if (!res.ok) throw new Error('Failed to add comment');
+      const updatedPost = await res.json();
+
+      // עדכון התצוגה
+      addCommentToList(commentsList, { username: currentUser, avatar: userProfilePic, text });
+      updateCommentsPreview(postEl, updatedPost.comments.length);
+
+      addCommentBox.value = '';
+      postButton.classList.add('disabled');
+      showToast(document.getElementById('toast-comment'));
+    } catch (err) {
+      console.error('Error adding comment:', err);
+      alert('Failed to add comment. Please try again.');
+    }
+  });
+
+  // פיקר אימוג'י
+  const emojiBtn = postEl.querySelector('.emoji');
+  const emojiPicker = document.getElementById('emoji-picker');
+  let isPickerOpen = false;
+
+  emojiBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!isPickerOpen) {
+      const rect = emojiBtn.getBoundingClientRect();
+      emojiPicker.style.display = 'block';
+      emojiPicker.style.position = 'absolute';
+      emojiPicker.style.top = `${rect.bottom + window.scrollY}px`;
+      emojiPicker.style.left = `${rect.left + window.scrollX}px`;
+      emojiPicker.style.width = '350px';
+      emojiPicker.style.height = '350px';
+      emojiPicker.style.padding = '10px';
+      emojiPicker.style.overflow = 'auto';
+      emojiPicker.style.zIndex = '1000';
+      isPickerOpen = true;
+      document.body.classList.add('no-scroll');
+
+      const emojiItems = emojiPicker.querySelectorAll('.emoji-item');
+      emojiItems.forEach(item => {
+        item.addEventListener('click', () => {
+          addCommentBox.value += item.textContent;
+          addCommentBox.dispatchEvent(new Event('input'));
+          emojiPicker.style.display = 'none';
+          isPickerOpen = false;
+          document.body.classList.remove('no-scroll');
+        });
+      });
+
+      document.addEventListener('click', outsideClickListener);
+    } else {
+      emojiPicker.style.display = 'none';
+      isPickerOpen = false;
+      document.body.classList.remove('no-scroll');
+      document.removeEventListener('click', outsideClickListener);
+    }
+  });
+
+  function outsideClickListener(event) {
+    if (!emojiPicker.contains(event.target) && event.target !== emojiBtn) {
+      emojiPicker.style.display = 'none';
+      isPickerOpen = false;
+      document.body.classList.remove('no-scroll');
+      document.removeEventListener('click', outsideClickListener);
+    }
+  }
+}
+
+
 
 document.addEventListener('DOMContentLoaded', loadPosts);
 
@@ -704,31 +893,218 @@ document.querySelectorAll('.view-comments-text').forEach(viewBtn => {
       : "https://static.thenounproject.com/png/bookmark-icon-809338-512.png";
 
     // פתח את המודל
-    openCommentModal();
+    openCommentsModal();
   });
 });
 
+    async function avatarFetch(username) {
+      
+      const avatarRes = await fetch('/users/getAvatarByUsername', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username })
+      });
+      const avatarData = await avatarRes.json();
+      return avatarData.avatar; }
 
-function openCommentModal() {
-    const sidebar = document.querySelector('.sidebar-left');
-  const scrollBtn = document.querySelector('#scrollToTopBtn');
-  
 
-  const modal = document.querySelector('.comment-modal');
-  modal.style.display = 'flex';
+async function openCommentsModal(postEl, postData) {
+
+    console.log("user", localStorage.getItem('currentUser'));
+    const commentoverlay = document.querySelector('.comment-modal-overlay');
     setTimeout(() => {
+    commentoverlay.style.opacity = '1';
+    commentoverlay.style.pointerEvents = 'auto';
+    }, 10);
+
+  console.log('Post ID:', postEl.dataset.id);
+  window.currentPostInModal = postEl;
+  const modal = document.querySelector('.comment-modal');
+  if (!modal) {
+    console.error('Comment modal not found');
+    return;
+  }
+  const postId = postEl.dataset.id || postEl.id;
+
+  // עדכון תוכן המודל
+  modal.querySelector('.modal-post-image').src = postEl.querySelector('.post-image img')?.src || '';
+  const avatarSrc = postEl.querySelector('.user-avatar')?.src || '';
+  modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
+  const username = postEl.querySelector('.user-name')?.textContent || '';
+  modal.querySelectorAll('.modal-username').forEach(u => u.textContent = username);
+  const descriptionEl = postEl.querySelector('.post-text .full-text') || postEl.querySelector('.post-text .short-text');
+  modal.querySelector('.modal-post-description').textContent = descriptionEl?.textContent || '';
+  const postLikesEl = postEl.querySelector('.likes-count');
+  const modalLikesEl = modal.querySelector('.modal-likes-count');
+  modalLikesEl.textContent = postLikesEl ? postLikesEl.textContent : '0 likes';
+
+  // סנכרון מצב לייק ושמירה
+  const modalLikeBtn = modal.querySelector('.modal-footer-static .like');
+  const modalSaveBtn = modal.querySelector('.modal-footer-static .save');
+  const feedLikeBtn = postEl.querySelector('.post-actions .like');
+  const feedSaveBtn = postEl.querySelector('.post-actions .save');
+  if (modalLikeBtn && feedLikeBtn) {
+    const liked = feedLikeBtn.classList.contains('liked');
+    modalLikeBtn.classList.toggle('liked', liked);
+    modalLikeBtn.src = liked
+      ? 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png'
+      : 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
+  }
+  if (modalSaveBtn && feedSaveBtn) {
+    const isSaved = feedSaveBtn.classList.contains('saved');
+    modalSaveBtn.classList.toggle('saved', isSaved);
+    modalSaveBtn.src = isSaved
+      ? 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png'
+      : 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
+  }
+
+  modal.setAttribute('data-post-id', postId);
+  const commentsList = modal.querySelector('.comments-list');
+  commentsList.innerHTML = ''; // ניקוי התגובות הקיימות
+  try {
+    // טעינת תגובות מהשרת
+    const res = await fetch(`/posts/${postId}`);
+    if (!res.ok) {
+      console.error(`שגיאה בטעינת פוסט ${postId}: סטטוס ${res.status}`);
+      throw new Error('Failed to fetch post');
+    }
+    
+    const updatedPost = await res.json();
+
+// הוספת התגובות לרשימה
+  if (Array.isArray(updatedPost.comments)) {
+    updatedPost.comments.forEach(comment => {
+      addCommentToList(commentsList, comment);
+    });
+  } else {
+    console.warn(`אין תגובות לפוסט ${postId}`);
+  }
+
+// עדכון תצוגת מספר התגובות
+  updateCommentsPreview(postEl, updatedPost.comments.length || 0);
+} catch (err) {
+  console.error('Error loading comments:', err);
+  alert('שגיאה בטעינת התגובות. בדוק אם הפוסט קיים או נסה שוב.');
+}
+
+  // הוספת תגובה מהמודל
+  const modalTextarea = modal.querySelector('.comment-input textarea');
+  const sendButton = modal.querySelector('.comment-input button.send-comment');
+  modalTextarea.value = '';
+  sendButton.classList.add('disabled');
+  sendButton.disabled = true;
+
+  modalTextarea.addEventListener('input', () => {
+    sendButton.classList.toggle('disabled', !modalTextarea.value.trim());
+    sendButton.disabled = !modalTextarea.value.trim();
+  });
+
+  sendButton.addEventListener('click', async () => {
+    const text = modalTextarea.value.trim();
+    if (!text) return;
+
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+      alert('Please log in to comment.');
+      return;
+    }
+
+    try {
+      const avatarRes = await fetch('/users/getAvatarByUsername', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: currentUser })
+      });
+      const avatarData = await avatarRes.json();
+      const userProfilePic = avatarData.avatar;
+
+      const res = await fetch(`/posts/${postId}/add-comment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: currentUser, avatar: userProfilePic, text })
+      });
+      if (!res.ok) throw new Error('Failed to add comment');
+      const updatedPost = await res.json();
+
+      addCommentToList(commentsList, { username: currentUser, avatar: userProfilePic, text });
+      updateCommentsPreview(postEl, updatedPost.comments.length);
+      modalTextarea.value = '';
+      sendButton.classList.add('disabled');
+      sendButton.disabled = true;
+      showToast(document.getElementById('toast-comment'));
+    } catch (err) {
+      console.error('Error adding comment:', err);
+      alert('Failed to add comment. Please try again.');
+    }
+  });
+
+  // הצגת המודל
+  modal.style.display = 'block';
     modal.classList.add('active');
-      if (sidebar) sidebar.classList.add('dimmable', 'dimmed');
-      if (scrollBtn) scrollBtn.classList.add('dimmable', 'dimmed');
-  }, 10);
-
+    const sidebar = document.querySelector('.sidebar-left');
+    const scrollBtn = document.querySelector('#scrollToTopBtn');
     sidebar.style.pointerEvents = 'none';
+}
 
-    setupModalSaveListener();
+  async function addCommentToList(commentsList, comment) {
+  const commentEl = document.createElement('div');
+  commentEl.className = 'comment-item';
+  commentEl.innerHTML = `
+    <img src="${await avatarFetch(comment.username)}" alt="${comment.username}" class="comment-avatar">
+    <div class="comment-content">
+      <span class="comment-username">${comment.username}</span>
+      <span class="comment-text">${comment.text}</span>
+    </div>
+  `;
+  commentsList.prepend(commentEl);
+}
 
+function updateCommentsPreview(postEl, count) {
+  const viewComments = postEl.querySelector('.view-comments');
+  if (count > 0) {
+    if (!viewComments) {
+      const commentsSection = postEl.querySelector('.comment-section');
+      if (!commentsSection) {
+        console.error('Comments section not found for post:', postEl);
+        return;
+      }
+      // אם אין תגובות, ייתכן ש-.comments-list לא קיים, אז נוסיף אותו
+      let commentsList = commentsSection.querySelector('.comments-list');
+      if (!commentsList) {
+        commentsList = document.createElement('div');
+        commentsList.className = 'comments-list';
+        commentsSection.appendChild(commentsList);
+      }
+      const newCommentsPreview = document.createElement('p');
+      newCommentsPreview.className = 'view-comments';
+      newCommentsPreview.innerHTML = `<span class="view-comments-text">View all ${count} comments</span>`;
+      commentsSection.insertBefore(newCommentsPreview, commentsList);
+      newCommentsPreview.querySelector('.view-comments-text').addEventListener('click', () => {
+        if (!postEl.dataset.id) {
+          console.error('Post ID is missing for post:', postEl);
+          return;
+        }
+        openCommentsModal(postEl, { _id: postEl.dataset.id });
+      });
+    } else {
+      const viewCommentsText = viewComments.querySelector('.view-comments-text');
+      if (viewCommentsText) {
+        viewCommentsText.textContent = `View all ${count} comments`;
+      }
+    }
+  } else if (viewComments) {
+    viewComments.remove();
+  }
 }
 
 function closeCommentModal() {
+
+    const commentoverlay = document.querySelector('.comment-modal-overlay');
+    setTimeout(() => {
+    commentoverlay.style.opacity = '0';
+    commentoverlay.style.pointerEvents = 'none';
+    }, 10);
+
   const modal = document.querySelector('.comment-modal');
   modal.classList.remove('active');
     setTimeout(() => {
@@ -913,7 +1289,7 @@ if (modalSaveBtn) {
     /* === 4. איפוס שדה תגובה ופתיחת המודל === */
     modal.querySelector('textarea').value = '';
 
-    openCommentModal();   // פונקציית הפתיחה הקיימת שלך
+    openCommentsModal();   // פונקציית הפתיחה הקיימת שלך
         setupModalSaveListener();
   });
 });
@@ -1180,7 +1556,7 @@ function showToast(toastElement) {
 }
 
 document.querySelectorAll('.send-comment').forEach(button => {
-  button.addEventListener('click', () => {
+  button.addEventListener('click',async () => {
     const commentInput = button.closest('.comment-input');
     const textarea = commentInput.querySelector('textarea');
     const text = textarea.value.trim();
@@ -1193,11 +1569,10 @@ document.querySelectorAll('.send-comment').forEach(button => {
     const writingIndicator = modal.querySelector('.comment-item.writing');
 
 
-    // נתונים של המשתמש הנוכחי
-    const userProfilePic = "https://cdn-icons-png.flaticon.com/512/12225/12225935.png";
-    const username = "_ron_lhayanie";
+    const username =  localStorage.getItem('currentUser');
+    const userProfilePic = await avatarFetch(username);
 
-    // יצירת אלמנט תגובה
+    
     const commentEl = document.createElement('div');
     commentEl.className = 'comment-item';
     commentEl.innerHTML = `
@@ -1208,8 +1583,8 @@ document.querySelectorAll('.send-comment').forEach(button => {
       </div>
     `;
 
-    commentsList.prepend(writingIndicator);
-    commentsList.insertBefore(commentEl, writingIndicator.nextSibling);
+    // commentsList.prepend(writingIndicator);
+    commentsList.appendChild(commentEl);
 
     // שמירה במבנה תגובות
     if (!commentData[postId]) {
@@ -1323,8 +1698,6 @@ function opensharemodal() {
   setTimeout(() => {
     shareoverlay.style.opacity = '1';
     shareoverlay.style.pointerEvents = 'auto';
-      FROMSHAREsidebarLeft?.classList.add('dimmable', 'dimmed');
-  FROMSHAREscrollToTopBtn?.classList.add('dimmable', 'dimmed');
   }, 10);
 
   // מוסיף מחלקות להחשכה חלקה של האלמנטים
@@ -1356,7 +1729,6 @@ sharecloseBtn.addEventListener('click', () => {
 
   }, 150); // תואם ל-transition ב-CSS
 
-      FROMSHAREsidebarLeft?.classList.remove('dimmed');
   FROMSHAREscrollToTopBtn?.classList.remove('dimmed');
     sidebar.style.pointerEvents = 'all'
   
@@ -1493,7 +1865,7 @@ if (!mainfeed || !createBtn) {
   console.error('Missing required elements');
 }
 
-const username = localStorage.getItem('currentUser') || '';
+const username = localStorage.getItem('currentUser');
 let avatar = 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
 
 
@@ -1731,7 +2103,7 @@ if (username) {
   })
   .then(res => res.json())
   .then(result => {
-    avatar = result.avatar || avatar;
+    avatar = result.avatar;
     // Now set modal content
     createModal.querySelector('.post-user-info').innerHTML = `
       <img src="${avatar}" alt="User Avatar" />
@@ -1760,7 +2132,6 @@ function updatePreview(src, type) {
   const uploadOptions = createModal.querySelector('#upload-options');
   const closeImage = createModal.querySelector('#close-image');
 
-  // קודם נסתיר הכל
   previewImg.style.display = 'none';
   if (previewVideo) previewVideo.style.display = 'none';
 
@@ -1768,6 +2139,7 @@ function updatePreview(src, type) {
     previewImg.src = src;
     previewImg.style.display = 'block';
   } else if (type === 'video') {
+    console.log('Video preview', src);
     if (!previewVideo) {
       const videoEl = document.createElement('video');
       videoEl.id = 'post-video-preview';
@@ -2186,327 +2558,89 @@ function dataURLtoBlob(dataurl) {
 
 async function createAndSetupPost(image) {
   const username = localStorage.getItem('currentUser');
-  const postId = `post-${Date.now()}`;
   const text = document.getElementById('new-post-desc').value.trim();
 
-  console.log(username)
-  // Fetch avatar from server
-  const res = await fetch('/users/getAvatarByUsername', {
+  if (!username) {
+    console.error('No current user found');
+    alert('Please log in to create a post.');
+    return;
+  }
+
+  // שליפת אווטאר מהשרת
+  const avatarRes = await fetch('/users/getAvatarByUsername', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username })
   });
-  const result = await res.json();
-  const avatar = result.avatar
+  const avatarData = await avatarRes.json();
+  const avatar = avatarData.avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
 
-  const blob = dataURLtoBlob(image);
+  // יצירת FormData לפוסט
   const formData = new FormData();
-  formData.append('media', blob, 'image.jpg'); // או 'image.png'
+  if (image) {
+    const blob = dataURLtoBlob(image);
+    formData.append('media', blob);
+  } else {
+  formData.append('media', '');}
+
   formData.append('username', username);
   formData.append('avatar', avatar);
   formData.append('text', text);
 
-  const res2 = await fetch('/posts/createPost', {
+  // שליחת הפוסט לשרת
+  const res = await fetch('/posts/createPost', {
     method: 'POST',
     body: formData
   });
-  const data  = await res2.json()
-
-  const newPost = createPost(data.post);
-  newPost.id = postId;
-  newPost.dataset.type = data.post.type;
-  postsWrapper.querySelector('.posts-list').prepend(newPost);
-
-
-
-    // אירועי לייק
-    const likeBtn = newPost.querySelector('.like');
-    likeBtn.addEventListener('click', function() {
-      const post = this.closest('.post-actions').nextElementSibling;
-      const likesCountSpan = post.querySelector('.likes-count');
-      let currentLikes = parseInt(likesCountSpan.textContent.replace(/,/g, '')) || 0;
-      const isLiked = this.src.includes('2107845.png');
-      if (!isLiked) {
-        this.src = 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png';
-        this.classList.add('liked');
-        likesCountSpan.textContent = (currentLikes + 1).toLocaleString() + ' likes';
-      } else {
-        this.src = 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
-        this.classList.remove('liked');
-        likesCountSpan.textContent = Math.max(0, currentLikes - 1).toLocaleString() + ' likes';
-      }
-      this.classList.add('pop');
-      setTimeout(() => this.classList.remove('pop'), 400);
-    });
-
-    // אירועי תגובות
-    const commentBtn = newPost.querySelector('.comment');
-    commentBtn.addEventListener('click', () => {
-      const post = commentBtn.closest('.post');
-      window.currentPostInModal = post;
-      const modal = document.querySelector('.comment-modal');
-      if (!modal) return;
-
-      modal.querySelector('.modal-post-image').src = post.querySelector('.post-image img')?.src || '';
-      const avatarSrc = post.querySelector('.user-avatar')?.src || '';
-      modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
-      const username = post.querySelector('.user-name')?.textContent || '';
-      modal.querySelectorAll('.modal-username').forEach(u => u.textContent = username);
-      const descriptionEl = post.querySelector('.post-text .full-text') || post.querySelector('.post-text .short-text');
-      modal.querySelector('.modal-post-description').textContent = descriptionEl?.textContent || '';
-      const postLikesEl = post.querySelector('.likes-count');
-      const modalLikesEl = modal.querySelector('.modal-likes-count');
-      modalLikesEl.textContent = postLikesEl ? postLikesEl.textContent : '0 likes';
-
-      const modalLikeBtn = modal.querySelector('.modal-footer-static .like');
-      const modalSaveBtn = modal.querySelector('.modal-footer-static .save');
-      const feedLikeBtn = post.querySelector('.post-actions .like');
-      const feedSaveBtn = post.querySelector('.post-actions .save');
-      if (modalLikeBtn && feedLikeBtn) {
-        const liked = feedLikeBtn.classList.contains('liked');
-        modalLikeBtn.classList.toggle('liked', liked);
-        modalLikeBtn.src = liked ? 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png' : 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
-      }
-      if (modalSaveBtn && feedSaveBtn) {
-        const isSaved = feedSaveBtn.classList.contains('saved');
-        modalSaveBtn.classList.toggle('saved', isSaved);
-        modalSaveBtn.src = isSaved ? 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png' : 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
-      }
-
-      const postId = post.id;
-      modal.setAttribute('data-post-id', postId);
-      const commentsList = modal.querySelector('.comments-list');
-      commentsList.querySelectorAll('.comment-item:not(.writing)').forEach(el => el.remove());
-      const postComments = commentData[postId] || [];
-      postComments.forEach(comment => {
-        const commentEl = document.createElement('div');
-        commentEl.className = 'comment-item';
-        commentEl.innerHTML = `<img src="${comment.avatar}" alt="${comment.username}" class="comment-avatar"><div class="comment-content"><span class="comment-username">${comment.username}</span><span class="comment-text" >${comment.text}</span></div>`;
-        commentsList.appendChild(commentEl);
-      });
-
-      openCommentModal();
-    });
-
-    // אירועי שמירה
-    const saveBtn = newPost.querySelector('.save');
-    saveBtn.addEventListener('click', function() {
-      const isSaved = this.classList.contains('saved');
-      if (!isSaved) {
-        this.classList.add('saved');
-        this.src = 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png';
-      } else {
-        this.classList.remove('saved');
-        this.src = 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
-      }
-    });
-
-    // אירועי שיתוף
-    const shareBtn = newPost.querySelector('.share');
-    shareBtn.addEventListener('click', opensharemodal);
-
-    // אירועי "more"
-    const moreBtn = newPost.querySelector('.more');
-    moreBtn.addEventListener('click', function() {
-      const postText = this.closest('.post-text');
-      const shortText = postText.querySelector('.short-text');
-      const fullText = postText.querySelector('.full-text');
-      if (fullText.style.display === 'none') {
-        shortText.style.display = 'none';
-        fullText.style.display = 'inline';
-        this.textContent = 'less';
-      } else {
-        shortText.style.display = 'inline';
-        fullText.style.display = 'none';
-        this.textContent = 'more';
-      }
-    });
-
-    // אירועי "more options" ומחיקה
-    const moreOptionsBtn = newPost.querySelector('.more-options');
-    const moreMenu = newPost.querySelector('.more-menu');
-    const deleteIcon = newPost.querySelector('.delete-post-icon');
-
-    moreOptionsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    deleteIcon.addEventListener('click', () => {
-      const postToDelete = deleteIcon.closest('.post');
-      if (postToDelete) {
-        postToDelete.remove();
-        if (image) {
-          imagePostsCount--;
-          updateSidebarMargin(-670); // מעדכן מרג'ין כלפי מעלה עבור תמונה
-        } else {
-          textPostsCount--;
-          updateSidebarMargin(-260); // מעדכן מרג'ין כלפי מעלה עבור טקסט
-        }
-        console.log('🗑️ פוסט נמחק, מספר פוסטי תמונות:', imagePostsCount, 'מספר פוסטי טקסט:', textPostsCount);
-      }
-    });
-
-    // אירועי הוספת תגובה ישירות מהפוסט
-    const addCommentBox = newPost.querySelector('.add-comment-box');
-    const postButton = newPost.querySelector('.post-button');
-    const viewCommentsText = newPost.querySelector('.view-comments-text');
-    const commentsList = newPost.querySelector('.comments-list');
-    const writingComment = document.createElement('div');
-    writingComment.className = 'comment writing';
-    writingComment.innerHTML = '<span class="comment-text">writing...</span>';
-
-    addCommentBox.addEventListener('input', function() {
-      postButton.classList.toggle('disabled', !this.value.trim());
-      if (this.value.trim()) {
-        if (!commentsList.querySelector('.writing')) {
-          commentsList.appendChild(writingComment.cloneNode(true));
-        }
-      } else {
-        const existingWriting = commentsList.querySelector('.writing');
-        if (existingWriting) existingWriting.remove();
-      }
-    });
-
-    postButton.addEventListener('click', function() {
-      const commentText = addCommentBox.value.trim();
-      if (commentText && !this.classList.contains('disabled')) {
-        const postId = newPost.id;
-        if (!commentData[postId]) commentData[postId] = [];
-        const newComment = {
-          avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
-          username: '_ron_lhayanie',
-          text: commentText
-        };
-        commentData[postId].push(newComment);
-
-        addCommentBox.value = '';
-        postButton.classList.add('disabled');
-        const existingWriting = commentsList.querySelector('.writing');
-        if (existingWriting) existingWriting.remove();
-
-        const totalComments = commentData[postId].length;
-        viewCommentsText.textContent = `View all ${totalComments} comment${totalComments !== 1 ? 's' : ''}`;
-
-        showToast(document.getElementById('toast-comment'));
-      }
-    });
-
-    // פתיחת מודל תגובות דרך "View X Comments"
-    viewCommentsText.addEventListener('click', function() {
-      const post = this.closest('.post');
-      window.currentPostInModal = post;
-      const modal = document.querySelector('.comment-modal');
-      if (!modal) return;
-
-      modal.querySelector('.modal-post-image').src = post.querySelector('.post-image img')?.src || '';
-      const avatarSrc = post.querySelector('.user-avatar')?.src || '';
-      modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
-      const username = post.querySelector('.user-name')?.textContent || '';
-      modal.querySelectorAll('.modal-username').forEach(u => u.textContent = username);
-      const descriptionEl = post.querySelector('.post-text .full-text') || post.querySelector('.post-text .short-text');
-      modal.querySelector('.modal-post-description').textContent = descriptionEl?.textContent || '';
-      const postLikesEl = post.querySelector('.likes-count');
-      const modalLikesEl = modal.querySelector('.modal-likes-count');
-      modalLikesEl.textContent = postLikesEl ? postLikesEl.textContent : '0 likes';
-
-      const modalLikeBtn = modal.querySelector('.modal-footer-static .like');
-      const modalSaveBtn = modal.querySelector('.modal-footer-static .save');
-      const feedLikeBtn = post.querySelector('.post-actions .like');
-      const feedSaveBtn = post.querySelector('.post-actions .save');
-      if (modalLikeBtn && feedLikeBtn) {
-        const liked = feedLikeBtn.classList.contains('liked');
-        modalLikeBtn.classList.toggle('liked', liked);
-        modalLikeBtn.src = liked ? 'https://cdn-icons-png.flaticon.com/256/2107/2107845.png' : 'https://cdn-icons-png.flaticon.com/256/130/130195.png';
-      }
-      if (modalSaveBtn && feedSaveBtn) {
-        const isSaved = feedSaveBtn.classList.contains('saved');
-        modalSaveBtn.classList.toggle('saved', isSaved);
-        modalSaveBtn.src = isSaved ? 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png' : 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
-      }
-
-      const postId = post.id;
-      modal.setAttribute('data-post-id', postId);
-      const commentsList = modal.querySelector('.comments-list');
-      commentsList.querySelectorAll('.comment-item:not(.writing)').forEach(el => el.remove());
-      const postComments = commentData[postId] || [];
-      postComments.forEach(comment => {
-        const commentEl = document.createElement('div');
-        commentEl.className = 'comment-item';
-        commentEl.innerHTML = `<img src="${comment.avatar}" alt="${comment.username}" class="comment-avatar"><div class="comment-content"><span class="comment-username">${comment.username}</span><span class="comment-text">${comment.text}</span></div>`;
-        commentsList.appendChild(commentEl);
-      });
-
-      openCommentModal();
-    });
-
-    // אירוע לפתיחת תפריט אימוג'ים
-    const emojiBtn = newPost.querySelector('.emoji');
-    const emojiPicker = document.getElementById('emoji-picker');
-    let isPickerOpen = false;
-
-    emojiBtn.addEventListener('click', () => {
-      if (!isPickerOpen) {
-        emojiPicker.style.display = 'block';
-        emojiPicker.style.position = 'absolute';
-        emojiPicker.style.padding = '10px';
-        emojiPicker.style.maxWidth = '250px';
-        emojiPicker.style.maxHeight = '150px';
-        emojiPicker.style.overflow = 'auto';
-        emojiPicker.style.zIndex = '1000';
-        emojiPicker.style.width = '350px';
-        emojiPicker.style.height = '350px';
-        emojiPicker.style.top = '400px';
-        emojiPicker.style.left = '950px';
-        isPickerOpen = true;  
-
-        document.body.classList.add('no-scroll');
-
-        const emojiItems = emojiPicker.querySelectorAll('.emoji-item');
-        emojiItems.forEach(item => {
-          item.addEventListener('click', () => {
-            addCommentBox.value += item.textContent;
-            addCommentBox.dispatchEvent(new Event('input'));
-            emojiPicker.style.display = 'none';
-            isPickerOpen = false;
-          });
-        });
-
-        document.addEventListener('click', outsideClickListener);
-      } else {
-        emojiPicker.style.display = 'none';
-        isPickerOpen = false;
-        document.removeEventListener('click', outsideClickListener);
-      }
-    });
-
-    function outsideClickListener(event) {
-      if (!emojiPicker.contains(event.target) && event.target !== emojiBtn) {
-        emojiPicker.style.display = 'none';
-        isPickerOpen = false;
-        document.removeEventListener('click', outsideClickListener);
-      }
-    }
-
-    // עדכון ספירת פוסטים ומרג'ין, ואיפוס המודל
-    if (image) {
-      imagePostsCount++;
-      updateSidebarMargin(670); // מעדכן מרג'ין כלפי מטה עבור תמונה
-    } else {
-      textPostsCount++;
-      updateSidebarMargin(260); // מעדכן מרג'ין כלפי מטה עבור טקסט
-    }
-    // איפוס המודל לאחר פרסום
-    const imageInput = document.querySelector('#postImage'); // שדה התמונה
-    if (imageInput) imageInput.value = ''; // איפוס שדה התמונה
-    const textInput = document.querySelector('#postText'); // שדה התיאור
-    if (textInput) textInput.value = ''; // איפוס שדה התיאור
-    closeModal();
-    showNotice();
-    newPost.classList.add('highlight');
-    setTimeout(() => newPost.classList.remove('highlight'), 2000);
-    
+  if (!res.ok) {
+    console.error('Failed to create post:', res.status, await res.text());
+    alert('Failed to create post. Please try again.');
+    return;
   }
+  const data = await res.json();
+  const postData = data.post;
+
+  if (!postData._id) {
+    console.error('Post creation failed: No _id returned from server', postData);
+    alert('Failed to create post: Invalid server response.');
+    return;
+  }
+
+  // יצירת אלמנט הפוסט
+  const newPost = createPost(postData);
+  newPost.id = postData._id; // הגדרת ה-ID של האלמנט
+  newPost.dataset.id = postData._id; // שמירה ב-dataset
+  newPost.dataset.type = postData.type; // שמירה ב-dataset
+
+  const postsWrapper = document.querySelector('.posts-list');
+  if (!postsWrapper) {
+    console.error('posts-list not found');
+    return;
+  }
+  postsWrapper.prepend(newPost);
+
+  // חיבור כל האירועים
+  setupPostListeners(newPost, postData);
+
+  // עדכון ספירות ומרג'ין
+  if (postData.type === 'image' || postData.type === 'video') {
+    imagePostsCount++;
+    updateSidebarMargin(670);
+  } else {
+    textPostsCount++;
+    updateSidebarMargin(260);
+  }
+
+  // איפוס המודל
+  const imageInput = document.querySelector('#postImage');
+  if (imageInput) imageInput.value = '';
+  const textInput = document.querySelector('#postText');
+  if (textInput) textInput.value = '';
+  closeModal();
+  showNotice();
+  newPost.classList.add('highlight');
+  setTimeout(() => newPost.classList.remove('highlight'), 2000);
+}
   
 }
 
@@ -2518,24 +2652,130 @@ function updateSidebarMargin(distance) {
   console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
 }
 
-// פונקציות עזר
-function updateCommentsCount(post) {
-  const postId = post.id;
-  const commentsCountSpan = post.querySelector('.comments-count') || post.querySelector('.view-comments-text');
-  const count = (commentData2[postId] || []).length;
-  if (commentsCountSpan) {
-    commentsCountSpan.textContent = count > 0 ? `${count} comments` : '0 comments';
-  }
+// // פונקציות עזר
+// function updateCommentsCount(post) {
+//   const postId = post.id;
+//   const commentsCountSpan = post.querySelector('.comments-count') || post.querySelector('.view-comments-text');
+//   const count = (commentData2[postId] || []).length;
+//   if (commentsCountSpan) {
+//     commentsCountSpan.textContent = count > 0 ? `${count} comments` : '0 comments';
+//   }
+// }
+
+// function updateViewCommentsText(post) {
+//   const postId = post.id;
+//   const viewCommentsText = post.querySelector('.view-comments-text');
+//   const count = (commentData2[postId] || []).length;
+//   if (viewCommentsText) {
+//     viewCommentsText.textContent = `View all ${count} comment${count !== 1 ? 's' : ''}`;
+//   }
+// }
+
+function setupPostEvents(postElement) {
+  const postId = postElement.id;
+
+  // כפתור תגובה (פותח מודל)
+  const commentBtn = postElement.querySelector('.comment');
+  commentBtn.addEventListener('click', () => {
+    openPostInModal(postElement);
+  });
+
+  // כפתור שמירה
+  const saveBtn = postElement.querySelector('.save');
+  saveBtn.addEventListener('click', function() {
+    const isSaved = this.classList.contains('saved');
+    this.classList.toggle('saved', !isSaved);
+    this.src = !isSaved
+      ? 'https://static.thenounproject.com/png/bookmark-icon-809340-512.png'
+      : 'https://static.thenounproject.com/png/bookmark-icon-809338-512.png';
+  });
+
+  // שיתוף
+  const shareBtn = postElement.querySelector('.share');
+  shareBtn.addEventListener('click', opensharemodal);
+
+  // more/less
+  const moreBtn = postElement.querySelector('.more');
+  moreBtn.addEventListener('click', function() {
+    const postText = this.closest('.post-text');
+    const shortText = postText.querySelector('.short-text');
+    const fullText = postText.querySelector('.full-text');
+    if (fullText.style.display === 'none') {
+      shortText.style.display = 'none';
+      fullText.style.display = 'inline';
+      this.textContent = 'less';
+    } else {
+      shortText.style.display = 'inline';
+      fullText.style.display = 'none';
+      this.textContent = 'more';
+    }
+  });
+
+  // תפריט אפשרויות נוספות
+  const moreOptionsBtn = postElement.querySelector('.more-options');
+  const moreMenu = postElement.querySelector('.more-menu');
+  const deleteIcon = postElement.querySelector('.delete-post-icon');
+  moreOptionsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
+  });
+  deleteIcon.addEventListener('click', () => {
+    const postToDelete = deleteIcon.closest('.post');
+    if (postToDelete) {
+      postToDelete.remove();
+      // עדכון מונים (imagePostsCount / textPostsCount) אם רלוונטי
+    }
+  });
+
+  // הוספת תגובה מהפיד
+  const addCommentBox = postElement.querySelector('.add-comment-box');
+  const postButton = postElement.querySelector('.post-button');
+  const viewCommentsText = postElement.querySelector('.view-comments-text');
+  const commentsList = postElement.querySelector('.comments-list');
+  const writingComment = document.createElement('div');
+  writingComment.className = 'comment writing';
+  writingComment.innerHTML = '<span class="comment-text">writing...</span>';
+
+  addCommentBox.addEventListener('input', function() {
+    postButton.classList.toggle('disabled', !this.value.trim());
+    if (this.value.trim()) {
+      if (!commentsList.querySelector('.writing')) {
+        commentsList.appendChild(writingComment.cloneNode(true));
+      }
+    } else {
+      const existingWriting = commentsList.querySelector('.writing');
+      if (existingWriting) existingWriting.remove();
+    }
+  });
+
+  postButton.addEventListener('click', function() {
+    const commentText = addCommentBox.value.trim();
+    if (commentText && !this.classList.contains('disabled')) {
+      if (!commentData[postId]) commentData[postId] = [];
+      const newComment = {
+        avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
+        username: '_ron_lhayanie',
+        text: commentText
+      };
+      commentData[postId].push(newComment);
+
+      addCommentBox.value = '';
+      postButton.classList.add('disabled');
+      const existingWriting = commentsList.querySelector('.writing');
+      if (existingWriting) existingWriting.remove();
+
+      const totalComments = commentData[postId].length;
+      viewCommentsText.textContent = `View all ${totalComments} comment${totalComments !== 1 ? 's' : ''}`;
+      showToast(document.getElementById('toast-comment'));
+    }
+  });
+
+  // פתיחת מודל תגובות מהטקסט "View X Comments"
+  viewCommentsText.addEventListener('click', () => {
+    openPostInModal(postElement);
+  });
 }
 
-function updateViewCommentsText(post) {
-  const postId = post.id;
-  const viewCommentsText = post.querySelector('.view-comments-text');
-  const count = (commentData2[postId] || []).length;
-  if (viewCommentsText) {
-    viewCommentsText.textContent = `View all ${count} comment${count !== 1 ? 's' : ''}`;
-  }
-}
 
 function showNotice() {
   if (!notice) return;

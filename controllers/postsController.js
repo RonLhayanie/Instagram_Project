@@ -5,7 +5,8 @@ const multer = require('multer');
 const path = require('path');
 
 const { fileTypeFromBuffer } = require('file-type')
-const fs = require('fs')
+const fs = require('fs') 
+const { ObjectId } = require('mongodb');
 
 // הגדרת איפה Multer ישמור את הקבצים
 const storage = multer.diskStorage({
@@ -83,6 +84,56 @@ router.get('/getAllPosts', async (req, res) => {
   }
 });
 
+// Get post by ID (לטעינת תגובות)
+router.get('/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    if (!ObjectId.isValid(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+    const post = await postsModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json(post);
+  } catch (err) {
+    console.error('Error fetching post:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Add a comment to a post
+router.post('/:id/add-comment', async (req, res) => {
+  try {
+    const { username, text } = req.body;
+    const postId = req.params.id;
+    console.log(`Adding comment to post ${postId}`);
+    if (!ObjectId.isValid(postId)) {
+      console.error(`Invalid post ID: ${postId}`);
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+    if (!username || !text) {
+      console.error('Missing username or text');
+      return res.status(400).json({ error: 'Username and text are required' });
+    }
+    const post = await postsModel.findById(postId);
+    if (!post) {
+      console.error(`Post not found: ${postId}`);
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    const newComment = {
+      username,
+      text,
+      time: new Date().toISOString(),
+    };
+    post.comments.push(newComment);
+    await postsModel.update(post);
+    res.json({ message: 'Comment added successfully', comment: newComment, commentCount: post.comments.length });
+  } catch (err) {
+    console.error(`Error adding comment to post ${req.params.id}:`, err.message);
+    res.status(500).json({ error: 'Server error', details: err.message });
+  }
+});
 
 
 

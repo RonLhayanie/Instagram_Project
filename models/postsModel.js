@@ -55,11 +55,43 @@ async function toggleLike(postId, username) {
   return { liked: !hasLiked, likesCount: updatedLikes.length };
 }
 
+async function update(post) {
+  try {
+    await collection.updateOne(
+      { _id: new ObjectId(post._id) },
+      { $set: { comments: post.comments } }
+    );
+  } catch (err) {
+    console.error('Error in update:', err.message);
+    throw err;
+  }
+}
 
+async function findById(postId) {
+  try {
+    if (!ObjectId.isValid(postId)) {
+      throw new Error('Invalid post ID');
+    }
+    const post = await collection.findOne({ _id: new ObjectId(postId) });
+    if (!post) {
+      throw new Error('Post not found');
+    }
+    return post;
+  } catch (err) {
+    console.error('Error in findById:', err.message);
+    throw err;
+  }
+}
 
 module.exports = { 
   Create,
   getAllPosts,
   getUserAvgStats,
-  toggleLike
+  toggleLike,
+  findById,
+  update
 };
+
+
+
+
