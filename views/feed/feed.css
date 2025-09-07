@@ -3100,6 +3100,7 @@ font-weight: 600;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
+
 #create-post-overlay {
   position: fixed;
   inset: 0;
@@ -3113,6 +3114,18 @@ font-weight: 600;
 #create-post-overlay.visible {
   background: rgba(0, 0, 0, 0.5);
 }
+
+.post-video {
+  width: 500px;
+  height: fit-content;
+  max-height: 600px;
+  overflow: hidden
+}
+
+.post video {
+  width: 100%;
+  object-fit: contain;
+} 
 
 #map-overlay {
   width: 100vw; 

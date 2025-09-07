@@ -24,6 +24,7 @@ window.addEventListener('load', () => {
 async function loadPosts() {
   try {
     const res = await fetch('/posts/getAllPosts');
+    console.log(res);
     if (!res.ok) throw new Error('Failed to fetch posts');
     const posts = await res.json();
     console.log(posts);
@@ -58,11 +59,11 @@ async function loadPosts() {
         // post.image יכול להיות data URL (base64) או URL רגיל
         mediaHtml = `<div class="post-image"><img src="${post.image}" alt="Post Image" loading="lazy" /></div>`;
       } else if (type === 'video') {
-        const videoSrc = post.videoUrl || post.video || (isVideoDataUrl ? post.image : '');
+        const videoSrc = post.image
         if (videoSrc) {
           mediaHtml = `
             <div class="post-video">
-              <video width="100%" height="auto" controls muted loop>
+              <video width="100%" height="auto" controls loop>
                 <source src="${videoSrc}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
@@ -144,10 +145,35 @@ async function loadPosts() {
     const noPostsMsg = document.getElementById('no-posts-message');
     if (noPostsMsg) noPostsMsg.style.display = 'block';
   }
+  
+  enableScrollAutoplay();
+
 }
 
 document.addEventListener('DOMContentLoaded', loadPosts);
 
+function enableScrollAutoplay() {
+  const videos = document.querySelectorAll('video');
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5
+  };
+  
+  const handleVideo = (entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        if (video.paused) video.play().catch(err => console.log(err));
+      } else {
+        if (!video.paused) video.pause();
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(handleVideo, options);
+  videos.forEach(video => observer.observe(video));
+}
 
 
 
@@ -1006,44 +1032,75 @@ document.addEventListener('click', (e) => {
   }
 });
 
+
+
+
+
+// LIKES BUTTON CONNECT TO MONGO
 const modalLikeBtn = document.querySelector('.modal-footer-static .like');
-const modalSaveBtn = document.querySelector('.modal-footer-static .save');
 const modalLikesCount = document.querySelector('.modal-likes-count');
 
-
 if (modalLikeBtn) {
-  modalLikeBtn.addEventListener('click', () => {
-    if (!window.currentPostInModal) return;
+  modalLikeBtn.addEventListener('click', async () => {
+    // מזהים את הפוסט במודל
+    const postElement = document.querySelector('.modal-content');
+    if (!postElement) return;
 
-    const post = window.currentPostInModal;
-    const originalLikeBtn = post.querySelector('.post-actions .like');
-    const originalLikesCountSpan = post.querySelector('.likes-count');
-    
+    const postId = postElement.dataset.id; // כאן _id של הפוסט
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) return;
 
-    let currentLikes = parseInt(originalLikesCountSpan.textContent.replace(/[^\d]/g, '')) || 0;
-    const isLiked = modalLikeBtn.classList.contains("liked");
+    try {
+      // שולחים בקשה לשרת לעדכון הלייק
+      const response = await fetch(`/posts/${postId}/toggle-like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: currentUser })
+      });
 
-    if (!isLiked) {
-      modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"; // full heart
-      originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
-      modalLikeBtn.classList.add("liked");
-      originalLikeBtn.classList.add("liked");
-      currentLikes++;
-    } else {
-      modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png"; // empty heart
-      originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-      modalLikeBtn.classList.remove("liked");
-      originalLikeBtn.classList.remove("liked");
-      currentLikes = Math.max(0, currentLikes - 1);
+      const data = await response.json(); // { liked: true/false, likesCount: number }
+
+      // כפתור הלייק בפוסט המקורי
+      const originalPostElement = document.querySelector(`[data-id="${postId}"]`);
+      const originalLikeBtn = originalPostElement?.querySelector('.post-actions .like');
+      const originalLikesCount = originalPostElement?.querySelector('.likes-count');
+
+      // עדכון הכפתורים והספירה
+      if (data.liked) {
+        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
+        modalLikeBtn.classList.add('liked');
+        if (originalLikeBtn) {
+          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
+          originalLikeBtn.classList.add('liked');
+        }
+      } else {
+        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
+        modalLikeBtn.classList.remove('liked');
+        if (originalLikeBtn) {
+          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
+          originalLikeBtn.classList.remove('liked');
+        }
+      }
+
+      // עדכון ספירת הלייקים
+      modalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
+      if (originalLikesCount) originalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
+
+      // אנימציה
+      modalLikeBtn.classList.add('pop');
+      setTimeout(() => modalLikeBtn.classList.remove('pop'), 300);
+
+    } catch (err) {
+      console.error('Error toggling like:', err);
     }
-
-    modalLikesCount.textContent = `${currentLikes.toLocaleString()} likes`;
-    originalLikesCountSpan.textContent = `${currentLikes.toLocaleString()} likes`;
-
-    modalLikeBtn.classList.add("pop");
-    setTimeout(() => modalLikeBtn.classList.remove("pop"), 300);
   });
 }
+
+
+
+
+
+const modalSaveBtn = document.querySelector('.modal-footer-static .save');
 
 if (modalSaveBtn) {
   modalSaveBtn.addEventListener('click', () => {
@@ -1562,9 +1619,9 @@ createModal.innerHTML = `
 
       <!-- Location -->
       <div class="input-field-container">
-        <input type="text" id="location-input" class="input-field" placeholder="Add location" list="places"/>
+        <input type="text" id="location-input" class="input-field" placeholder="Add location" />
         <svg class="location-icon" aria-label="Add location" class="x1lliihq x1n2onr6 x1roi4f4" fill="currentColor" height="16" role="img" viewBox="0 0 24 24" width="16"><title>Add location</title><path d="M12.053 8.105a1.604 1.604 0 1 0 1.604 1.604 1.604 1.604 0 0 0-1.604-1.604Zm0-7.105a8.684 8.684 0 0 0-8.708 8.66c0 5.699 6.14 11.495 8.108 13.123a.939.939 0 0 0 1.2 0c1.969-1.628 8.109-7.424 8.109-13.123A8.684 8.684 0 0 0 12.053 1Zm0 19.662C9.29 18.198 5.345 13.645 5.345 9.66a6.709 6.709 0 0 1 13.417 0c0 3.985-3.944 8.538-6.709 11.002Z"></path></svg>
-        <div class="location-suggestions" id="places"></div>
+        <div id="places" class="location-suggestions"></div>
       </div>
 
       <!-- Collaborators -->
@@ -1932,7 +1989,9 @@ createModal.querySelector('#close-image').addEventListener('click', () => {
 
 // Location suggestions
 const locationInput = createModal.querySelector('#location-input');
-const locationSuggestions = createModal.querySelector('.location-suggestions');
+const locationSuggestions = createModal.querySelector('#location-suggestions');
+
+
 
 const textInputs = [createModal.querySelector('#new-post-desc'), locationInput, createModal.querySelector('.accessibility-content .input-field')];
 textInputs.forEach(input => {
@@ -2078,7 +2137,8 @@ function resizeImage(src, callback) {
   img.src = src;
 }
 
-function addPost(image, text) {
+
+async function addPost(image, text) {
   let processedImage = image;
   const postsWrapper = document.querySelector('.posts-wrapper');
   const storiesContainer = document.querySelector('.stories-container');
@@ -2096,18 +2156,19 @@ function addPost(image, text) {
     postsWrapper.insertBefore(filterElement, postsWrapper.firstChild);
   }
 
+  
   // עיבוד תמונה אם קיימת
-if (image) {
-  if (image.endsWith('.mp4')) {
-    // זה וידאו – אין שינוי גודל, שלח ישר
-    createAndSetupPost(image);
-  } else {
+  if (image) {
+    if ( image.endsWith('.mp4')) {
+      // זה וידאו – אין שינוי גודל, שלח ישר
+      createAndSetupPost(image);
+    } else {
     // זה תמונה – שנה גודל עם canvas
-    resizeImage(image, (resizedImage) => {
-      createAndSetupPost(resizedImage);
-    });
-  }
-} else {
+      resizeImage(image, (resizedImage) => {
+        createAndSetupPost(resizedImage);
+      });
+    }
+  } else {
   createAndSetupPost(null);
 }
 
@@ -2128,6 +2189,7 @@ async function createAndSetupPost(image) {
   const postId = `post-${Date.now()}`;
   const text = document.getElementById('new-post-desc').value.trim();
 
+  console.log(username)
   // Fetch avatar from server
   const res = await fetch('/users/getAvatarByUsername', {
     method: 'POST',
@@ -2135,56 +2197,25 @@ async function createAndSetupPost(image) {
     body: JSON.stringify({ username })
   });
   const result = await res.json();
-  const avatar = result.avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
-  const userId = result._id;
+  const avatar = result.avatar
 
-  let type = "text";
-  let formData = new FormData();
+  const blob = dataURLtoBlob(image);
+  const formData = new FormData();
+  formData.append('media', blob, 'image.jpg'); // או 'image.png'
+  formData.append('username', username);
+  formData.append('avatar', avatar);
+  formData.append('text', text);
 
-  if (image) {
-    type = "image";
-  }
-  if (image && image.endsWith(".mp4")) {
-    type = "video";
-  }
-
-  const data = {
-    username,
-    avatar,
-    userId,
-    image,
-    likes: 0,
-    text: text,
-    commentsCount: 0,
-    time: 'Just now',
-    date: new Date().toDateString(),
-    type
-  };
-
-  // const blob = dataURLtoBlob(image);
-  // const formData = new FormData();
-  // formData.append('media', blob, 'image.jpg'); // או 'image.png'
-  // formData.append('username', username);
-  // formData.append('avatar', avatar);
-  // formData.append('text', text);
-  // formData.append('type', 'image');
-
-  // await fetch('/posts/createPost', {
-  //   method: 'POST',
-  //   body: formData
-  // });
-
-  // Send to server
-  await fetch('/posts/createPost', {
+  const res2 = await fetch('/posts/createPost', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    body: formData
   });
+  const data  = await res2.json()
 
-  const newPost = createPost(data);
+  const newPost = createPost(data.post);
   newPost.id = postId;
-  newPost.dataset.type = type;
-  postsWrapper.insertBefore(newPost, customFilter.nextSibling || postsWrapper.firstChild.nextSibling);
+  newPost.dataset.type = data.post.type;
+  postsWrapper.querySelector('.posts-list').prepend(newPost);
 
 
 
@@ -2519,11 +2550,11 @@ function showNotice() {
   }, 2000);
 }
 
-function createPost({ username, avatar, userId, image, likes, text, commentsCount, time, date, type }) {
+function createPost({ username, avatar, image, likes, text, comments, time, date, type }) {
   const post = document.createElement('div');
   const postType = type === 'video' ? 'videotype' : (type === 'image' ? 'imgtype' : 'texttype');
   post.className = `post ${postType}`;
-  post.setAttribute('data-user-id', userId);
+  post.setAttribute('data-username', username);
 
   post.innerHTML = `
     <div class="post-header">
@@ -2580,7 +2611,7 @@ function createPost({ username, avatar, userId, image, likes, text, commentsCoun
         <span class="more">more</span>
       </p>
       <div class="comment-section">
-        <p class="view-comments"><span class="view-comments-text">View all ${commentsCount} comments</span></p>
+        <p class="view-comments"><span class="view-comments-text">View all ${comments.length} comments</span></p>
         <div class="comments-list"></div>
         <div class="comment-row">
           <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
@@ -2595,7 +2626,6 @@ function createPost({ username, avatar, userId, image, likes, text, commentsCoun
 
   return post;
 }
-
 
 function filterPostsByType(type) {
   const allPosts = document.querySelectorAll('.post');
