@@ -24,6 +24,7 @@ window.addEventListener('load', () => {
 async function loadPosts() {
   try {
     const res = await fetch('/posts/getAllPosts');
+    console.log(res);
     if (!res.ok) throw new Error('Failed to fetch posts');
     const posts = await res.json();
     console.log(posts);
@@ -62,7 +63,7 @@ async function loadPosts() {
         if (videoSrc) {
           mediaHtml = `
             <div class="post-video">
-              <video width="100%" height="auto" controls muted loop>
+              <video width="100%" height="auto" controls loop>
                 <source src="${videoSrc}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
@@ -144,10 +145,35 @@ async function loadPosts() {
     const noPostsMsg = document.getElementById('no-posts-message');
     if (noPostsMsg) noPostsMsg.style.display = 'block';
   }
+  
+  enableScrollAutoplay();
+
 }
 
 document.addEventListener('DOMContentLoaded', loadPosts);
 
+function enableScrollAutoplay() {
+  const videos = document.querySelectorAll('video');
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.5
+  };
+  
+  const handleVideo = (entries) => {
+    entries.forEach(entry => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        if (video.paused) video.play().catch(err => console.log(err));
+      } else {
+        if (!video.paused) video.pause();
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(handleVideo, options);
+  videos.forEach(video => observer.observe(video));
+}
 
 
 
@@ -1006,44 +1032,75 @@ document.addEventListener('click', (e) => {
   }
 });
 
+
+
+
+
+// LIKES BUTTON CONNECT TO MONGO
 const modalLikeBtn = document.querySelector('.modal-footer-static .like');
-const modalSaveBtn = document.querySelector('.modal-footer-static .save');
 const modalLikesCount = document.querySelector('.modal-likes-count');
 
-
 if (modalLikeBtn) {
-  modalLikeBtn.addEventListener('click', () => {
-    if (!window.currentPostInModal) return;
+  modalLikeBtn.addEventListener('click', async () => {
+    // מזהים את הפוסט במודל
+    const postElement = document.querySelector('.modal-content');
+    if (!postElement) return;
 
-    const post = window.currentPostInModal;
-    const originalLikeBtn = post.querySelector('.post-actions .like');
-    const originalLikesCountSpan = post.querySelector('.likes-count');
-    
+    const postId = postElement.dataset.id; // כאן _id של הפוסט
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) return;
 
-    let currentLikes = parseInt(originalLikesCountSpan.textContent.replace(/[^\d]/g, '')) || 0;
-    const isLiked = modalLikeBtn.classList.contains("liked");
+    try {
+      // שולחים בקשה לשרת לעדכון הלייק
+      const response = await fetch(`/posts/${postId}/toggle-like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: currentUser })
+      });
 
-    if (!isLiked) {
-      modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"; // full heart
-      originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
-      modalLikeBtn.classList.add("liked");
-      originalLikeBtn.classList.add("liked");
-      currentLikes++;
-    } else {
-      modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png"; // empty heart
-      originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-      modalLikeBtn.classList.remove("liked");
-      originalLikeBtn.classList.remove("liked");
-      currentLikes = Math.max(0, currentLikes - 1);
+      const data = await response.json(); // { liked: true/false, likesCount: number }
+
+      // כפתור הלייק בפוסט המקורי
+      const originalPostElement = document.querySelector(`[data-id="${postId}"]`);
+      const originalLikeBtn = originalPostElement?.querySelector('.post-actions .like');
+      const originalLikesCount = originalPostElement?.querySelector('.likes-count');
+
+      // עדכון הכפתורים והספירה
+      if (data.liked) {
+        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
+        modalLikeBtn.classList.add('liked');
+        if (originalLikeBtn) {
+          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
+          originalLikeBtn.classList.add('liked');
+        }
+      } else {
+        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
+        modalLikeBtn.classList.remove('liked');
+        if (originalLikeBtn) {
+          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
+          originalLikeBtn.classList.remove('liked');
+        }
+      }
+
+      // עדכון ספירת הלייקים
+      modalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
+      if (originalLikesCount) originalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
+
+      // אנימציה
+      modalLikeBtn.classList.add('pop');
+      setTimeout(() => modalLikeBtn.classList.remove('pop'), 300);
+
+    } catch (err) {
+      console.error('Error toggling like:', err);
     }
-
-    modalLikesCount.textContent = `${currentLikes.toLocaleString()} likes`;
-    originalLikesCountSpan.textContent = `${currentLikes.toLocaleString()} likes`;
-
-    modalLikeBtn.classList.add("pop");
-    setTimeout(() => modalLikeBtn.classList.remove("pop"), 300);
   });
 }
+
+
+
+
+
+const modalSaveBtn = document.querySelector('.modal-footer-static .save');
 
 if (modalSaveBtn) {
   modalSaveBtn.addEventListener('click', () => {
@@ -1948,14 +2005,14 @@ textInputs.forEach(input => {
   });
 });
 
-document.addEventListener('click', (e) => {
-  if (!locationInput.contains(e.target) && !locationSuggestions.contains(e.target)) {
-    locationSuggestions.style.display = 'none';
-  }
-  if (!createModal.contains(e.target)) {
-    createEmojiPicker.style.display = 'none';
-  }
-});
+// document.addEventListener('click', (e) => {
+//   if (!locationInput.contains(e.target) && !locationSuggestions.contains(e.target)) {
+//     locationSuggestions.style.display = 'none';
+//   }
+//   if (!createModal.contains(e.target)) {
+//     createEmojiPicker.style.display = 'none';
+//   }
+// });
 
 // Toggle accessibility and advanced settings
 const accessibilityToggle = createModal.querySelector('.toggle-accessibility');

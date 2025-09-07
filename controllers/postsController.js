@@ -55,7 +55,7 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
       username: username,
       avatar: avatar,
       image: `/uploads/${file.filename}`,
-      likes: 0,
+      likes: [],
       text: text || '',
       comments: [],
       time: 'Just now',
@@ -82,5 +82,48 @@ router.get('/getAllPosts', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
+
+
+
+
+
+// Get average likes and comments per post for a user
+router.get('/avg-stats/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const stats = await postsModel.getUserAvgStats(username);
+    res.json(stats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+
+
+
+// Likes
+router.post('/:id/toggle-like', async (req, res) => {
+  const postId = req.params.id;
+  const { user } = req.body;
+
+  try {
+    const result = await postsModel.toggleLike(postId, user);
+    res.json(result); // { liked: true/false, likesCount: number }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+
+
+
+
+
+
 
 module.exports = router;
