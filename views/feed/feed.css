@@ -90,6 +90,11 @@
     body.dark-mode .confirmation-modal button:hover
     {
       background-color: #2e2e2e !important;
+    }   
+
+
+    body.dark-mode .sidebar-item #pfp-l {
+      filter: invert(0);
     }
     
 
@@ -193,9 +198,11 @@ body.dark-mode #scrollToTopBtn {
     }
 
     body.dark-mode .share-action span,
-    body.dark-mode .custom-filter img{
+    body.dark-mode .custom-filter img
+    {
       filter: invert(1);
     }
+
 
     body.dark-mode .share-action img{
       filter: invert(1);
@@ -463,6 +470,8 @@ body.dark-mode #scrollToTopBtn img {
     opacity: 1;
   }
 
+
+
   /* left side bar */
   
   .sidebar-left {
@@ -528,6 +537,7 @@ body.dark-mode #scrollToTopBtn img {
   #pfp-l {
   width: 30px;
   height: 30px;
+  border-radius: 50%;
   }
   
   #lftlogo {
@@ -896,11 +906,11 @@ body.dark-mode #scrollToTopBtn img {
     gap: 25px;
     /* אין top ואין transform */
     margin-left: 72%;
-    margin-top: -3860px;
+    margin-top: -3200px;
   }
 
     .sidebar-right.hide-0 {
-    margin-top: -3860px;
+    margin-top: -3200px;
   }
   .sidebar-right.hide-1 {
     margin-top: -1397px;
@@ -1049,6 +1059,8 @@ body.dark-mode #scrollToTopBtn img {
   .follow-btn:hover {
   color: #005289;
   }
+
+  
 
   .profile-picture {
       width: 40px; /* או 45px או מה שמתאים לך */
@@ -2895,6 +2907,7 @@ font-weight: 600;
   color: #000000;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 .collaborator-icon {
@@ -3087,6 +3100,7 @@ font-weight: 600;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
+
 #create-post-overlay {
   position: fixed;
   inset: 0;
@@ -3099,4 +3113,74 @@ font-weight: 600;
 }
 #create-post-overlay.visible {
   background: rgba(0, 0, 0, 0.5);
+}
+
+.post-video {
+  width: 500px;
+  height: fit-content;
+  max-height: 600px;
+  overflow: hidden
+}
+
+.post video {
+  width: 100%;
+  object-fit: contain;
+} 
+
+#map-overlay {
+  width: 100vw; 
+  height: 100vh; 
+  background: transparent;
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  z-index: 10000000;
+}
+
+#map-wrapper {
+  width: 600px;
+  height: 500px;
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  translate: -50% -50%;
+}
+
+#map-modal {
+  width: 600px;
+  height: 500px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius:  10px;
+}
+
+#exit-map {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+#save-map-marker {
+  height: 30px;
+  width: 100px;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  cursor: pointer;
+
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  background: #199aa9;
+  color: #fff;
+  font-size: 1em;
+}
+
+#save-map-marker:hover {
+  background: #167a85;
+  transform: translateY(-1px);
 }
