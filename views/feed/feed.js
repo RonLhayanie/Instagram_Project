@@ -1037,66 +1037,37 @@ document.addEventListener('click', (e) => {
 
 
 // LIKES BUTTON CONNECT TO MONGO
-const modalLikeBtn = document.querySelector('.modal-footer-static .like');
-const modalLikesCount = document.querySelector('.modal-likes-count');
+const postsWrapper = document.querySelector('.posts-list');
 
-if (modalLikeBtn) {
-  modalLikeBtn.addEventListener('click', async () => {
-    // מזהים את הפוסט במודל
-    const postElement = document.querySelector('.modal-content');
-    if (!postElement) return;
+postsWrapper.addEventListener('click', async (e) => {
+  const likeBtn = e.target.closest('.like');
+  if (!likeBtn) return;
 
-    const postId = postElement.dataset.id; // כאן _id של הפוסט
-    const currentUser = localStorage.getItem('currentUser');
-    if (!currentUser) return;
+  const postEl = likeBtn.closest('.post');
+  const postId = postEl.dataset.id;
+  const currentUser = localStorage.getItem('currentUser');
+  if (!currentUser) return;
 
-    try {
-      // שולחים בקשה לשרת לעדכון הלייק
-      const response = await fetch(`/posts/${postId}/toggle-like`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: currentUser })
-      });
+  try {
+    const res = await fetch(`/posts/${postId}/toggle-like`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: currentUser })
+    });
+    const data = await res.json(); // { liked: true/false, likesCount: number }
 
-      const data = await response.json(); // { liked: true/false, likesCount: number }
+    likeBtn.src = data.liked 
+      ? "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"
+      : "https://cdn-icons-png.flaticon.com/256/130/130195.png";
+    likeBtn.classList.toggle('liked', data.liked);
 
-      // כפתור הלייק בפוסט המקורי
-      const originalPostElement = document.querySelector(`[data-id="${postId}"]`);
-      const originalLikeBtn = originalPostElement?.querySelector('.post-actions .like');
-      const originalLikesCount = originalPostElement?.querySelector('.likes-count');
+    const likesCountEl = postEl.querySelector('.likes-count');
+    if (likesCountEl) likesCountEl.textContent = `${data.likesCount.toLocaleString()} likes`;
 
-      // עדכון הכפתורים והספירה
-      if (data.liked) {
-        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
-        modalLikeBtn.classList.add('liked');
-        if (originalLikeBtn) {
-          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
-          originalLikeBtn.classList.add('liked');
-        }
-      } else {
-        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-        modalLikeBtn.classList.remove('liked');
-        if (originalLikeBtn) {
-          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-          originalLikeBtn.classList.remove('liked');
-        }
-      }
-
-      // עדכון ספירת הלייקים
-      modalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
-      if (originalLikesCount) originalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
-
-      // אנימציה
-      modalLikeBtn.classList.add('pop');
-      setTimeout(() => modalLikeBtn.classList.remove('pop'), 300);
-
-    } catch (err) {
-      console.error('Error toggling like:', err);
-    }
-  });
-}
-
-
+  } catch (err) {
+    console.error('Error toggling like:', err);
+  }
+});
 
 
 
@@ -1989,7 +1960,7 @@ createModal.querySelector('#close-image').addEventListener('click', () => {
 
 // Location suggestions
 const locationInput = createModal.querySelector('#location-input');
-const locationSuggestions = createModal.querySelector('#location-suggestions');
+const places = createModal.querySelector('#location-suggestions');
 
 
 
