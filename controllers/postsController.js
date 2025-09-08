@@ -5,7 +5,8 @@ const multer = require('multer');
 const path = require('path');
 
 const { fileTypeFromBuffer } = require('file-type')
-const fs = require('fs')
+const fs = require('fs') 
+const { ObjectId } = require('mongodb');
 
 // הגדרת איפה Multer ישמור את הקבצים
 const storage = multer.diskStorage({
@@ -20,10 +21,13 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   const allowedMime = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
-  const ext = path.extname(file.originalname).toLowerCase();
   const allowedExt = [".jpeg", ".jpg", ".png", ".gif", ".mp4"];
+  console.log("file: ", file);
+  console.log("file.mimetype: ", file.mimetype);
 
-  if (allowedMime.includes(file.mimetype) && allowedExt.includes(ext)) {
+  const isTrue =allowedMime.includes(file.mimetype);
+
+  if (isTrue) {
     cb(null, true);
   } 
   else {
@@ -43,39 +47,52 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
     const { username, text, avatar } = req.body;
     const file = req.file;
 
-    if (!file) return res.status(400).json({ error: 'No file uploaded' });
+    let imagePath = null;
+    let postType = 'text';
 
-    console.log(`/uploads/${file.filename}`)
-    const buffer = await fs.promises.readFile(`uploads/${file.filename}`)
-    const type = await fileTypeFromBuffer(buffer) 
+    if (file) {
+      const buffer = await fs.promises.readFile(file.path);
+      const type = await fileTypeFromBuffer(buffer);
 
-    console.log(type.ext)
+      imagePath = `/uploads/${file.filename}`;
+      postType = type ? type.mime.split('/')[0] : 'unknown';
+    }
 
     const newPost = {
-      username: username,
-      avatar: avatar,
-      image: `/uploads/${file.filename}`,
+      username,
+      avatar: avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
+      image: imagePath,
       likes: [],
       text: text || '',
       comments: [],
       time: 'Just now',
       date: new Date().toDateString(),
-      type: type.mime.split('/')[0]
+      type: postType
     };
 
     await postsModel.Create(newPost);
     res.status(201).json({ message: 'Post created successfully', post: newPost });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Error in createPost:', err);
+    res.status(500).json({ error: 'Server error', details: err.message });
   }
 });
+
 
 // Get all posts
 router.get('/getAllPosts', async (req, res) => {
   try {
-    const posts = await postsModel.getAllPosts({ sort: { _id: -1 } }); // newest first
+    const posts = await postsModel.getAllPosts({ sort: { _id: -1 } });
+    console.log(posts);
+    const currentUser = req.query.user; // מגיע מהלקוח
+
+    if (currentUser) {
+      posts.forEach(p => {
+        p.liked = (p.likes || []).includes(currentUser);
+      });
+    }
+
     res.json(posts);
   } catch (err) {
     console.error(err);
@@ -83,6 +100,59 @@ router.get('/getAllPosts', async (req, res) => {
   }
 });
 
+
+
+
+// Get post by ID (לטעינת תגובות)
+router.get('/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    if (!ObjectId.isValid(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+    const post = await postsModel.findById(postId);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.json(post);
+  } catch (err) {
+    console.error('Error fetching post:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Add a comment to a post
+router.post('/:id/add-comment', async (req, res) => {
+  try {
+    const { username, text } = req.body;
+    const postId = req.params.id;
+    console.log(`Adding comment to post ${postId}`);
+    if (!ObjectId.isValid(postId)) {
+      console.error(`Invalid post ID: ${postId}`);
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+    if (!username || !text) {
+      console.error('Missing username or text');
+      return res.status(400).json({ error: 'Username and text are required' });
+    }
+    const post = await postsModel.findById(postId);
+    if (!post) {
+      console.error(`Post not found: ${postId}`);
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    const newComment = {
+      username,
+      text,
+      time: new Date().toISOString(),
+    };
+    post.comments.push(newComment);
+    await postsModel.update(post);
+    res.json({ message: 'Comment added successfully', comment: newComment, commentCount: post.comments.length });
+  } catch (err) {
+    console.error(`Error adding comment to post ${req.params.id}:`, err.message);
+    res.status(500).json({ error: 'Server error', details: err.message });
+  }
+});
 
 
 

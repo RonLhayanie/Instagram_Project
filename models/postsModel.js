@@ -39,14 +39,11 @@ async function toggleLike(postId, username) {
 
   let updatedLikes;
   if (hasLiked) {
-    // אם כבר סימן לייק - מסירים
-    updatedLikes = likes.filter(u => u !== username);
+    updatedLikes = likes.filter(u => u !== username); // מסיר לייק
   } else {
-    // אם לא סימן - מוסיפים
-    updatedLikes = [...likes, username];
+    updatedLikes = [...likes, username]; // מוסיף לייק
   }
 
-  // עדכון הפוסט בבסיס הנתונים
   await collection.updateOne(
     { _id: new ObjectId(postId) },
     { $set: { likes: updatedLikes } }
@@ -55,11 +52,43 @@ async function toggleLike(postId, username) {
   return { liked: !hasLiked, likesCount: updatedLikes.length };
 }
 
+async function update(post) {
+  try {
+    await collection.updateOne(
+      { _id: new ObjectId(post._id) },
+      { $set: { comments: post.comments } }
+    );
+  } catch (err) {
+    console.error('Error in update:', err.message);
+    throw err;
+  }
+}
 
+async function findById(postId) {
+  try {
+    if (!ObjectId.isValid(postId)) {
+      throw new Error('Invalid post ID');
+    }
+    const post = await collection.findOne({ _id: new ObjectId(postId) });
+    if (!post) {
+      throw new Error('Post not found');
+    }
+    return post;
+  } catch (err) {
+    console.error('Error in findById:', err.message);
+    throw err;
+  }
+}
 
 module.exports = { 
   Create,
   getAllPosts,
   getUserAvgStats,
-  toggleLike
+  toggleLike,
+  findById,
+  update
 };
+
+
+
+
