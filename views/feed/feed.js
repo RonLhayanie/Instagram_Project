@@ -34,6 +34,8 @@ async function loadPosts() {
       return;
     }
     postsWrapper.innerHTML = ''; // ניקוי הרשימה הקיימת
+    const currentUser = localStorage.getItem("currentUser");
+
 
     if (!Array.isArray(posts) || posts.length === 0) {
       console.warn('No posts received from server');
@@ -55,10 +57,10 @@ async function loadPosts() {
         ? `<p class="view-comments"><span class="view-comments-text">View all ${post.comments.length} comments</span></p>`
         : '';
 
-      // Mini images (likes preview)
-      const miniImages = Array.isArray(post.likedBy)
+        //mini avatars
+      const miniImages = Array.isArray(post.likedBy) && post.likedBy.length
         ? post.likedBy.slice(0, 2).map(u =>
-            `<img src="${u.profilePic || ''}" alt="${u.username || ''}" class="mini-image">`
+            `<img src="${u.profilePic || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png'}" alt="${u.username}" class="mini-image">`
           ).join('')
         : '';
 
@@ -118,8 +120,8 @@ async function loadPosts() {
         </div>
         <div class="post-description">
           <div class="likes-row">
-            <div class="mini-images">${miniImages}</div>
-            <span class="likes-count">${post.likes ?? 0} likes</span>
+            <span class="likes-count">${Array.isArray(post.likes) ? post.likes.length : 0} likes</span>
+
           </div>
           <p class="post-text">
             <span class="user-name">${post.username || 'Unknown'}</span>
@@ -143,6 +145,18 @@ async function loadPosts() {
 
       postsWrapper.appendChild(postEl); // הוספה בסוף הרשימה
       setupPostListeners(postEl, post); // חיבור event listeners
+
+
+
+        // ✅ סימון לייק אם המשתמש כבר סימן לייק
+      const currentUser = localStorage.getItem("currentUser");
+      if (post.likes.includes(currentUser)) {
+        const likeBtn = postEl.querySelector('.like');
+        likeBtn.classList.add('liked');
+        likeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
+  }
+
+
     });
 
     const noPostsMsg = document.getElementById('no-posts-message');
@@ -1021,7 +1035,6 @@ async function openCommentsModal(postEl, postData) {
       return;
     }
 
-    try {
       const avatarRes = await fetch('/users/getAvatarByUsername', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1044,11 +1057,8 @@ async function openCommentsModal(postEl, postData) {
       sendButton.classList.add('disabled');
       sendButton.disabled = true;
       showToast(document.getElementById('toast-comment'));
-    } catch (err) {
-      console.error('Error adding comment:', err);
-      alert('Failed to add comment. Please try again.');
-    }
-  });
+    } 
+  );
 
   // הצגת המודל
   modal.style.display = 'block';
@@ -1425,66 +1435,37 @@ document.addEventListener('click', (e) => {
 
 
 // LIKES BUTTON CONNECT TO MONGO
-const modalLikeBtn = document.querySelector('.modal-footer-static .like');
-const modalLikesCount = document.querySelector('.modal-likes-count');
+const postsWrapper = document.querySelector('.posts-list');
 
-if (modalLikeBtn) {
-  modalLikeBtn.addEventListener('click', async () => {
-    // מזהים את הפוסט במודל
-    const postElement = document.querySelector('.modal-content');
-    if (!postElement) return;
+postsWrapper.addEventListener('click', async (e) => {
+  const likeBtn = e.target.closest('.like');
+  if (!likeBtn) return;
 
-    const postId = postElement.dataset.id; // כאן _id של הפוסט
-    const currentUser = localStorage.getItem('currentUser');
-    if (!currentUser) return;
+  const postEl = likeBtn.closest('.post');
+  const postId = postEl.dataset.id;
+  const currentUser = localStorage.getItem('currentUser');
+  if (!currentUser) return;
 
-    try {
-      // שולחים בקשה לשרת לעדכון הלייק
-      const response = await fetch(`/posts/${postId}/toggle-like`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: currentUser })
-      });
+  try {
+    const res = await fetch(`/posts/${postId}/toggle-like`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: currentUser })
+    });
+    const data = await res.json(); // { liked: true/false, likesCount: number }
 
-      const data = await response.json(); // { liked: true/false, likesCount: number }
+    likeBtn.src = data.liked 
+      ? "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"
+      : "https://cdn-icons-png.flaticon.com/256/130/130195.png";
+    likeBtn.classList.toggle('liked', data.liked);
 
-      // כפתור הלייק בפוסט המקורי
-      const originalPostElement = document.querySelector(`[data-id="${postId}"]`);
-      const originalLikeBtn = originalPostElement?.querySelector('.post-actions .like');
-      const originalLikesCount = originalPostElement?.querySelector('.likes-count');
+    const likesCountEl = postEl.querySelector('.likes-count');
+    if (likesCountEl) likesCountEl.textContent = `${data.likesCount.toLocaleString()} likes`;
 
-      // עדכון הכפתורים והספירה
-      if (data.liked) {
-        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
-        modalLikeBtn.classList.add('liked');
-        if (originalLikeBtn) {
-          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
-          originalLikeBtn.classList.add('liked');
-        }
-      } else {
-        modalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-        modalLikeBtn.classList.remove('liked');
-        if (originalLikeBtn) {
-          originalLikeBtn.src = "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-          originalLikeBtn.classList.remove('liked');
-        }
-      }
-
-      // עדכון ספירת הלייקים
-      modalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
-      if (originalLikesCount) originalLikesCount.textContent = `${data.likesCount.toLocaleString()} likes`;
-
-      // אנימציה
-      modalLikeBtn.classList.add('pop');
-      setTimeout(() => modalLikeBtn.classList.remove('pop'), 300);
-
-    } catch (err) {
-      console.error('Error toggling like:', err);
-    }
-  });
-}
-
-
+  } catch (err) {
+    console.error('Error toggling like:', err);
+  }
+});
 
 
 
@@ -2371,7 +2352,7 @@ createModal.querySelector('#close-image').addEventListener('click', () => {
 
 // Location suggestions
 const locationInput = createModal.querySelector('#location-input');
-const locationSuggestions = createModal.querySelector('#location-suggestions');
+const places = createModal.querySelector('#location-suggestions');
 
 
 
@@ -2597,14 +2578,16 @@ async function createAndSetupPost(image) {
   formData.append('avatar', avatar);
   formData.append('text', text);
 
+  console.log("post data: ", formData);
   // שליחת הפוסט לשרת
   const res = await fetch('/posts/createPost', {
     method: 'POST',
     body: formData
   });
+
   if (!res.ok) {
     console.error('Failed to create post:', res.status, await res.text());
-    alert('Failed to create post. Please try again.');
+    alert('Failed to create post. Please try again later.');
     return;
   }
   const data = await res.json();
@@ -2679,6 +2662,8 @@ function updateSidebarMargin(distance) {
 //   if (viewCommentsText) {
 //     viewCommentsText.textContent = `View all ${count} comment${count !== 1 ? 's' : ''}`;
 //   }
+// }
+
 // }
 
 function setupPostEvents(postElement) {
@@ -2852,7 +2837,7 @@ function createPost({ username, avatar, image, likes, text, comments, time, date
     </div>
     <div class="post-description">
       <div class="likes-row">
-        <span class="likes-count">${likes} likes</span>
+        <span class="likes-count">0 likes</span>
       </div>
       <p class="post-text">
         <span class="user-name">${username}</span>

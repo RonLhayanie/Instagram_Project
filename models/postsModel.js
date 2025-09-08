@@ -39,14 +39,11 @@ async function toggleLike(postId, username) {
 
   let updatedLikes;
   if (hasLiked) {
-    // אם כבר סימן לייק - מסירים
-    updatedLikes = likes.filter(u => u !== username);
+    updatedLikes = likes.filter(u => u !== username); // מסיר לייק
   } else {
-    // אם לא סימן - מוסיפים
-    updatedLikes = [...likes, username];
+    updatedLikes = [...likes, username]; // מוסיף לייק
   }
 
-  // עדכון הפוסט בבסיס הנתונים
   await collection.updateOne(
     { _id: new ObjectId(postId) },
     { $set: { likes: updatedLikes } }
