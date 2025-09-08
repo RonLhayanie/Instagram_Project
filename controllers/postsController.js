@@ -152,6 +152,34 @@ router.delete('/:id', async (req, res) => {
   } 
 });
 
+// Edit a post's text
+router.put('/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { user, text } = req.body;
+
+    if (!ObjectId.isValid(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    const post = await postsModel.findById(postId);
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+    if (post.username !== user) return res.status(403).json({ error: 'You can only edit your own posts' });
+
+    // עדכון הטקסט במונגו
+    await collection.updateOne(
+      { _id: new ObjectId(postId) },
+      { $set: { text } }
+    );
+
+    res.json({ message: 'Post updated successfully' });
+
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Add a comment to a post
 router.post('/:id/add-comment', async (req, res) => {
   try {

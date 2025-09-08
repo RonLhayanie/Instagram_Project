@@ -3076,6 +3076,17 @@ font-weight: 600;
   transform: scale(1.1);
 }
 
+.edit-post-icon {
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.edit-post-icon:hover {
+  transform: scale(1.1);
+}
+
 .new-post {
   border-bottom: 2px solid #ccc; /* או כל צבע אחר */
   padding-bottom: 10px;

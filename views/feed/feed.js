@@ -1,3 +1,4 @@
+
 //sidebar navigation
 function gettomessages() {
   window.location.href = '../chats/chats.html';
@@ -106,7 +107,7 @@ async function loadPosts() {
           </button>
           <div class="more-menu" style="display: none;">
             <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
-            <img class="edit-post-icon" src="https://img.icons8.com/?size=48&id=dvZ3QGGN2K9v&format=png 1x, https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
+            <img class="edit-post-icon" src="https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
           </div>
         </div>
         ${mediaHtml}
@@ -243,6 +244,8 @@ function setupPostListeners(postEl, postData) {
       alert('Failed to delete post. Please try again.');
     }
   });
+
+  
 
 
   // כפתור תגובות (פתיחת מודל)
@@ -2551,10 +2554,12 @@ function setupPostEvents(postElement) {
   const moreOptionsBtn = postElement.querySelector('.more-options');
   const moreMenu = postElement.querySelector('.more-menu');
   const deleteIcon = postElement.querySelector('.delete-post-icon');
+  const editIcon = postElement.querySelector('.edit-post-icon');
   moreOptionsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
   });
+
   deleteIcon.addEventListener('click', () => {
     const postToDelete = deleteIcon.closest('.post');
     if (postToDelete) {
@@ -2562,6 +2567,8 @@ function setupPostEvents(postElement) {
       // עדכון מונים (imagePostsCount / textPostsCount) אם רלוונטי
     }
   });
+
+
 
   // הוספת תגובה מהפיד
   const addCommentBox = postElement.querySelector('.add-comment-box');
@@ -2628,6 +2635,7 @@ function createPost({ username, avatar, image, likes, text, comments, time, date
       </button>
       <div class="more-menu" style="display: none;">
         <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
+            <img class="edit-post-icon" src="https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
       </div>
     </div>
     ${
