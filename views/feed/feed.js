@@ -34,7 +34,6 @@ async function loadPosts() {
       return;
     }
     postsWrapper.innerHTML = ''; // ניקוי הרשימה הקיימת
-    const currentUser = localStorage.getItem("currentUser");
 
 
     if (!Array.isArray(posts) || posts.length === 0) {
@@ -107,6 +106,7 @@ async function loadPosts() {
           </button>
           <div class="more-menu" style="display: none;">
             <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
+            <img class="edit-post-icon" src="https://img.icons8.com/?size=48&id=dvZ3QGGN2K9v&format=png 1x, https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
           </div>
         </div>
         ${mediaHtml}
@@ -153,7 +153,12 @@ async function loadPosts() {
         const likeBtn = postEl.querySelector('.like');
         likeBtn.classList.add('liked');
         likeBtn.src = "https://cdn-icons-png.flaticon.com/256/2107/2107845.png";
+
   }
+        if (currentUser !== post.username) { 
+        const moreOptions = postEl.querySelector('.more-options');
+        moreOptions.style.pointerEvents = 'none';
+      }
 
 
     });
@@ -216,14 +221,19 @@ function setupPostListeners(postEl, postData) {
   const moreOptionsBtn = postEl.querySelector('.more-options');
   const moreMenu = postEl.querySelector('.more-menu');
   const deleteIcon = postEl.querySelector('.delete-post-icon');
-  
+
   moreOptionsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
   });
+
+
+  const currentUser = localStorage.getItem("currentUser");
   deleteIcon.addEventListener('click', async () => {
     try {
-      const res = await fetch(`/posts/${postId}`, { method: 'DELETE' });
+      const res = await fetch(`/posts/${postId}?user=${encodeURIComponent(currentUser)}`, {
+        method: 'DELETE'
+      });
       if (!res.ok) throw new Error('Failed to delete post');
       postEl.remove();
       // עדכון מרג'ין לפי סוג הפוסט
@@ -233,6 +243,7 @@ function setupPostListeners(postEl, postData) {
       alert('Failed to delete post. Please try again.');
     }
   });
+
 
   // כפתור תגובות (פתיחת מודל)
   const commentBtn = postEl.querySelector('.comment');
@@ -2254,17 +2265,21 @@ function isValidImageUrl(url) {
   return /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|bmp)$/i.test(url);
 }
 
-const urlErrorMsg = createModal.querySelector('#error-message');
 
 createModal.querySelector('#submit-new-post').addEventListener('click', () => {
   const file = fileInput.files[0];
   const url = urlInput.value.trim();
   const text = createModal.querySelector('#new-post-desc').value.trim();
   const urlErrorMsg = createModal.querySelector('#error-message');
+  const img = createModal.querySelector('#post-image-preview');
 
   // בדיקה שהתיאור לא ריק
   if (!text) {
     alert('Please write a description.');
+    return;
+  }
+  if (!file && (!url || !img.src)) {
+    alert('Please upload an image or video, or provide a valid URL.');
     return;
   }
 
@@ -2288,10 +2303,7 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
         addPost(resizedImage, text);
       });
     }
-  } else {
-    // אם אין תמונה, אבל יש תיאור - שתף רק עם התיאור
-    addPost(null, text);
-  }
+  } 
 });
 
 
