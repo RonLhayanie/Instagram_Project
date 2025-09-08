@@ -83,7 +83,7 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 // Get all posts
 router.get('/getAllPosts', async (req, res) => {
   try {
-    const posts = await postsModel.getAllPosts({ sort: { _id: -1 } });
+    const posts = await postsModel.getAllPosts({ sort: { date: 1 } });
     console.log(posts);
     const currentUser = req.query.user; // מגיע מהלקוח
 
@@ -120,6 +120,8 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
 
 // Add a comment to a post
 router.post('/:id/add-comment', async (req, res) => {

@@ -131,7 +131,6 @@ async function loadPosts() {
           </p>
           <div class="comment-section">
             ${commentsPreview}
-            <div class="comments-list"></div>
             <div class="comment-row">
               <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
               <span class="post-button disabled">Post</span>
@@ -217,6 +216,7 @@ function setupPostListeners(postEl, postData) {
   const moreOptionsBtn = postEl.querySelector('.more-options');
   const moreMenu = postEl.querySelector('.more-menu');
   const deleteIcon = postEl.querySelector('.delete-post-icon');
+  
   moreOptionsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
@@ -251,7 +251,7 @@ function setupPostListeners(postEl, postData) {
   // הוספת תגובה ישירות מהפוסט
   const addCommentBox = postEl.querySelector('.add-comment-box');
   const postButton = postEl.querySelector('.post-button');
-  const commentsList = postEl.querySelector('.comments-list');
+  const commentsList = document.querySelector('#comments-modal .comments-list');
 
   // הפעלה/השבתת כפתור התגובה בהתאם לקלט
   addCommentBox.addEventListener('input', () => {
@@ -276,7 +276,7 @@ function setupPostListeners(postEl, postData) {
         body: JSON.stringify({ username: currentUser })
       });
       const avatarData = await avatarRes.json();
-      const userProfilePic = avatarData.avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
+      const userProfilePic = avatarData.avatar;
 
       // שליחת התגובה לשרת
       const res = await fetch(`/posts/${postId}/add-comment`, {
@@ -285,12 +285,12 @@ function setupPostListeners(postEl, postData) {
         body: JSON.stringify({ username: currentUser, avatar: userProfilePic, text })
       });
       if (!res.ok) throw new Error('Failed to add comment');
-      const updatedPost = await res.json();
+      const UpdateComment = await res.json();
 
       // עדכון התצוגה
-      addCommentToList(commentsList, { username: currentUser, avatar: userProfilePic, text });
-      updateCommentsPreview(postEl, updatedPost.comments.length);
-
+     
+      updateCommentsPreview(postEl, UpdateComment.comment);
+      document.querySelector('.view-comments-text').innerHTML = `View all ${UpdateComment.commentCount} comments`;
       addCommentBox.value = '';
       postButton.classList.add('disabled');
       showToast(document.getElementById('toast-comment'));
@@ -776,138 +776,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
 /// comment feature
-const commentData = {};
 
-// רשימת משתמשים מדומים ותמונות פרופיל
-const dummyUsers = [
-  { username: "ariel_yeshurun", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
-  { username: "shira_katz", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
-  { username: "david_gold", avatar: "https://randomuser.me/api/portraits/men/54.jpg" },
-  { username: "aya_cohen", avatar: "https://randomuser.me/api/portraits/women/65.jpg" },
-  { username: "tal_levi", avatar: "https://randomuser.me/api/portraits/men/77.jpg" },
-  { username: "neta_friedman", avatar: "https://randomuser.me/api/portraits/women/28.jpg" },
-  { username: "ido_barak", avatar: "https://randomuser.me/api/portraits/men/12.jpg" },
-  { username: "lior_golan", avatar: "https://randomuser.me/api/portraits/men/20.jpg" },
-  { username: "moran_shaked", avatar: "https://randomuser.me/api/portraits/women/12.jpg" },
-  { username: "or_cohen", avatar: "https://randomuser.me/api/portraits/men/41.jpg" },
-];
-
-const dummyTexts = [
-  "Awesome post!",
-  "Really love this picture.",
-  "Thanks for sharing!",
-  "Such a cool post!",
-  "Amazing, so beautiful.",
-  "Love this place!",
-  "Inspiring content.",
-  "Great to see this here.",
-  "Keep up the great work!",
-  "Fantastic post, thanks!",
-];
 
 document.querySelectorAll('.view-comments-text').forEach(viewBtn => {
   viewBtn.addEventListener('click', () => {
     const post = viewBtn.closest('.post');
-    if (!post) return;
-
-    // מזהה הפוסט
-    const postId = post.id || post.getAttribute('data-post-id');
-    window.currentPostInModal = post;
-
-    // פרטי הפוסט למודל
-    const postImageEl = post.querySelector('.post-image img');
-    const postImageSrc = postImageEl ? postImageEl.src : '';
-
-    const userAvatarEl = post.querySelector('.user-avatar');
-    const userAvatarSrc = userAvatarEl ? userAvatarEl.src : '';
-
-    const usernameEl = post.querySelector('.user-name');
-    const username = usernameEl ? usernameEl.textContent : '';
-
-    const postLikesEl = post.querySelector('.likes-count');
-    const modalLikesEl = document.querySelector('.modal-likes-count');
-    if (postLikesEl && modalLikesEl) {
-      modalLikesEl.textContent = postLikesEl.textContent;
-    }
-
-    const descriptionEl = post.querySelector('.post-text .full-text');
-    const description = descriptionEl ? descriptionEl.textContent : '';
-
-    const modal = document.querySelector('.comment-modal');
-
-    // עדכון מידע בפנים המודל
-    modal.querySelectorAll('.modal-user-avatar').forEach(el => el.src = userAvatarSrc);
-    modal.querySelectorAll('.modal-username').forEach(el => el.textContent = username);
-    const descriptionTarget = modal.querySelector('.modal-post-description');
-    if (descriptionTarget) descriptionTarget.textContent = description;
-    modal.querySelector('.modal-post-image').src = postImageSrc;
-    modal.querySelector('textarea').value = '';
-
-    modal.setAttribute('data-post-id', postId); // לשימוש בעת הוספת תגובה
-
-    // ניקוי תגובות ישנות לפני טעינה
-    const commentsList = modal.querySelector('.comments-list');
-
-      commentsList.querySelectorAll('.comment-item:not(.writing)').forEach(el => el.remove());
-
-    // טען תגובות אמיתיות ששמרנו
-    const postComments = commentData[postId] || [];
-    postComments.forEach(comment => {
-      const commentEl = document.createElement('div');
-      commentEl.className = 'comment-item';
-      commentEl.innerHTML = `
-        <img src="${comment.avatar}" alt="${comment.username}" class="comment-avatar">
-        <div class="comment-content">
-          <span class="comment-username">${comment.username}</span>
-          <span class="comment-text">${comment.text}</span>
-        </div>
-      `;
-      commentsList.appendChild(commentEl);
-    });
-
-    // מספר כולל תגובות בפוסט (מתוך הטקסט של view comments)
-    const viewCommentsText = viewBtn.textContent || '';
-    const match = viewCommentsText.match(/\d+/);
-    const totalCommentsCount = match ? parseInt(match[0], 10) : 0;
-
-    // חשב כמה תגובות מדומות צריך להוסיף כדי להשלים את המספר
-    const dummyCount = totalCommentsCount - postComments.length;
-
-    for (let i = 0; i < dummyCount; i++) {
-      const user = dummyUsers[i % dummyUsers.length];
-      const text = dummyTexts[i % dummyTexts.length];
-
-      const dummyCommentEl = document.createElement('div');
-      dummyCommentEl.className = 'comment-item';
-      dummyCommentEl.innerHTML = `
-        <img src="${user.avatar}" alt="${user.username}" class="comment-avatar">
-        <div class="comment-content">
-          <span class="comment-username">${user.username}</span>
-          <span class="comment-text">${text}</span>
-        </div>
-      `;
-      commentsList.appendChild(dummyCommentEl);
-    }
-
-    // סנכרון לייק ושמירה
-    const originalLikeBtn = post.querySelector('.post-actions .like');
-    const modalLikeBtn = document.querySelector('.modal-footer-static .like');
-    const isLiked = originalLikeBtn.classList.contains('liked');
-    modalLikeBtn.classList.toggle('liked', isLiked);
-    modalLikeBtn.src = isLiked
-      ? "https://cdn-icons-png.flaticon.com/256/2107/2107845.png"
-      : "https://cdn-icons-png.flaticon.com/256/130/130195.png";
-
-    const originalSaveBtn = post.querySelector('.post-actions .save');
-    const modalSaveBtn = document.querySelector('.modal-footer-static .save');
-    const isSaved = originalSaveBtn.classList.contains('saved');
-    modalSaveBtn.classList.toggle('saved', isSaved);
-    modalSaveBtn.src = isSaved
-      ? "https://static.thenounproject.com/png/bookmark-icon-809340-512.png"
-      : "https://static.thenounproject.com/png/bookmark-icon-809338-512.png";
-
-    // פתח את המודל
-    openCommentsModal();
+    fetch(`/posts/${post.dataset.id}`)
+      .then(res => res.json())
+      .then(postData => openCommentsModal(post, postData))
   });
 });
 
@@ -995,11 +871,11 @@ async function openCommentsModal(postEl, postData) {
       throw new Error('Failed to fetch post');
     }
     
-    const updatedPost = await res.json();
+    const UpdateComment = await res.json();
 
 // הוספת התגובות לרשימה
-  if (Array.isArray(updatedPost.comments)) {
-    updatedPost.comments.forEach(comment => {
+  if (Array.isArray(UpdateComment.comments)) {
+    UpdateComment.comments.forEach(comment => {
       addCommentToList(commentsList, comment);
     });
   } else {
@@ -1007,7 +883,7 @@ async function openCommentsModal(postEl, postData) {
   }
 
 // עדכון תצוגת מספר התגובות
-  updateCommentsPreview(postEl, updatedPost.comments.length || 0);
+  updateCommentsPreview(postEl, UpdateComment.comments.length || 0);
 } catch (err) {
   console.error('Error loading comments:', err);
   alert('שגיאה בטעינת התגובות. בדוק אם הפוסט קיים או נסה שוב.');
@@ -1049,10 +925,11 @@ async function openCommentsModal(postEl, postData) {
         body: JSON.stringify({ username: currentUser, avatar: userProfilePic, text })
       });
       if (!res.ok) throw new Error('Failed to add comment');
-      const updatedPost = await res.json();
+      const UpdateComment = await res.json();
 
       addCommentToList(commentsList, { username: currentUser, avatar: userProfilePic, text });
-      updateCommentsPreview(postEl, updatedPost.comments.length);
+      console.log('UpdateComment', UpdateComment);
+      updateCommentsPreview(postEl, UpdateComment.commentCount);
       modalTextarea.value = '';
       sendButton.classList.add('disabled');
       sendButton.disabled = true;
@@ -1114,9 +991,7 @@ function updateCommentsPreview(postEl, count) {
         viewCommentsText.textContent = `View all ${count} comments`;
       }
     }
-  } else if (viewComments) {
-    viewComments.remove();
-  }
+  } 
 }
 
 function closeCommentModal() {
@@ -1210,53 +1085,7 @@ postComments.forEach(comment => {
  const viewCommentsEl = post.querySelector('.view-comments-text');
     const viewCommentsText = viewCommentsEl ? viewCommentsEl.textContent : '';
     const match = viewCommentsText ? viewCommentsText.match(/\d+/) : null;
-    const totalCommentsCount = match ? parseInt(match[0], 10) : 0;
 
-    // רשימת משתמשים מדומים ותמונות פרופיל
-    const dummyUsers = [
-      { username: "ariel_yeshurun", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
-      { username: "shira_katz", avatar: "https://randomuser.me/api/portraits/women/44.jpg" },
-      { username: "david_gold", avatar: "https://randomuser.me/api/portraits/men/54.jpg" },
-      { username: "aya_cohen", avatar: "https://randomuser.me/api/portraits/women/65.jpg" },
-      { username: "tal_levi", avatar: "https://randomuser.me/api/portraits/men/77.jpg" },
-      { username: "neta_friedman", avatar: "https://randomuser.me/api/portraits/women/28.jpg" },
-      { username: "ido_barak", avatar: "https://randomuser.me/api/portraits/men/12.jpg" },
-      { username: "lior_golan", avatar: "https://randomuser.me/api/portraits/men/20.jpg" },
-      { username: "moran_shaked", avatar: "https://randomuser.me/api/portraits/women/12.jpg" },
-      { username: "or_cohen", avatar: "https://randomuser.me/api/portraits/men/41.jpg" },
-    ];
-
-    const dummyTexts = [
-      "Awesome post!",
-      "Really love this picture.",
-      "Thanks for sharing!",
-      "Such a cool post!",
-      "Amazing, so beautiful.",
-      "Love this place!",
-      "Inspiring content.",
-      "Great to see this here.",
-      "Keep up the great work!",
-      "Fantastic post, thanks!",
-    ];
-
-    // חשב כמה תגובות מדומות להוסיף כדי להשלים למספר התגובות הכולל
-    const dummyCount = totalCommentsCount - postComments.length;
-
-    for (let i = 0; i < dummyCount; i++) {
-      const user = dummyUsers[i % dummyUsers.length];
-      const text = dummyTexts[i % dummyTexts.length];
-
-      const dummyCommentEl = document.createElement('div');
-      dummyCommentEl.className = 'comment-item';
-      dummyCommentEl.innerHTML = `
-        <img src="${user.avatar}" alt="${user.username}" class="comment-avatar">
-        <div class="comment-content">
-          <span class="comment-username">${user.username}</span>
-          <span class="comment-text">${text}</span>
-        </div>
-      `;
-      commentsList.appendChild(dummyCommentEl);
-    }
 
 
 function updateModalSaveState() {
@@ -1548,64 +1377,64 @@ function showToast(toastElement) {
   }, 1500);
 }
 
-document.querySelectorAll('.send-comment').forEach(button => {
-  button.addEventListener('click',async () => {
-    const commentInput = button.closest('.comment-input');
-    const textarea = commentInput.querySelector('textarea');
-    const text = textarea.value.trim();
-    if (!text) return;
+// document.querySelectorAll('.send-comment').forEach(button => {
+//   button.addEventListener('click',async () => {
+//     const commentInput = button.closest('.comment-input');
+//     const textarea = commentInput.querySelector('textarea');
+//     const text = textarea.value.trim();
+//     if (!text) return;
 
-    const modal = document.querySelector('.comment-modal');
-    const postId = modal.getAttribute('data-post-id'); // משייך לפוסט פתוח
+//     const modal = document.querySelector('.comment-modal');
+//     const postId = modal.getAttribute('data-post-id'); // משייך לפוסט פתוח
 
-    const commentsList = modal.querySelector('.comments-list');
-    const writingIndicator = modal.querySelector('.comment-item.writing');
+//     const commentsList = modal.querySelector('.comments-list');
+//     const writingIndicator = modal.querySelector('.comment-item.writing');
 
 
-    const username =  localStorage.getItem('currentUser');
-    const userProfilePic = await avatarFetch(username);
+//     const username =  localStorage.getItem('currentUser');
+//     const userProfilePic = await avatarFetch(username);
 
     
-    const commentEl = document.createElement('div');
-    commentEl.className = 'comment-item';
-    commentEl.innerHTML = `
-      <img src="${userProfilePic}" alt="${username}" class="comment-avatar">
-      <div class="comment-content">
-        <span class="comment-username">${username}</span>
-        <span class="comment-text">${text}</span>
-      </div>
-    `;
+//     const commentEl = document.createElement('div');
+//     commentEl.className = 'comment-item';
+//     commentEl.innerHTML = `
+//       <img src="${userProfilePic}" alt="${username}" class="comment-avatar">
+//       <div class="comment-content">
+//         <span class="comment-username">${username}</span>
+//         <span class="comment-text">${text}</span>
+//       </div>
+//     `;
 
-    // commentsList.prepend(writingIndicator);
-    commentsList.appendChild(commentEl);
+//     // commentsList.prepend(writingIndicator);
+//     commentsList.appendChild(commentEl);
 
-    // שמירה במבנה תגובות
-    if (!commentData[postId]) {
-      commentData[postId] = [];
-    }
-    commentData[postId].unshift({
-      username,
-      avatar: userProfilePic,
-      text
-    });
+//     // שמירה במבנה תגובות
+//     if (!commentData[postId]) {
+//       commentData[postId] = [];
+//     }
+//     commentData[postId].unshift({
+//       username,
+//       avatar: userProfilePic,
+//       text
+//     });
 
-    // איפוס התיבה
-    textarea.value = "";
-    textarea.dispatchEvent(new Event('input'));
-// עדכון טקסט view comments
-const viewComments = window.currentPostInModal?.querySelector('.view-comments-text');
-if (viewComments) {
-  const match = viewComments.textContent.match(/\d+/);
-  const base = match ? parseInt(match[0], 10) : 0;
-  const total = base + 1;
+//     // איפוס התיבה
+//     textarea.value = "";
+//     textarea.dispatchEvent(new Event('input'));
+// // עדכון טקסט view comments
+// const viewComments = window.currentPostInModal?.querySelector('.view-comments-text');
+// if (viewComments) {
+//   const match = viewComments.textContent.match(/\d+/);
+//   const base = match ? parseInt(match[0], 10) : 0;
+//   const total = base + 1;
 
-  viewComments.textContent = `View all ${total} comments`;
-}
+//   viewComments.textContent = `View all ${total} comments`;
+// }
 
-    const toastComment = document.getElementById('toast-comment');
-    showToast(toastComment);
-  });
-});
+//     const toastComment = document.getElementById('toast-comment');
+//     showToast(toastComment);
+//   });
+// });
 
 document.querySelectorAll('.post-button').forEach(postBtn => {
   postBtn.addEventListener('click', () => {
@@ -2734,41 +2563,16 @@ function setupPostEvents(postElement) {
   addCommentBox.addEventListener('input', function() {
     postButton.classList.toggle('disabled', !this.value.trim());
     if (this.value.trim()) {
-      if (!commentsList.querySelector('.writing')) {
-        commentsList.appendChild(writingComment.cloneNode(true));
-      }
+      // if (!commentsList.querySelector('.writing')) {
+      //   commentsList.appendChild(writingComment.cloneNode(true));
+      // }
     } else {
       const existingWriting = commentsList.querySelector('.writing');
       if (existingWriting) existingWriting.remove();
     }
   });
 
-  postButton.addEventListener('click', function() {
-    const commentText = addCommentBox.value.trim();
-    if (commentText && !this.classList.contains('disabled')) {
-      if (!commentData[postId]) commentData[postId] = [];
-      const newComment = {
-        avatar: 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
-        username: '_ron_lhayanie',
-        text: commentText
-      };
-      commentData[postId].push(newComment);
 
-      addCommentBox.value = '';
-      postButton.classList.add('disabled');
-      const existingWriting = commentsList.querySelector('.writing');
-      if (existingWriting) existingWriting.remove();
-
-      const totalComments = commentData[postId].length;
-      viewCommentsText.textContent = `View all ${totalComments} comment${totalComments !== 1 ? 's' : ''}`;
-      showToast(document.getElementById('toast-comment'));
-    }
-  });
-
-  // פתיחת מודל תגובות מהטקסט "View X Comments"
-  viewCommentsText.addEventListener('click', () => {
-    openPostInModal(postElement);
-  });
 }
 
 
@@ -2847,7 +2651,6 @@ function createPost({ username, avatar, image, likes, text, comments, time, date
       </p>
       <div class="comment-section">
         <p class="view-comments"><span class="view-comments-text">View all ${comments.length} comments</span></p>
-        <div class="comments-list"></div>
         <div class="comment-row">
           <textarea class="add-comment-box" placeholder="Add a comment..."></textarea>
           <span class="post-button">Post</span>
