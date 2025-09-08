@@ -80,13 +80,33 @@ async function findById(postId) {
   }
 }
 
+async function deletePost(postId) {
+  try {
+    if (!ObjectId.isValid(postId)) {
+      throw new Error('Invalid post ID');
+    }
+
+    const result = await collection.deleteOne({ _id: new ObjectId(postId) });
+    if (result.deletedCount === 0) {
+      throw new Error('Post not found');
+    }
+
+    return result;
+  } catch (err) {
+    console.error('Error in delete:', err.message);
+    throw err;
+  }
+}
+
+
 module.exports = { 
   Create,
   getAllPosts,
   getUserAvgStats,
   toggleLike,
   findById,
-  update
+  update,
+  deletePost
 };
 
 

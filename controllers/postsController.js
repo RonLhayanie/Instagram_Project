@@ -121,7 +121,36 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Delete a post
+router.delete('/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const username = req.query.user; // מגיע מהלקוח 
+    console.log(`Request to delete post ${postId} by user ${username}`);
+    
+    if (!ObjectId.isValid(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
 
+    const post = await postsModel.findById(postId);   
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    } 
+
+    if (post.username !== username) {
+      return res.status(403).json({ error: 'You can only delete your own posts' });
+    }
+
+    // מחיקה מהמונגו
+    await postsModel.deletePost(postId);
+
+    res.json({ message: 'Post deleted successfully' });
+
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(500).json({ error: 'Server error' });
+  } 
+});
 
 // Add a comment to a post
 router.post('/:id/add-comment', async (req, res) => {
@@ -189,13 +218,5 @@ router.post('/:id/toggle-like', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
-
-
-
-
-
-
 
 module.exports = router;
