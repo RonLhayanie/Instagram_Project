@@ -818,17 +818,17 @@ async function openCommentsModal(postEl, postData) {
 
   // load image/video
   const modalMediaType = postData.type
-  if(modalMediaType === 'image') {
+  setTimeout(()=>{if(modalMediaType === 'image') {
     modal.querySelector('.modal-post-video').style.display = 'none'
     modal.querySelector('.modal-post-image').style.display = 'block'
-    modal.querySelector('.modal-post-image').src = postEl.querySelector('.post-image img').src
+    modal.querySelector('.modal-post-image').src = postData.image
   }
   else {
     modal.querySelector('.modal-post-image').style.display = 'none'
     modal.querySelector('.modal-post-video').style.display = 'block'
-    modal.querySelector('.modal-post-video source').src = postEl.querySelector('.post-video video source').src
+    modal.querySelector('.modal-post-video').src = postData.image
   }
-
+}, 2000)
   // עדכון תוכן המודל
   const avatarSrc = postEl.querySelector('.user-avatar')?.src || '';
   modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);

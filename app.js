@@ -21,7 +21,7 @@ app.use('/users', usersRouter)
 app.use('/chats', chatsRouter)
 app.use('/posts', postsRouter)
 app.use('/weather', weatherRouter);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('uploads'));
 
 
 app.get('/', (req, res) => {
