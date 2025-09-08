@@ -69,7 +69,7 @@ async function loadPosts() {
       } else if (type === 'video' && post.image) {
         mediaHtml = `
           <div class="post-video">
-            <video width="100%" height="auto" controls loop>
+            <video width="100%" height="auto" controls loop autoplay>
               <source src="${post.image}" type="video/mp4">
               Your browser does not support the video tag.
             </video>
@@ -926,8 +926,20 @@ async function openCommentsModal(postEl, postData) {
   }
   const postId = postEl.dataset.id || postEl.id;
 
+  // load image/video
+  const modalMediaType = postData.type
+  if(modalMediaType === 'image') {
+    modal.querySelector('.modal-post-video').style.display = 'none'
+    modal.querySelector('.modal-post-image').style.display = 'block'
+    modal.querySelector('.modal-post-image').src = postEl.querySelector('.post-image img').src
+  }
+  else {
+    modal.querySelector('.modal-post-image').style.display = 'none'
+    modal.querySelector('.modal-post-video').style.display = 'block'
+    modal.querySelector('.modal-post-video source').src = postEl.querySelector('.post-video video source').src
+  }
+
   // עדכון תוכן המודל
-  modal.querySelector('.modal-post-image').src = postEl.querySelector('.post-image img')?.src || '';
   const avatarSrc = postEl.querySelector('.user-avatar')?.src || '';
   modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
   const username = postEl.querySelector('.user-name')?.textContent || '';
@@ -1873,8 +1885,6 @@ let avatar = 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png';
 const createModal = document.createElement('div');
 createModal.className = 'create-post-modal';
 createModal.innerHTML = `
-<link rel="stylesheet" href="styles.css">
-
 <div class="create-post-overlay" id="createModal">
   <button id="close-create-modal">×</button>
   <div class="modal-instagram-layout">
