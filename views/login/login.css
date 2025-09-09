@@ -88,36 +88,6 @@
     top: 36.5%;
 }
 
-.tooltip    /* "more info" text */ 
-{
-    display: none;
-    position: absolute;
-    padding: 8px 12px;
-    border-radius: 4px;
-    z-index: 10;
-    text-align: left;
-    left: 95%;
-
-    background-color: #3f3f3f;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 12px;
-    width: 300px;
-}
-#tooltipUsername
-{
-    top: 15%;
-}
-#tooltipPassword
-{
-    top: 49%;
-}
-
-.syntaxUserPass:hover + .tooltip    /* appears only when hovering */
-{
-    display: block;
-}
-
 
 #passlabel
 {
@@ -427,4 +397,18 @@ input[id="pass"]:not(:placeholder-shown) ~ .showButton     /* appear only when t
 
     font-size: 12px;
     color: #767676;
+}
+
+#usererror.show
+{
+    display: block;
+    text-align: center;
+    color: red;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.userpassword:has(#usererror.show) .labels   /* adjust label when Verification is shown */
+{
+    top: 20%; 
 }

@@ -90,8 +90,6 @@ async function unfollowUser(currentUsername, targetUsername) {
 }
 
 
-
-
 //Use if need to add a field to users
 /*
 async function addFollowingAndFollowersToExistingUsers() {

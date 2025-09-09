@@ -28,4 +28,4 @@ app.get('/', (req, res) => {
     res.redirect('login/login.html')
 })
 
-app.listen(3000)
+app.listen(3000);
