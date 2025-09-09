@@ -1,3 +1,4 @@
+
 //sidebar navigation
 function gettomessages() {
   window.location.href = '../chats/chats.html';
@@ -21,7 +22,7 @@ window.addEventListener('load', () => {
 
 
 // load posts from server
-async function loadPosts(loadtype="All") {
+async function loadPosts(filter = null, loadtype="All") {
   try {
     const currentUser = localStorage.getItem('currentUser')
     console.log(loadtype)
@@ -155,7 +156,7 @@ async function loadPosts(loadtype="All") {
 
 
 
-        // ✅ סימון לייק אם המשתמש כבר סימן לייק
+        //  סימון לייק אם המשתמש כבר סימן לייק
       const currentUser = localStorage.getItem("currentUser");
       if (post.likes.includes(currentUser)) {
         const likeBtn = postEl.querySelector('.like');
@@ -171,7 +172,45 @@ async function loadPosts(loadtype="All") {
 
     });
 
-    
+
+    if (filter)
+    {
+      if (SearchFilters.onlyPostsILiked)
+      {
+        document.querySelectorAll('.post').forEach(postEl => {
+          const likebtn = postEl.querySelector('.like');
+          if (!likebtn.classList.contains('liked'))
+          {
+            postEl.style.display = "none";
+          }
+        })
+      }
+
+
+      if (SearchFilters.filterType.Video && !SearchFilters.filterType.Image)
+          {
+            document.querySelectorAll('.post.imgtype').forEach(postEl => {
+              postEl.style.display = "none";
+            })
+          }    
+
+      if (SearchFilters.filterType.Image && !SearchFilters.filterType.Video)
+      {
+        document.querySelectorAll('.post.videotype').forEach(postEl => {
+          postEl.style.display = "none";
+        })
+      }
+
+      if (!SearchFilters.filterType.Image && !SearchFilters.filterType.Video)
+      {
+        document.querySelectorAll('.post').forEach(postEl => {
+          postEl.style.display = "none";
+        })
+      }
+  
+        
+
+    }
 
     enableScrollAutoplay();
   } catch (err) {
@@ -626,6 +665,50 @@ const toggleBtn = document.getElementById("search-toggle");
 const modal = document.getElementById("search-modal");
 const closeBtn = document.getElementById("close-search");
 const sidebarLeft = document.querySelector(".sidebar-left");
+const filtersDropdown = document.getElementById("filter-dropdown");
+
+
+//open/close search filters
+function OpenSerchFilters()
+{
+  if (filtersDropdown.style.display == "none")
+  {
+    filtersDropdown.style.display = "block";
+  }
+  else
+  {
+    filtersDropdown.style.display = "none";
+
+  }
+}
+
+//Filter click listener
+const SearchFilters = {
+    onlyPostsILiked: false,
+    filterType: {Video: true, Image: true},
+}
+
+document.getElementById("onlyPostsILiked").addEventListener("click", () => {
+  SearchFilters.onlyPostsILiked = !SearchFilters.onlyPostsILiked;
+  loadPosts(SearchFilters);
+})
+
+document.getElementById("filterVideo").addEventListener("click", () => {
+  SearchFilters.filterType.Video = !SearchFilters.filterType.Video;
+  loadPosts(SearchFilters);
+
+})
+
+document.getElementById("filterImage").addEventListener("click", () => {
+  SearchFilters.filterType.Image = !SearchFilters.filterType.Image;
+  loadPosts(SearchFilters);
+
+})
+
+
+
+
+
 
 const animationDuration = 500; // זמן האנימציה במילישניות (0.5 שניות)
 
@@ -641,9 +724,12 @@ toggleBtn.addEventListener("click", () => {
 
 closeBtn.addEventListener("click", () => {
   sidebarLeft.classList.remove("sidebar--collapsed");
+  document.getElementById("filter-dropdown").style.display = "none"
+
 
   modal.classList.remove("active");
   modal.classList.add("closing");
+
 
   setTimeout(() => {
     modal.classList.remove("closing");
@@ -659,7 +745,7 @@ document.addEventListener('DOMContentLoaded', () => {
   filterRadios.forEach( (radio) => {
     radio.addEventListener('click', () => {
       const loadType = radio.value === 'any' ? 'All' : 'Friends'
-      loadPosts(loadType)
+      loadPosts(null, loadType)
     })
   })
 
@@ -791,9 +877,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const isClickInside =
       searchModal.contains(event.target) ||
       searchToggle.contains(event.target) ||
-      sidebar.contains(event.target);
+      sidebar.contains(event.target) || 
+      document.getElementById("filter-dropdown").contains(event.target)
+      ;
 
     if (!isClickInside && searchModal.style.display === "flex") {
+
       searchModal.style.display = "none";
       sidebar.classList.remove("sidebar--collapsed");
       logoImg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";

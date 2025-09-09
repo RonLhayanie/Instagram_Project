@@ -73,6 +73,8 @@
 <div id="search-modal" class="search-modal">
   <div class="search-header">
     <h3>Search</h3>
+    <svg onclick="OpenSerchFilters()" aria-label="Filter" id="SearchFilterIcon" class="search-box-filter hidden" xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/></svg>
+
     <span id="close-search" class="close-btn">&times;</span>
   </div>
 <!--Search by type-->
@@ -87,152 +89,21 @@
   </label>
 </div>
 
+
+
   <!--Search List-->
   <input type="text" class="search-input" placeholder="Search" />
   
   <div class="recent-section">
     <div class="recent-header">
-      <span id="Recent">Recent</span>
-      <a id="clearAll" href="#">Clear all</a>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/1.jpg" />
-      <div class="recent-text">
-        <span class="m_username">amit_ben_giat</span>
-        <span class="m_name">Amit Ben-Giat</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/2.jpg" />
-      <div class="recent-text">
-        <span class="m_username">liron_cohen</span>
-        <span class="m_name">Liron Cohen</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/3.jpg" />
-      <div class="recent-text">
-        <span class="m_username">yonatan_d</span>
-        <span class="m_name">Yonatan Dahan</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/4.jpg" />
-      <div class="recent-text">
-        <span class="m_username">noga_levi</span>
-        <span class="m_name">Noga Levi</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/5.jpg" />
-      <div class="recent-text">
-        <span class="m_username">david_shapira</span>
-        <span class="m_name">David Shapira</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/6.jpg" />
-      <div class="recent-text">
-        <span class="m_username">talya_m</span>
-        <span class="m_name">Talya M.</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/7.jpg" />
-      <div class="recent-text">
-        <span class="m_username">shai_gil</span>
-        <span class="m_name">Shai Gil</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/8.jpg" />
-      <div class="recent-text">
-        <span class="m_username">orly_p</span>
-        <span class="m_name">Orly Peretz</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/9.jpg" />
-      <div class="recent-text">
-        <span class="m_username">maor_shopen333</span>
-        <span class="m_name">Maor Shopen</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/10.jpg" />
-      <div class="recent-text">
-        <span class="m_username">aya_katz</span>
-        <span class="m_name">Aya Katz</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/11.jpg" />
-      <div class="recent-text">
-        <span class="m_username">dani_lev</span>
-        <span class="m_name">Dani Lev</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/12.jpg" />
-      <div class="recent-text">
-        <span class="m_username">moran_s</span>
-        <span class="m_name">Moran Shaked</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/13.jpg" />
-      <div class="recent-text">
-        <span class="m_username">erez_b</span>
-        <span class="m_name">Erez Barak</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/women/14.jpg" />
-      <div class="recent-text">
-        <span class="m_username">shira_cohen</span>
-        <span class="m_name">Shira Cohen</span>
-      </div>
-      <span class="remove">✕</span>
-    </div>
-
-    <div class="recent-item">
-      <img src="https://randomuser.me/api/portraits/men/15.jpg" />
-      <div class="recent-text">
-        <span class="m_username">yossi_t</span>
-        <span class="m_name">Yossi Tamir</span>
-      </div>
-      <span class="remove">✕</span>
+      <span id="Recent"></span>
+      <a id="clearAll" href="#"></a>
     </div>
 
   </div>
-</div>
+
+
+    </div>
 
     
         <div class="sidebar-item sidebar-hoverable">
@@ -833,6 +704,52 @@
       <button id="save-map-marker">Save</button>
     </div>
   </div>
+
+
+
+
+
+
+
+
+
+
+  <div class="hidden" id="filter-dropdown">
+        <h2>Filters</h2>
+        <div class="dropdown-content">
+    
+            <div class="filter-group">
+                <h4>Liked</h4>
+                <label>
+                    <input type="checkbox" id="onlyPostsILiked">
+                    Only posts I liked
+                </label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Type</h4>
+                <label>
+                    <input type="checkbox" value="Video" class="filterType" id="filterVideo" checked> Video
+                </label>
+                <label>
+                    <input type="checkbox" value="Image" class="filterType" id="filterImage" checked> image
+                </label>
+            </div>
+
+          
+
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
 
   <!-- jump messages -->
   <div id="toast-message" class="toast-hidden">Message sent!</div>
