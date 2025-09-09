@@ -6,8 +6,12 @@
     "express-session": "^1.18.2",
     "file-type": "^21.0.0",
     "leaflet": "^1.9.4",
-    "mongodb": "^6.18.0",
+    "mongodb": "^6.19.0",
     "mongoose": "^8.18.0",
     "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "typescript": "^5.9.2"
   }
 }
