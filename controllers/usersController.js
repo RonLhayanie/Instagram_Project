@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const usersModel = require('./../models/usersModel');
+const postsModel = require('./../models/postsModel');
+
 
 
 
@@ -18,6 +20,26 @@ initUsers(); // קורה פעם אחת בהתחלת הריצה
 
 
 
+
+
+router.get('/user-stats', async (req, res) => {
+  try {
+    const users = await usersModel.search(''); // מחזיר את כל המשתמשים
+    const statsPromises = users.map(async user => {
+      const avgStats = await postsModel.getUserAvgStats(user.username);
+      return {
+        username: user.username,
+        avgLikes: avgStats.avgLikes,
+        avgComments: avgStats.avgComments
+      };
+    });
+    const stats = await Promise.all(statsPromises);
+    res.json(stats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
 
 
 
@@ -69,6 +91,30 @@ router.post('/createAccount', async (req, res) => {
 
 
 });
+
+router.post('/login', async (req,res) => {
+    try
+    {
+        const { username, password } = req.body;
+        const existingUser1 = await usersModel.findByUsername(username);
+        if(!existingUser1)
+        {
+            res.status(401).json();
+            return;
+        }
+        if(password == existingUser1.password)
+        {
+            res.status(200).json();
+            return;
+        }
+        res.status(400).json();
+        return;
+    }
+    catch(err)
+    {
+        res.status(400).json();
+    }
+})
 
 //check if username is available or not
 router.post('/check-username', async (req, res) => {
@@ -343,14 +389,5 @@ router.post('/unfollow', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-<<<<<<< HEAD
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> 7a5ef14fd26768883d3e34410d28aea944e66ec1
+

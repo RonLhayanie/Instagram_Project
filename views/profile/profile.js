@@ -1,3 +1,5 @@
+
+
 //Navigation functions
 function goToFeed()
 {
@@ -14,16 +16,9 @@ function EditProfile()
     window.location.href = "editProfile.html";
 }
 
-
-
-
-
-
-
-
-
-
-
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
 
 
 
@@ -400,6 +395,73 @@ function CloseLogout()
 
 
 
+// Open/Close weather div
+async function OpenWeather() {
+    const modal = document.querySelector('.weather-modal');
+    const cityEl = document.getElementById("UsersCity");
+    const weatherEl = document.getElementById("UsersWeather");
+
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.classList.add('no-scroll');
+    }
+
+    navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+            const response = await fetch("/weather", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ lat, lon })
+            });
+
+            const data = await response.json();
+
+            cityEl.textContent = `City: ${data.city}`;
+            weatherEl.textContent = `Weather: ${data.temp}°C, ${data.description}`;
+        } catch (err) {
+            cityEl.textContent = "שגיאה בקבלת המידע";
+            weatherEl.textContent = "";
+            console.error(err);
+        }
+    }, (error) => {
+        cityEl.textContent = "לא ניתן לקבל את המיקום שלך.";
+        weatherEl.textContent = "";
+        console.error(error);
+    });
+}
+
+function CloseWeather()
+{
+    const modal = document.querySelector('.weather-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
+
+function OpenStats() 
+{
+    window.location.href = 'stats.html';
+    drawCharts();
+}
+
+function CloseStats()
+{
+    const modal = document.querySelector('.stats-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
 
 
 //Load profile data to screen
@@ -416,7 +478,7 @@ async function loadProfile()
         const res = await fetch(`/users/getByUsername/${encodeURIComponent(username)}`);        
         console.log(res);
         if (!res.ok) throw new Error("User not found");
-        const user = await res.json();
+        const user = await res.json();  
 
         //Getting the data from Mongo
         document.getElementById("ProfileUsername").innerText = user.username;
@@ -492,3 +554,60 @@ async function LogOut()
     localStorage.removeItem("currentUser");
     window.location.href = "/login/login.html"
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const currentUser = localStorage.getItem('currentUser'); // או שם המשתמש שאתה רוצה
+console.log(currentUser);
+
+async function loadAvgStats() {
+    try {
+        const res = await fetch(`/posts/avg-stats/${currentUser}`);
+        if (!res.ok) throw new Error('Failed to fetch stats');
+
+        const stats = await res.json();
+        const ctx = document.getElementById('avgStatsChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Average Likes', 'Average Comments'],
+                datasets: [{
+                    data: [stats.avgLikes, stats.avgComments],
+                    backgroundColor: ['#FF6384', '#36A2EB'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: `Average Stats for ${currentUser}`
+                    }
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadAvgStats);

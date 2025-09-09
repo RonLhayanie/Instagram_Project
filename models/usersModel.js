@@ -90,8 +90,6 @@ async function unfollowUser(currentUsername, targetUsername) {
 }
 
 
-
-
 //Use if need to add a field to users
 /*
 async function addFollowingAndFollowersToExistingUsers() {
@@ -110,6 +108,8 @@ async function addFollowingAndFollowersToExistingUsers() {
 */
 
 
+
+
 //export
 module.exports = 
 {
@@ -120,7 +120,7 @@ module.exports =
     deleteByUsername,
     searchByFullnameAndUsername,
     followUser,
-    unfollowUser
+    unfollowUser,
 
 //    addFollowingAndFollowersToExistingUsers
 

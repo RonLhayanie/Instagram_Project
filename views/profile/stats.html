@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>D3 Dashboard</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  .bar { fill: steelblue; }
+  .axis-label { font-size: 12px; }
+</style>
+</head>
+<body>
+<h2>Top 5 Users by Average Likes (Bar Chart)</h2>
+<svg id="barChart" width="800" height="400"></svg>
+
+<h2>Likes + Comments (Pie Chart)</h2>
+<svg id="pieChart" width="600" height="400"></svg>
+
+<img src="https://static.thenounproject.com/png/1957732-200.png" onclick="window.location.href = 'profile.html'" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; cursor: pointer;">
+
+<script>
+async function drawCharts() {
+  try {
+    const data = await fetch('/users/user-stats').then(res => res.json());
+    console.log('API data:', data);
+
+    // ---------- TOP 5 BAR CHART ----------
+    let top5Data = data
+      .sort((a, b) => b.avgLikes - a.avgLikes)
+      .slice(0, 5);
+
+    const svgBar = d3.select('#barChart');
+    const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+    const width = +svgBar.attr('width') - margin.left - margin.right;
+    const height = +svgBar.attr('height') - margin.top - margin.bottom;
+    const g = svgBar.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleBand()
+      .domain(top5Data.map(d => d.username))
+      .range([0, width])
+      .padding(0.2);
+
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(top5Data, d => d.avgLikes)])
+      .nice()
+      .range([height, 0]);
+
+    g.append('g')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(x))
+      .selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end");
+
+    g.append('g')
+      .call(d3.axisLeft(y));
+
+    g.selectAll('.bar')
+      .data(top5Data)
+      .enter()
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', d => x(d.username))
+      .attr('y', d => y(d.avgLikes))
+      .attr('width', x.bandwidth())
+      .attr('height', d => height - y(d.avgLikes));
+
+    // ---------- PIE CHART ----------
+    const svgPie = d3.select('#pieChart');
+    const radius = 150;
+    const pieGroup = svgPie.append('g').attr('transform', `translate(${radius + 20},${radius})`);
+
+    const pieData = top5Data; // שימוש באותם 5 משתמשים
+
+    const pie = d3.pie().value(d => d.avgLikes + d.avgComments);
+    const arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // הפרוסות
+    pieGroup.selectAll('path')
+      .data(pie(pieData))
+      .enter()
+      .append('path')
+      .attr('d', arc)
+      .attr('fill', (d, i) => color(i))
+      .attr('stroke', 'white')
+      .attr('stroke-width', 1);
+
+    // ---------- LEGEND עם נתונים ----------
+    const legend = svgPie.append('g')
+      .attr('transform', `translate(${radius * 2 + 50}, 20)`);
+
+    pieData.forEach((d, i) => {
+      const gLegend = legend.append('g')
+        .attr('transform', `translate(0, ${i * 25})`);
+
+      // ריבוע צבע
+      gLegend.append('rect')
+        .attr('width', 20)
+        .attr('height', 20)
+        .attr('fill', color(i));
+
+      // טקסט עם שם המשתמש והנתונים (לייקים+תגובות)
+      gLegend.append('text')
+        .attr('x', 30)
+        .attr('y', 15)
+        .attr('font-size', '14px')
+        .text(`${d.username} (${Math.round(d.avgLikes + d.avgComments)})`);
+    });
+
+  } catch (err) {
+    console.error('Error fetching or drawing charts:', err);
+  }
+}
+
+drawCharts();
+</script>
+</body>
+</html>

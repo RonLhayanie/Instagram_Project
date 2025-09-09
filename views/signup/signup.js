@@ -133,7 +133,8 @@ document.getElementById("UsernameInput").addEventListener("blur", async function
             this.style.borderWidth = "1.5px";
             usernameAvailable = false;
         }
-    } catch (err) {
+    } 
+    catch (err) {
         console.error(err);
         showError("UsernameVer", "server error");
         usernameAvailable = false;
