@@ -122,7 +122,7 @@ body.dark-mode #scrollToTopBtn {
     ,body.dark-mode .input-field
     ,body.dark-mode .upload-options input[type="url"]
     ,body.dark-mode .location-suggestions
-    ,body.dark-mode .confirmation-modal
+    ,body.dark-mode .confirmation-modal,body.dark-mode #filter-dropdown
   {
     background-color:rgb(32, 32, 32) ;
     border-color: #ececec;
@@ -2160,6 +2160,15 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
     z-index: 9999999999999;
 }
 
+#filter-dropdown .filterHeader{
+    font-size: 30px;
+    font-weight: 600;
+    padding: 10px;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
 .search-modal.active {
   display: flex; 
   opacity: 1;
@@ -3095,32 +3104,9 @@ font-weight: 600;
 }
 
 
-.filter-icon {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
 
-.dropdown {
-  display: none;
-  position: absolute;
-  left: 40px;
-  top: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 5px;
-  z-index: 999;
-}
-
-.dropdown-option {
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.dropdown-option:hover {
-  background-color: #f0f0f0;
+.search-filter{
+margin-left: 35px;
 }
 
 .more-menu {

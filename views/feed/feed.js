@@ -45,9 +45,7 @@ async function loadPosts(filter = null, loadtype="All") {
 
     // update filter icon and no-posts message
     const noPostsMsg = document.getElementById('no-posts-message');
-    const filterBtn  = document.querySelector('.custom-filter');
     if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
-    if (filterBtn)  filterBtn.style.display  = posts.length === 0 ? 'none' : 'flex';
     console.log(posts.length)
 
     if (!Array.isArray(posts) || posts.length === 0) {
@@ -747,11 +745,15 @@ closeBtn.addEventListener("click", () => {
   modal.classList.remove("active");
   modal.classList.add("closing");
 
-
+  const filterDrop = document.getElementById("filter-dropdown");
   setTimeout(() => {
     modal.classList.remove("closing");
     modal.style.display = "none";  // להסתיר רק אחרי האנימציה
   }, animationDuration);
+  filterDrop.style.display = "none";
+  filterDrop.classList.add("hidden")
+   filterDrop.classList.remove("active");
+
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -759,12 +761,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const recentSection = modal.querySelector('.recent-section');
   const searchInput = modal.querySelector('.search-input');
   const filterRadios = modal.querySelectorAll('input[name="filter"]');
+
+
+
   filterRadios.forEach( (radio) => {
     radio.addEventListener('click', () => {
       const loadType = radio.value === 'any' ? 'All' : 'Friends'
+      console.log(loadType);
       loadPosts(null, loadType)
     })
   })
+  
 
   // מחיקת פריט ספציפי - עם עצירת התפשטות האירוע
   recentSection.addEventListener('click', (e) => {
@@ -803,7 +810,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const posts = document.querySelectorAll('.posts-wrapper .post');
     const storiesContainer = document.querySelector('.stories-container'); // שמירה על הסטורייס
     const sidebarRight = document.querySelector('.sidebar-right'); // שמירה על הסיידבאר הימני
-    const cfilter = document.querySelector('.custom-filter');
     let anyVisible = false;
     let hiddenCount = 0;
     let firstMatch = null;
@@ -886,25 +892,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   closeSearch.addEventListener("click", () => {
     searchModal.style.display = "none";
+    filterDrop.style.display = "none";
     sidebar.classList.remove("sidebar--collapsed");
     logoImg.src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png"
   });
 
   document.addEventListener("click", (event) => {
-    const isClickInside =
-      searchModal.contains(event.target) ||
-      searchToggle.contains(event.target) ||
-      sidebar.contains(event.target) || 
-      document.getElementById("filter-dropdown").contains(event.target)
-      ;
+  const isClickInside =
+    searchModal.contains(event.target) ||
+    searchToggle.contains(event.target) ||
+    sidebar.contains(event.target) ||
+    document.getElementById("filter-dropdown").contains(event.target);
 
-    if (!isClickInside && searchModal.style.display === "flex") {
-
+  if (!isClickInside) {
+    if (searchModal.style.display === "flex") {
       searchModal.style.display = "none";
-      sidebar.classList.remove("sidebar--collapsed");
-      logoImg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";
     }
-  });
+
+    if (filterDrop.style.display === "block" || filterDrop.style.display === "flex") {
+      filterDrop.style.display = "none";
+      filterDrop.classList.add("hidden");
+      filterDrop.classList.remove("active");
+    }
+
+    sidebar.classList.remove("sidebar--collapsed");
+    logoImg.src =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";
+  }
+});
   
 /// comment feature
 
