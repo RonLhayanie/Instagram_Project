@@ -29,6 +29,12 @@ async function getUserAvgStats(username)
 
 
 
+async function getFilteredPosts(filter = {}) 
+{
+  return await collection.find(filter).sort({ _id: -1 }).toArray();
+}
+
+
 
 async function toggleLike(postId, username) {
   const post = await collection.findOne({ _id: new ObjectId(postId) });
@@ -80,13 +86,21 @@ async function findById(postId) {
   }
 }
 
+
+
+
+
+
+
+
 module.exports = { 
   Create,
   getAllPosts,
   getUserAvgStats,
   toggleLike,
   findById,
-  update
+  update,
+  getFilteredPosts
 };
 
 

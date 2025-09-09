@@ -73,12 +73,14 @@
 <div id="search-modal" class="search-modal">
   <div class="search-header">
     <h3>Search</h3>
+    <svg onclick="OpenSerchFilters()" aria-label="Filter" id="SearchFilterIcon" class="search-box-filter hidden" xmlns="http://www.w3.org/2000/svg"  width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/></svg>
+
     <span id="close-search" class="close-btn">&times;</span>
   </div>
 <!--Search by type-->
 <div class="search-filter" >
   <label>
-    <input type="radio" name="filter" value="username" checked>
+    <input id="search-post" type="radio" name="filter" value="username" checked>
     Search username
   </label>
   <label style="margin-left: 15px;">
@@ -86,6 +88,8 @@
     Search post description
   </label>
 </div>
+
+
 
   <!--Search List-->
   <input type="text" class="search-input" placeholder="Search" />
@@ -233,6 +237,35 @@
 
   </div>
 </div>
+
+<div class="hidden" id="filter-dropdown">
+        <h2>Filters</h2>
+        <div class="dropdown-content">
+    
+            <div class="filter-group">
+                <h4>Liked</h4>
+                <label>
+                    <input type="checkbox" id="onlyPostsILiked">
+                    Only posts I liked
+                </label>
+            </div>
+
+            <div class="filter-group">
+                <h4>Type</h4>
+                <label>
+                    <input type="checkbox" value="Video" class="filterType" id="filterVideo" checked> Video
+                </label>
+                <label>
+                    <input type="checkbox" value="Image" class="filterType" id="filterImage" checked> image
+                </label>
+            </div>
+
+          
+
+            </div>
+
+        </div>
+    </div>
 
     
         <div class="sidebar-item sidebar-hoverable">

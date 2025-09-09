@@ -2074,7 +2074,7 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   position: fixed;
   top: 0;
   left: 72px;
-  width: 400px;
+  width: 356px;
   height: 100%;
   background: #fff;
   border-top-right-radius: 3%;
@@ -2090,9 +2090,28 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   pointer-events: none;
 }
 
-.search-filter{
-margin-bottom: 10px;
-margin-left: 20px;
+#SearchFilterIcon
+{
+  position: relative;
+  top: 95px;
+  left: 115px;
+  cursor: pointer;
+}
+
+#filter-dropdown {
+    width: 285px;
+    height: 320px;
+    position: absolute;
+    display: none;
+    top: 39.3%;
+    left: 562px;
+    translate: -50% -50%;
+    background: #fff;
+    border: 1px solid lightgrey;
+    padding: 5px;
+    box-shadow: 0 0 10px 5px #0000000a;
+    border-radius: 5px;
+    z-index: 9999999999999;
 }
 
 .search-modal.active {
@@ -2100,6 +2119,7 @@ margin-left: 20px;
   opacity: 1;
   pointer-events: auto;
   animation: slideIn 0.5s ease forwards;
+
 
 }
 
@@ -2109,6 +2129,11 @@ margin-left: 20px;
   pointer-events: none;
 
 }
+
+
+
+
+
 
 
 @keyframes slideIn {
