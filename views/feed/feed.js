@@ -231,12 +231,15 @@ function setupPostListeners(postEl, postData) {
 
   const currentUser = localStorage.getItem("currentUser");
   deleteIcon.addEventListener('click', async () => {
+    
     try {
       const res = await fetch(`/posts/${postId}?user=${encodeURIComponent(currentUser)}`, {
         method: 'DELETE'
       });
-      if (!res.ok) throw new Error('Failed to delete post');
+      if (!res.ok) throw new Error('Failed to delete post');{
+      showToast(document.getElementById('toast-delete'));
       postEl.remove();
+      }
       // עדכון מרג'ין לפי סוג הפוסט
       updateSidebarMargin(postData.type === 'text' ? -260 : -670);
     } catch (err) {
@@ -832,17 +835,17 @@ async function openCommentsModal(postEl, postData) {
 
   // load image/video
   const modalMediaType = postData.type
-  if(modalMediaType === 'image') {
+  setTimeout(()=>{if(modalMediaType === 'image') {
     modal.querySelector('.modal-post-video').style.display = 'none'
     modal.querySelector('.modal-post-image').style.display = 'block'
-    modal.querySelector('.modal-post-image').src = postEl.querySelector('.post-image img').src
+    modal.querySelector('.modal-post-image').src = postData.image
   }
   else {
     modal.querySelector('.modal-post-image').style.display = 'none'
     modal.querySelector('.modal-post-video').style.display = 'block'
-    modal.querySelector('.modal-post-video source').src = postEl.querySelector('.post-video video source').src
+    modal.querySelector('.modal-post-video').src = postData.image
   }
-
+}, 2000)
   // עדכון תוכן המודל
   const avatarSrc = postEl.querySelector('.user-avatar')?.src || '';
   modal.querySelectorAll('.modal-user-avatar').forEach(i => i.src = avatarSrc);
@@ -1391,64 +1394,6 @@ function showToast(toastElement) {
   }, 1500);
 }
 
-// document.querySelectorAll('.send-comment').forEach(button => {
-//   button.addEventListener('click',async () => {
-//     const commentInput = button.closest('.comment-input');
-//     const textarea = commentInput.querySelector('textarea');
-//     const text = textarea.value.trim();
-//     if (!text) return;
-
-//     const modal = document.querySelector('.comment-modal');
-//     const postId = modal.getAttribute('data-post-id'); // משייך לפוסט פתוח
-
-//     const commentsList = modal.querySelector('.comments-list');
-//     const writingIndicator = modal.querySelector('.comment-item.writing');
-
-
-//     const username =  localStorage.getItem('currentUser');
-//     const userProfilePic = await avatarFetch(username);
-
-    
-//     const commentEl = document.createElement('div');
-//     commentEl.className = 'comment-item';
-//     commentEl.innerHTML = `
-//       <img src="${userProfilePic}" alt="${username}" class="comment-avatar">
-//       <div class="comment-content">
-//         <span class="comment-username">${username}</span>
-//         <span class="comment-text">${text}</span>
-//       </div>
-//     `;
-
-//     // commentsList.prepend(writingIndicator);
-//     commentsList.appendChild(commentEl);
-
-//     // שמירה במבנה תגובות
-//     if (!commentData[postId]) {
-//       commentData[postId] = [];
-//     }
-//     commentData[postId].unshift({
-//       username,
-//       avatar: userProfilePic,
-//       text
-//     });
-
-//     // איפוס התיבה
-//     textarea.value = "";
-//     textarea.dispatchEvent(new Event('input'));
-// // עדכון טקסט view comments
-// const viewComments = window.currentPostInModal?.querySelector('.view-comments-text');
-// if (viewComments) {
-//   const match = viewComments.textContent.match(/\d+/);
-//   const base = match ? parseInt(match[0], 10) : 0;
-//   const total = base + 1;
-
-//   viewComments.textContent = `View all ${total} comments`;
-// }
-
-//     const toastComment = document.getElementById('toast-comment');
-//     showToast(toastComment);
-//   });
-// });
 
 document.querySelectorAll('.post-button').forEach(postBtn => {
   postBtn.addEventListener('click', () => {
@@ -2310,7 +2255,7 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
 });
 
 
-let leftSidebarOffset = -3200;
+let leftSidebarOffset = -8650;
 let textPostsCount = 0; 
 let imagePostsCount = 0; 
 let videoPostsCount = 0; 
@@ -2489,26 +2434,110 @@ function updateSidebarMargin(distance) {
   console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
 }
 
-// // פונקציות עזר
-// function updateCommentsCount(post) {
-//   const postId = post.id;
-//   const commentsCountSpan = post.querySelector('.comments-count') || post.querySelector('.view-comments-text');
-//   const count = (commentData2[postId] || []).length;
-//   if (commentsCountSpan) {
-//     commentsCountSpan.textContent = count > 0 ? `${count} comments` : '0 comments';
-//   }
-// }
 
-// function updateViewCommentsText(post) {
-//   const postId = post.id;
-//   const viewCommentsText = post.querySelector('.view-comments-text');
-//   const count = (commentData2[postId] || []).length;
-//   if (viewCommentsText) {
-//     viewCommentsText.textContent = `View all ${count} comment${count !== 1 ? 's' : ''}`;
-//   }
-// }
 
-// }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Script loaded, attaching click listener');
+
+  document.addEventListener('click', async (e) => {
+    const editIcon = e.target.closest('.edit-post-icon');
+    if (!editIcon) return;
+    console.log('Edit icon clicked:', editIcon);
+
+    const postEl = editIcon.closest('.post');
+    if (!postEl) return;
+
+    const postTextEl = postEl.querySelector('.post-text');
+    if (!postTextEl) return;
+
+    const shortTextEl = postTextEl.querySelector('.short-text');
+    if (!shortTextEl) return;
+
+    const originalText = shortTextEl.textContent;
+
+    // אם כבר בעריכה, לא לפתוח שוב
+    if (postTextEl.querySelector('.edit-btns-inline')) return;
+
+    // הפיכת ה-short-text לעריכה inline
+    shortTextEl.contentEditable = true;
+    shortTextEl.focus();
+    shortTextEl.style.outline = 'none'; // מבטל את הבורדר השחור
+
+    // העברת הסמן לסוף הטקסט
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(shortTextEl);
+    range.collapse(false); // false = סוף הטקסט
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    // כפתורים inline
+    const btnContainer = document.createElement('span');
+    btnContainer.className = 'edit-btns-inline';
+    btnContainer.style.marginLeft = '80px';
+
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    saveBtn.className = 'save-edit-btn';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.className = 'cancel-edit-btn';
+
+    btnContainer.appendChild(saveBtn);
+    btnContainer.appendChild(cancelBtn);
+    shortTextEl.parentNode.appendChild(btnContainer);
+
+    // ביטול עריכה
+    cancelBtn.addEventListener('click', () => {
+      shortTextEl.textContent = originalText;
+      shortTextEl.contentEditable = false;
+      shortTextEl.style.borderBottom = 'none';
+      btnContainer.remove();
+    });
+
+    // שמירה והעדכון בשרת
+    saveBtn.addEventListener('click', async () => {
+      const newText = shortTextEl.textContent.trim();
+      if (!newText) {
+        alert('Text cannot be empty');
+        return;
+      }
+
+      const currentUser = localStorage.getItem('currentUser');
+      const postId = postEl.dataset.id;
+
+      try {
+        const res = await fetch(`/posts/${postId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user: currentUser, text: newText })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to update post');
+
+        // עדכון DOM
+        shortTextEl.textContent = newText.substring(0, 30) + (newText.length > 30 ? '...' : '');
+        shortTextEl.contentEditable = false;
+        shortTextEl.style.borderBottom = 'none';
+        btnContainer.remove();
+
+        const fullTextEl = postTextEl.querySelector('.full-text');
+        if (fullTextEl) fullTextEl.textContent = newText;
+
+        console.log('Post updated successfully');
+        showToast(document.getElementById('toast-edit'));
+      } catch (err) {
+        console.error('Error updating post:', err);
+        alert('Failed to update post');
+      }
+    });
+  });
+});
+
 
 function setupPostEvents(postElement) {
   const postId = postElement.id;
@@ -2554,19 +2583,24 @@ function setupPostEvents(postElement) {
   const moreOptionsBtn = postElement.querySelector('.more-options');
   const moreMenu = postElement.querySelector('.more-menu');
   const deleteIcon = postElement.querySelector('.delete-post-icon');
-  const editIcon = postElement.querySelector('.edit-post-icon');
   moreOptionsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
   });
 
   deleteIcon.addEventListener('click', () => {
+    showToast(document.getElementById('toast-delete'));
     const postToDelete = deleteIcon.closest('.post');
     if (postToDelete) {
       postToDelete.remove();
       // עדכון מונים (imagePostsCount / textPostsCount) אם רלוונטי
     }
   });
+
+ // מאזינים לכל לחיצות על עיפרון בתוך הפיד
+// Event delegation ל-edit-post-icon
+
+
 
 
 
@@ -2681,7 +2715,6 @@ function createPost({ username, avatar, image, likes, text, comments, time, date
       </div>
     </div>
   `;
-
   return post;
 }
 
@@ -2822,7 +2855,7 @@ document.addEventListener('click', function (e) {
   if (e.target.classList.contains('delete-post-icon')) {
     const post = e.target.closest('.post');
     post.remove();
-    console.log('🗑️ פוסט נמחק');
+    console.log('🗑️ Post deleted succsessfully ');
   }
 });
 

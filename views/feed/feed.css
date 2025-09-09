@@ -94,9 +94,12 @@
     }   
 
 
-    body.dark-mode .sidebar-item #pfp-l {
+    body.dark-mode .sidebar-item #pfp-l{
       filter: invert(0);
     }
+    body.dark-mode .edit-post-icon{
+      filter: invert(1);
+    } 
     
 
 
@@ -831,13 +834,56 @@ body.dark-mode #scrollToTopBtn img {
 
 
 
+.cancel-edit-btn {
+  background: #e53935;     
+  color: #fff;           
+  border: none;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.cancel-edit-btn:hover {
+  background: #c62828;   
+}
+.cancel-edit-btn:active {
+  transform: scale(0.96);
+}
 
+
+.save-edit-btn {
+  background: #1e88e5;   
+  color: #fff;             
+  border: none;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.save-edit-btn:hover {
+  background: #1565c0;    
+}
+
+.save-edit-btn:active {
+  transform: scale(0.96);
+}
+
+.edit-btns-inline {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 20px;      
+} 
 
 
 #toast-message,
-#toast-comment {
+#toast-comment,#toast-delete,#toast-edit {
   position: fixed;
-  bottom: 80px; /* מעל התפריט התחתון */
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.8);
@@ -885,7 +931,7 @@ body.dark-mode #scrollToTopBtn img {
     gap: 25px;
     /* אין top ואין transform */
     margin-left: 72%;
-    margin-top: -3200px;
+    margin-top: -8650px;
   }
 
     .sidebar-right.hide-0 {
@@ -1326,7 +1372,7 @@ cursor: pointer;
 
 .user-name {
   font-size: 14px;
-  margin-left: 10px; /* מזיז את השם ימינה */
+  margin-left: 5px;
   font-weight: 500;
   color: #000000;
 }
@@ -3081,6 +3127,7 @@ font-weight: 600;
   height: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
+  pointer-events: auto;
 }
 
 .edit-post-icon:hover {
