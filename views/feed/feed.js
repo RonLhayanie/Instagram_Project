@@ -241,12 +241,19 @@ function setupPostListeners(postEl, postData) {
       postEl.remove();
       }
       // עדכון מרג'ין לפי סוג הפוסט
-      updateSidebarMargin(postData.type === 'text' ? -260 : -670);
+       updateSidebarMarginDelete(0);
     } catch (err) {
       console.error('Error deleting post:', err);
       alert('Failed to delete post. Please try again.');
     }
   });
+
+    function updateSidebarMarginDelete(distance) {
+  const sidebarRight = document.querySelector('.sidebar-right');
+  const newMargin = leftSidebarOffset + ((imagePostsCount-1) * 670);
+  sidebarRight.style.marginTop = `${newMargin}px`;
+  console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
+}
 
   
 
@@ -2255,7 +2262,7 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
 });
 
 
-let leftSidebarOffset = -8650;
+let leftSidebarOffset = -12550;
 let textPostsCount = 0; 
 let imagePostsCount = 0; 
 let videoPostsCount = 0; 
@@ -2749,30 +2756,9 @@ function updateRightSidebarClass(currentType) {
     return;
   }
 
-  // הסרת כל הקלאסים הקשורים להצגה והסתרה
-  rsidebar.classList.remove('hide-0', 'hide-1', 'hide-2', 'hide-3plus');
-  rsidebar.classList.remove('show-text', 'show-image', 'show-video', 'show-all');
-  rsidebar.style.marginTop = ''; // איפוס המרג'ין
-
-  // הוספת הקלאס המתאים לפי סוג הפוסט
-  switch (currentType) {
-    case 'text':
-      rsidebar.classList.add('show-text');
-      break;
-    case 'image':
-      rsidebar.classList.add('show-image');
-      break;
-    case 'video':
-      rsidebar.classList.add('show-video');
-      break;
-    case 'all':
-    default:
-      rsidebar.classList.add('show-all');
-      break;
-  }
 
   // עדכון המרג'ין
-    const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop) || 0; // ערך ברירת מחדל
+    const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop); 
     let adjustedMargin;
 
 
@@ -2790,7 +2776,7 @@ function updateRightSidebarClass(currentType) {
       ((textPostsCount || 0) * 260) +
       ((videoPostsCount || 0) * 670)
     );
-    adjustedMargin = baseMargin - offset; // שימוש ב-baseMargin כדי לשמור על מרג'ין דינמי
+    adjustedMargin = baseMargin - offset;
     rsidebar.style.marginTop = `${adjustedMargin}px`;
     console.log(`📊 עדכון מרג'ין עבור ${currentType}: ${adjustedMargin}px (תמונות: ${imagePostsCount || 0}, טקסט: ${textPostsCount || 0}, וידאו: ${videoPostsCount || 0}, הפחתה: ${offset}px)`);
   } else {
