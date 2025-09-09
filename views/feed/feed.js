@@ -7,6 +7,11 @@ function gotoprofile() {
 window.location.href = '../profile/profile.html';
 } 
 
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
+console.log(localStorage.getItem('currentUser'))
+
 // loading screen
 window.addEventListener('load', () => {
   const loader = document.getElementById('loading-screen');
@@ -172,7 +177,6 @@ async function loadPosts(filter = null, loadtype="All") {
 
     });
 
-
     if (filter)
     {
       if (SearchFilters.onlyPostsILiked)
@@ -211,6 +215,7 @@ async function loadPosts(filter = null, loadtype="All") {
         
 
     }
+    
 
     enableScrollAutoplay();
   } catch (err) {

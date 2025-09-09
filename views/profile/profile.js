@@ -14,16 +14,9 @@ function EditProfile()
     window.location.href = "editProfile.html";
 }
 
-
-
-
-
-
-
-
-
-
-
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
 
 
 
