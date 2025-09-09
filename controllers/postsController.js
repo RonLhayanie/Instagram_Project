@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const postsModel = require('./../models/postsModel');
 const usersModel = require('./../models/usersModel');
+const { postToFacebookPage, deleteFacebookPost } = require('../utils/instagramAPI');
 
 const multer = require('multer');
 const path = require('path');
@@ -31,6 +32,11 @@ const upload = multer({
   fileFilter,
   limits: { fileSize: 200 * 1024 * 1024 } // עד 200MB במקום 50MB
 });
+
+
+
+
+
 
 // Create a new post עם תמונה/וידאו
 router.post('/createPost', upload.single('media'), async (req, res) => {
@@ -63,15 +69,35 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
       avatar: avatar || 'https://cdn-icons-png.flaticon.com/512/12225/12225935.png',
       image: imagePath,
       likes: [],
-      text: text || '',
+      text: text,
       comments: [],
       time: 'Just now',
       date: new Date().toDateString(),
       type: postType
     };
 
+
+       // שליפת המשתמש מה־DB
+    const userObj = await usersModel.findByUsername(username);
+
+    try {
+      const fbResponse = await postToFacebookPage(text, userObj?.name || username);
+      if (fbResponse && fbResponse.id) {
+        newPost.facebookPostId = fbResponse.id; // לשמור ID של פייסבוק
+        console.log('[POST] saved facebookPostId:', fbResponse.id);
+      }
+    } catch (e) {
+      console.error("Failed to create Facebook post:", e);
+      // ממשיכים גם אם פייסבוק נכשל
+    }
+
+
+
     await postsModel.Create(newPost);
     res.status(201).json({ message: 'Post created successfully', post: newPost });
+
+
+    
 
   } catch (err) {
     console.error('Error in createPost:', err);
@@ -144,6 +170,18 @@ router.delete('/:id', async (req, res) => {
       return res.status(403).json({ error: 'You can only delete your own posts' });
     }
 
+
+
+    if (post.facebookPostId) {
+      try {
+        const fbResponse = await deleteFacebookPost(post.facebookPostId);
+        console.log("Facebook delete response:", fbResponse);
+      } catch (err) {
+        console.error("Failed to delete Facebook post:", err);
+      }
+    }
+
+
     // מחיקה מהמונגו
     await postsModel.deletePost(postId);
 
@@ -198,6 +236,7 @@ router.get('/avg-stats/:username', async (req, res) => {
   try {
     const { username } = req.params;
     const stats = await postsModel.getUserAvgStats(username);
+    console.log(stats);
     res.json(stats);
   } catch (err) {
     console.error(err);

@@ -44,24 +44,6 @@ async function getFriendsPosts(currentUser) {
   return posts
 }
 
-async function getUserAvgStats(username) 
-{
-  const posts = await collection.find({ username }).toArray();
-
-  if (posts.length === 0) {
-    return { avgLikes: 0, avgComments: 0 };
-  }
-
-  const totalLikes = posts.reduce((sum, p) => sum + (p.likes?.length || 0), 0);
-  const totalComments = posts.reduce((sum, p) => sum + (p.comments?.length || 0), 0);
-
-  return {
-    avgLikes: totalLikes / posts.length,
-    avgComments: totalComments / posts.length
-  };
-}
-
-
 
 async function getFilteredPosts(filter = {}) 
 {
@@ -143,6 +125,34 @@ async function deletePost(postId) {
     throw err;
   }
 }
+
+
+
+
+
+
+//get stats for graph
+async function getUserAvgStats(username) {
+  const posts = await collection.find({ username }).toArray();
+
+  if (!posts.length) {
+    return { avgLikes: 0, avgComments: 0 };
+  }
+
+  let totalLikes = 0;
+  let totalComments = 0;
+
+  posts.forEach(post => {
+    totalLikes += (post.likes || []).length;
+    totalComments += (post.comments || []).length;
+  });
+
+  return {
+    avgLikes: totalLikes / posts.length,
+    avgComments: totalComments / posts.length
+  };
+}
+
 
 
 module.exports = { 

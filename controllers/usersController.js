@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const usersModel = require('./../models/usersModel');
+const postsModel = require('./../models/postsModel');
+
 
 
 
@@ -18,6 +20,26 @@ initUsers(); // קורה פעם אחת בהתחלת הריצה
 
 
 
+
+
+router.get('/user-stats', async (req, res) => {
+  try {
+    const users = await usersModel.search(''); // מחזיר את כל המשתמשים
+    const statsPromises = users.map(async user => {
+      const avgStats = await postsModel.getUserAvgStats(user.username);
+      return {
+        username: user.username,
+        avgLikes: avgStats.avgLikes,
+        avgComments: avgStats.avgComments
+      };
+    });
+    const stats = await Promise.all(statsPromises);
+    res.json(stats);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
 
 
 

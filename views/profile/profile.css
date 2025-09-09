@@ -545,7 +545,34 @@ html
 
 
 
+/* stats modal */
+.stats-modal
+{
+    position: relative;
+    display: none;
+}
 
+#closeStats
+{
+    position: absolute;
+    display: flex;
+    top: 40%;
+    right: 45%;
+
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 0.70%;
+    padding-bottom: 0.75%;
+
+    font-size: 20px;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+    background-color: rgb(216, 47, 47);
+}
 
 
 

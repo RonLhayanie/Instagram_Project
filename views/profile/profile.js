@@ -1,3 +1,5 @@
+
+
 //Navigation functions
 function goToFeed()
 {
@@ -13,15 +15,6 @@ function EditProfile()
 {
     window.location.href = "editProfile.html";
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -451,6 +444,22 @@ function CloseWeather()
 }
 
 
+function OpenStats() 
+{
+    window.location.href = 'stats.html';
+    drawCharts();
+}
+
+function CloseStats()
+{
+    const modal = document.querySelector('.stats-modal');
+    if (modal)
+    {
+        modal.style.display = 'none';
+        document.body.classList.remove('no-scroll');
+    }
+}
+
 
 
 //Load profile data to screen
@@ -543,3 +552,60 @@ async function LogOut()
     localStorage.removeItem("currentUser");
     window.location.href = "/login/login.html"
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const currentUser = localStorage.getItem('currentUser'); // או שם המשתמש שאתה רוצה
+console.log(currentUser);
+
+async function loadAvgStats() {
+    try {
+        const res = await fetch(`/posts/avg-stats/${currentUser}`);
+        if (!res.ok) throw new Error('Failed to fetch stats');
+
+        const stats = await res.json();
+        const ctx = document.getElementById('avgStatsChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Average Likes', 'Average Comments'],
+                datasets: [{
+                    data: [stats.avgLikes, stats.avgComments],
+                    backgroundColor: ['#FF6384', '#36A2EB'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: {
+                        display: true,
+                        text: `Average Stats for ${currentUser}`
+                    }
+                }
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadAvgStats);

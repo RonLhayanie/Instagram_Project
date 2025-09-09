@@ -178,6 +178,22 @@
 
 
 
+            <!-- stats -->
+            <div class="stats-modal">
+                <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="bd-title">
+                    <div class="modal">
+                        <h3>Your average stats</h3>
+                        <!-- נבטל את הקנבס -->
+                        <canvas id="avgStatsChart" width="300" height="300" style="display:none;"></canvas>
+                        <div id="statsPieChart3D" style="width:300px; height:300px;"></div>
+                        <button id="closeStats" onclick="CloseStats()">Close</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
             <!-- search user -->
             <div id="search-modal" class="search-modal-collapsed" style="z-index: 4;">
                     <div id="search-header">
@@ -203,6 +219,14 @@
 
 
             <br>
+
+
+
+            
+
+
+
+
 
 
             <div class="postsAndSaved">
@@ -327,6 +351,11 @@
 
     <div id="overlay2" class="hidden"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/statsChart.js"></script>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="profile.js"></script>
+
+
 </body>
 </html>
