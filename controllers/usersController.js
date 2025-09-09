@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const usersModel = require('./../models/usersModel');
+const { error } = require('console');
 
 
 
@@ -69,6 +70,32 @@ router.post('/createAccount', async (req, res) => {
 
 
 });
+
+router.post('/login', async (req,res) => {
+    try
+    {
+        const { username, password } = req.body;
+        const existingUser1 = await usersModel.findByUsername(username);
+        if(!existingUser1)
+        {
+            res.status(401).json();
+            return;
+        }
+        if(password == existingUser1.password)
+        {
+            res.status(200).json();
+            return;
+        }
+        res.status(400).json();
+        return;
+    }
+    catch(err)
+    {
+        console.log("123");
+        res.status(400).json();
+    }
+})
+
 
 //check if username is available or not
 router.post('/check-username', async (req, res) => {
@@ -345,12 +372,5 @@ router.post('/unfollow', async (req, res) => {
 
 
 
-
-
-
-
-<<<<<<< HEAD
 module.exports = router;
-=======
-module.exports = router;
->>>>>>> 7a5ef14fd26768883d3e34410d28aea944e66ec1
+
