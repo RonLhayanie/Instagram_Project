@@ -79,8 +79,8 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 
 
 
-// Get all posts
-router.get('/getAllPosts', async (req, res) => {
+// Get friends posts
+router.get('/getFriendsPosts', async (req, res) => {
   try {
     const currentUser = req.query.user; // מגיע מהלקוח
 
@@ -101,7 +101,27 @@ router.get('/getAllPosts', async (req, res) => {
   }
 });
 
+// Get all posts
+router.get('/getAllPosts', async (req, res) => {
+  try {
+    const currentUser = req.query.user; // מגיע מהלקוח
 
+    // try to load friends posts
+    let posts = await postsModel.getAllPosts(currentUser);
+    console.log('final posts', posts);
+
+    if (currentUser) {
+      posts.forEach(p => {
+        p.liked = (p.likes || []).includes(currentUser);
+      });
+    }
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 // Get post by ID (לטעינת תגובות)

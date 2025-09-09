@@ -21,10 +21,11 @@ window.addEventListener('load', () => {
 
 
 // load posts from server
-async function loadPosts() {
+async function loadPosts(loadtype="All") {
   try {
     const currentUser = localStorage.getItem('currentUser')
-    const res = await fetch(`/posts/getAllPosts?user=${currentUser}`);
+    console.log(loadtype)
+    const res = await fetch(`/posts/get${loadtype}Posts?user=${currentUser}`);
     if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
     const posts = await res.json();
     console.log('Loaded posts:', posts);
@@ -36,6 +37,12 @@ async function loadPosts() {
     }
     postsWrapper.innerHTML = ''; // ניקוי הרשימה הקיימת
 
+    // update filter icon and no-posts message
+    const noPostsMsg = document.getElementById('no-posts-message');
+    const filterBtn  = document.querySelector('.custom-filter');
+    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
+    if (filterBtn)  filterBtn.style.display  = posts.length === 0 ? 'none' : 'flex';
+    console.log(posts.length)
 
     if (!Array.isArray(posts) || posts.length === 0) {
       console.warn('No posts received from server');
@@ -164,8 +171,7 @@ async function loadPosts() {
 
     });
 
-    const noPostsMsg = document.getElementById('no-posts-message');
-    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
+    
 
     enableScrollAutoplay();
   } catch (err) {
@@ -365,7 +371,9 @@ function setupPostListeners(postEl, postData) {
 
 
 
-document.addEventListener('DOMContentLoaded', loadPosts);
+document.addEventListener('DOMContentLoaded', () => {
+  loadPosts();
+})
 
 function enableScrollAutoplay() {
   const videos = document.querySelectorAll('video');
@@ -648,6 +656,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const recentSection = modal.querySelector('.recent-section');
   const searchInput = modal.querySelector('.search-input');
   const filterRadios = modal.querySelectorAll('input[name="filter"]');
+  filterRadios.forEach( (radio) => {
+    radio.addEventListener('click', () => {
+      const loadType = radio.value === 'any' ? 'All' : 'Friends'
+      loadPosts(loadType)
+    })
+  })
 
   // מחיקת פריט ספציפי - עם עצירת התפשטות האירוע
   recentSection.addEventListener('click', (e) => {
@@ -665,14 +679,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // חיפוש לפי פילטר
-  searchInput.addEventListener('input', () => {
+    searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase().trim();
-    const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value || 'username';
 
     // --- חיפוש במשתמשים (recent-item)
     const items = recentSection.querySelectorAll('.recent-item');
     items.forEach(item => {
-      if (selectedFilter === 'username') {
+      if (false) {
         const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
         const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
         const textToSearch = username + ' ' + name;
@@ -697,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
       const description = shortText + " " + fullText;
 
-      if (selectedFilter === 'description') {
+      if (true) {
         const isMatch = description.includes(query);
         
         if (isMatch) {
