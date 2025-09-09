@@ -2446,9 +2446,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const editIcon = e.target.closest('.edit-post-icon');
     if (!editIcon) return;
     console.log('Edit icon clicked:', editIcon);
-
     const postEl = editIcon.closest('.post');
     if (!postEl) return;
+    const moreMenu = postEl.querySelector('.more-menu');
+    moreMenu.style.display = 'none';  
 
     const postTextEl = postEl.querySelector('.post-text');
     if (!postTextEl) return;
