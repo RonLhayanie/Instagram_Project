@@ -665,7 +665,7 @@ function OpenSerchFilters()
   }
 }
 
-
+//Filter click listener
 const SearchFilters = {
     onlyPostsILiked: false,
     filterType: {Video: true, Image: true},
@@ -744,21 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // חיפוש לפי פילטר
   searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase().trim();
-    const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value || 'username';
-
-    // --- חיפוש במשתמשים (recent-item)
-    const items = recentSection.querySelectorAll('.recent-item');
-    items.forEach(item => {
-      if (selectedFilter === 'username') {
-        const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
-        const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
-        const textToSearch = username + ' ' + name;
-
-        item.style.display = textToSearch.includes(query) ? "" : "none";
-      } else {
-        item.style.display = "";
-      }
-    });
+    const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value;
 
     // --- חיפוש בפוסטים בלבד
     const posts = document.querySelectorAll('.posts-wrapper .post');
@@ -855,10 +841,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const isClickInside =
       searchModal.contains(event.target) ||
       searchToggle.contains(event.target) ||
-      sidebar.contains(event.target);
+      sidebar.contains(event.target) || 
+      document.getElementById("filter-dropdown").contains(event.target)
+      ;
 
     if (!isClickInside && searchModal.style.display === "flex") {
-      document.getElementById("filter-dropdown").style.display = "none"
 
       searchModal.style.display = "none";
       sidebar.classList.remove("sidebar--collapsed");

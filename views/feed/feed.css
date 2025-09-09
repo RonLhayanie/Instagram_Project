@@ -473,8 +473,8 @@ body.dark-mode #scrollToTopBtn img {
 
 
 
-  /* left side bar */
-  
+/* left side bar */
+
   .sidebar-left {
     z-index: 999;
     position: fixed;
@@ -491,25 +491,25 @@ body.dark-mode #scrollToTopBtn img {
   transition: border-color 0.15s ease;   /* החלקה כמו ההאפלה */
 
   }
-  
+
   .sidebar-items {
   display: flex;
   flex-direction: column;
   gap:20px;
   }
-  
+
   .sidebar-top {
   display: flex;
   flex-direction: column;
   gap: 12px;
   }
-  
+
   .sidebar-bottom {
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
   }
-  
+
   .sidebar-item {
   width: 100%;
   display: flex;
@@ -521,11 +521,11 @@ body.dark-mode #scrollToTopBtn img {
   cursor: pointer;
   transition: background-color 0.3s ease;
   }
-  
+
   .sidebar-hoverable:hover {
   background-color: #e3e3e383;
   }
-  
+
   .sidebar-item img {
   width: 25px;
   height: 25px;
@@ -534,13 +534,13 @@ body.dark-mode #scrollToTopBtn img {
 
   }
 
-  
+
   #pfp-l {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   }
-  
+
   #lftlogo {
   height: 42px;
   width: 115px;
@@ -553,18 +553,18 @@ body.dark-mode #scrollToTopBtn img {
   {
     opacity: 0.7;
   }
-  
+
   #lftlogo:hover {
   background-color: transparent;
   box-shadow: none;
   }
-  
+
   /* Optional: Adjust size of bottom icons */
   .sidebar-bottom img {
   width: 25px;
   height: 25px;
   }
-  
+
   /* Optional: Add margins for the bottom items to have more space from the top section */
   .sidebar-bottom .sidebar-item {
   margin-top: 12px;
@@ -2103,8 +2103,8 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
     height: 320px;
     position: absolute;
     display: none;
-    top: 39.3%;
-    left: 562px;
+    top: 45.4%;
+    left: 265px;
     translate: -50% -50%;
     background: #fff;
     border: 1px solid lightgrey;
