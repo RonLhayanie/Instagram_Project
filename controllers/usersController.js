@@ -91,11 +91,9 @@ router.post('/login', async (req,res) => {
     }
     catch(err)
     {
-        console.log("123");
         res.status(400).json();
     }
 })
-
 
 //check if username is available or not
 router.post('/check-username', async (req, res) => {
@@ -369,8 +367,6 @@ router.post('/unfollow', async (req, res) => {
         res.status(500).json({ error: "Failed to unfollow user" });
     }
 });
-
-
 
 module.exports = router;
 

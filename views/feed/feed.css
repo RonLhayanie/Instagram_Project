@@ -9,6 +9,7 @@
         overflow: hidden; /* ביטול גלילה רגילה */
     }
     
+    
     .container{
     justify-content: space-between;
     align-items: flex-start; /* כדי ששניהם יהיו למעלה */
@@ -68,7 +69,7 @@
       border-radius: 50%;
       padding: 10px;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 999;
       display: block;
     }
 
@@ -470,10 +471,12 @@ body.dark-mode #scrollToTopBtn img {
     opacity: 1;
   }
 
-  /* left side bar */
-  
+
+
+/* left side bar */
+
   .sidebar-left {
-    z-index: 9999999;
+    z-index: 999;
     position: fixed;
   display: flex;
   flex-direction: column;
@@ -488,25 +491,25 @@ body.dark-mode #scrollToTopBtn img {
   transition: border-color 0.15s ease;   /* החלקה כמו ההאפלה */
 
   }
-  
+
   .sidebar-items {
   display: flex;
   flex-direction: column;
   gap:20px;
   }
-  
+
   .sidebar-top {
   display: flex;
   flex-direction: column;
   gap: 12px;
   }
-  
+
   .sidebar-bottom {
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
   }
-  
+
   .sidebar-item {
   width: 100%;
   display: flex;
@@ -518,11 +521,11 @@ body.dark-mode #scrollToTopBtn img {
   cursor: pointer;
   transition: background-color 0.3s ease;
   }
-  
+
   .sidebar-hoverable:hover {
   background-color: #e3e3e383;
   }
-  
+
   .sidebar-item img {
   width: 25px;
   height: 25px;
@@ -531,13 +534,13 @@ body.dark-mode #scrollToTopBtn img {
 
   }
 
-  
+
   #pfp-l {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   }
-  
+
   #lftlogo {
   height: 42px;
   width: 115px;
@@ -550,24 +553,26 @@ body.dark-mode #scrollToTopBtn img {
   {
     opacity: 0.7;
   }
-  
+
   #lftlogo:hover {
   background-color: transparent;
   box-shadow: none;
   }
-  
+
   /* Optional: Adjust size of bottom icons */
   .sidebar-bottom img {
   width: 25px;
   height: 25px;
   }
-  
+
   /* Optional: Add margins for the bottom items to have more space from the top section */
   .sidebar-bottom .sidebar-item {
   margin-top: 12px;
   }
+
   
-  .share-overlay {
+  
+  .share-overlay,.comment-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -578,9 +583,7 @@ body.dark-mode #scrollToTopBtn img {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  
-    opacity: 0;
+  opacity: 0;
   transition: opacity 0.15s ease;
   pointer-events: none;
 }
@@ -821,35 +824,13 @@ body.dark-mode #scrollToTopBtn img {
 }
 
 
-.dimmed::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* החשכה */
-  z-index: 1000; /* שיהיה מעל אבל לא מעל המודל */
-  pointer-events: none; /* שימנע בעיות קליקים */
-  border-radius: inherit; /* אם יש רדיוס – שישמר */
-}
 
 .dimmable.dimmed::after {
   opacity: 0.5;   
 }
 
 
-.dimmable::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 1); /* שחור מלא – לא משנה, נשלוט באופסיטי */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  border-radius: inherit;
-  z-index: 1000; /* מעל התוכן, מתחת למודלים */
-}
+
 
 
 
@@ -1593,17 +1574,19 @@ cursor: pointer;
 
 .comment-modal {
   position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 50%; 
+  left: 50%;
   background: rgba(0,0,0,0.6);
-  display: none; /* נתחיל סגור */
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   font-family: 'Arial', sans-serif;
-  background-color: rgba(0, 0, 0, 0.5); /* החשכה */
+  background-color: rgba(0, 0, 0, 0.5); 
   opacity: 0;
   transition: opacity 0.15s ease;
-  pointer-events: none; /* לא לאפשר אינטראקציה כשהוא נסגר */
+  pointer-events: none; 
+  translate: -50% -50%;
 }
 .comment-modal.active {
   display: flex;
@@ -1665,8 +1648,8 @@ cursor: pointer;
 .modal-close {
   background: transparent;
   border: none;
-  color: white;
-  font-size: 28px;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
   font-weight: bold;
   cursor: pointer;
   padding: 0 8px;
@@ -1674,8 +1657,8 @@ cursor: pointer;
   user-select: none;
   transition: color 0.3s ease;
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: -60px;
+  right: -280px;
   z-index: 10;
 }
 
@@ -2091,7 +2074,7 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   position: fixed;
   top: 0;
   left: 72px;
-  width: 400px;
+  width: 356px;
   height: 100%;
   background: #fff;
   border-top-right-radius: 3%;
@@ -2107,9 +2090,28 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   pointer-events: none;
 }
 
-.search-filter{
-margin-bottom: 10px;
-margin-left: 20px;
+#SearchFilterIcon
+{
+  position: relative;
+  top: 95px;
+  left: 115px;
+  cursor: pointer;
+}
+
+#filter-dropdown {
+    width: 285px;
+    height: 320px;
+    position: absolute;
+    display: none;
+    top: 45.4%;
+    left: 265px;
+    translate: -50% -50%;
+    background: #fff;
+    border: 1px solid lightgrey;
+    padding: 5px;
+    box-shadow: 0 0 10px 5px #0000000a;
+    border-radius: 5px;
+    z-index: 9999999999999;
 }
 
 .search-modal.active {
@@ -2117,6 +2119,7 @@ margin-left: 20px;
   opacity: 1;
   pointer-events: auto;
   animation: slideIn 0.5s ease forwards;
+
 
 }
 
@@ -2126,6 +2129,11 @@ margin-left: 20px;
   pointer-events: none;
 
 }
+
+
+
+
+
 
 
 @keyframes slideIn {
@@ -3098,6 +3106,7 @@ font-weight: 600;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
+
 #create-post-overlay {
   position: fixed;
   inset: 0;
@@ -3111,6 +3120,18 @@ font-weight: 600;
 #create-post-overlay.visible {
   background: rgba(0, 0, 0, 0.5);
 }
+
+.post-video {
+  width: 500px;
+  height: fit-content;
+  max-height: 600px;
+  overflow: hidden
+}
+
+.post video {
+  width: 100%;
+  object-fit: contain;
+} 
 
 #map-overlay {
   width: 100vw; 

@@ -24,6 +24,10 @@ const groupSearchFilters = {
     activityLevel: "any"
 }
 
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
+
 console.log(AccountUsername + "'s console")
 
 // load all chats

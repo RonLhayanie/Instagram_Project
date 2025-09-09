@@ -118,7 +118,7 @@ module.exports =
     deleteByUsername,
     searchByFullnameAndUsername,
     followUser,
-    unfollowUser
+    unfollowUser,
 
 //    addFollowingAndFollowersToExistingUsers
 
