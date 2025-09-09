@@ -10,6 +10,40 @@ async function getAllPosts() {
   return await collection.find().toArray();
 }
 
+async function getFriendsPosts(currentUser) {
+  // all the groups containing currentUser and all the user currentUser follows
+  const currentUserGroups = await  connectDB.collection('chats').find({
+    members: currentUser
+  }).toArray()
+
+  const currentUserFriends = await connectDB.collection('users').find({
+    followers: currentUser
+  }).toArray()
+
+
+   // all the username from friends and group
+  let totalGroupMembers = currentUserGroups.map(chat => chat.members)
+  let totalMembers = []
+  totalGroupMembers.forEach(members => {
+    totalMembers = [...totalMembers, ...members]
+  })
+  const totalFriends = currentUserFriends.map(user => user.username)
+
+  // remove duplicates
+  const distinctUsers = new Set([...totalFriends, ...totalMembers])
+
+  // sum up all the posts of the usernames
+  let posts = []
+  for(const username of distinctUsers) {
+    const newPosts = await collection.find({
+      username: username
+    }).toArray()
+    posts = [...posts, ...newPosts]
+  }
+
+  return posts
+}
+
 async function getUserAvgStats(username) 
 {
   const posts = await collection.find({ username }).toArray();
@@ -102,6 +136,7 @@ async function deletePost(postId) {
 module.exports = { 
   Create,
   getAllPosts,
+  getFriendsPosts,
   getUserAvgStats,
   toggleLike,
   findById,

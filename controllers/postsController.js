@@ -82,9 +82,11 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 // Get all posts
 router.get('/getAllPosts', async (req, res) => {
   try {
-    const posts = await postsModel.getAllPosts({ sort: { date: 1 } });
-    console.log(posts);
     const currentUser = req.query.user; // מגיע מהלקוח
+
+    // try to load friends posts
+    let posts = await postsModel.getFriendsPosts(currentUser);
+    console.log('final posts', posts);
 
     if (currentUser) {
       posts.forEach(p => {

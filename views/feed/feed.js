@@ -23,7 +23,8 @@ window.addEventListener('load', () => {
 // load posts from server
 async function loadPosts() {
   try {
-    const res = await fetch('/posts/getAllPosts');
+    const currentUser = localStorage.getItem('currentUser')
+    const res = await fetch(`/posts/getAllPosts?user=${currentUser}`);
     if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
     const posts = await res.json();
     console.log('Loaded posts:', posts);
