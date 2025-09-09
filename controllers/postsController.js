@@ -10,24 +10,13 @@ const { fileTypeFromBuffer } = require('file-type')
 const fs = require('fs') 
 const { ObjectId } = require('mongodb');
 
-// הגדרת איפה Multer ישמור את הקבצים
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // ודא שיצרת תיקייה uploads בספרייה הראשית
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
 const fileFilter = (req, file, cb) => {
   const allowedMime = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
   const allowedExt = [".jpeg", ".jpg", ".png", ".gif", ".mp4"];
   console.log("file: ", file);
   console.log("file.mimetype: ", file.mimetype);
 
-  const isTrue =allowedMime.includes(file.mimetype);
+  const isTrue = allowedMime.includes(file.mimetype);
 
   if (isTrue) {
     cb(null, true);
@@ -38,7 +27,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter,
   limits: { fileSize: 200 * 1024 * 1024 } // עד 200MB במקום 50MB
 });
@@ -49,16 +38,25 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
     const { username, text, avatar } = req.body;
     const file = req.file;
 
-    let imagePath = null;
-    let postType = 'text';
-
-    if (file) {
-      const buffer = await fs.promises.readFile(file.path);
-      const type = await fileTypeFromBuffer(buffer);
-
-      imagePath = `/uploads/${file.filename}`;
-      postType = type ? type.mime.split('/')[0] : 'unknown';
+    if (!file) {
+      return res.status(400).json({ error: 'No file uploaded' });
     }
+
+    // בדיקת סוג הקובץ לפי תוכן אמיתי
+    const type = await fileTypeFromBuffer(file.buffer);
+    if (!type) {
+      return res.status(400).json({ error: 'Unsupported file type' });
+    }
+
+    // יצירת שם ייחודי ושמירה ל־uploads
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const filename = uniqueSuffix + "." + type.ext;
+    const filePath = path.join("uploads", filename);
+
+    fs.writeFileSync(filePath, file.buffer);
+
+    const imagePath = `/uploads/${filename}`;
+    const postType = type.mime.split('/')[0]; // "image" או "video"
 
     const newPost = {
       username,
@@ -82,12 +80,15 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 });
 
 
+
 // Get all posts
 router.get('/getAllPosts', async (req, res) => {
   try {
-    const posts = await postsModel.getAllPosts({ sort: { _id: -1 } });
-    console.log(posts);
     const currentUser = req.query.user; // מגיע מהלקוח
+
+    // try to load friends posts
+    let posts = await postsModel.getFriendsPosts(currentUser);
+    console.log('final posts', posts);
 
     if (currentUser) {
       posts.forEach(p => {
@@ -121,6 +122,37 @@ router.get('/:id', async (req, res) => {
     console.error('Error fetching post:', err);
     res.status(500).json({ error: 'Server error' });
   }
+});
+
+// Delete a post
+router.delete('/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const username = req.query.user; // מגיע מהלקוח 
+    console.log(`Request to delete post ${postId} by user ${username}`);
+    
+    if (!ObjectId.isValid(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    const post = await postsModel.findById(postId);   
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    } 
+
+    if (post.username !== username) {
+      return res.status(403).json({ error: 'You can only delete your own posts' });
+    }
+
+    // מחיקה מהמונגו
+    await postsModel.deletePost(postId);
+
+    res.json({ message: 'Post deleted successfully' });
+
+  } catch (err) {
+    console.error('Error deleting post:', err);
+    res.status(500).json({ error: 'Server error' });
+  } 
 });
 
 // Add a comment to a post
@@ -270,9 +302,6 @@ router.get('/getFilteredPosts', async (req, res) => {
     res.status(500).json({ error: 'Server error', details: err.message });
   }
 });
-
-
-
 
 
 
