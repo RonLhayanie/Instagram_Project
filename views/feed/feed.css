@@ -476,8 +476,8 @@ body.dark-mode #scrollToTopBtn img {
 
 
 
-  /* left side bar */
-  
+/* left side bar */
+
   .sidebar-left {
     z-index: 999;
     position: fixed;
@@ -494,25 +494,25 @@ body.dark-mode #scrollToTopBtn img {
   transition: border-color 0.15s ease;   /* החלקה כמו ההאפלה */
 
   }
-  
+
   .sidebar-items {
   display: flex;
   flex-direction: column;
   gap:20px;
   }
-  
+
   .sidebar-top {
   display: flex;
   flex-direction: column;
   gap: 12px;
   }
-  
+
   .sidebar-bottom {
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
   }
-  
+
   .sidebar-item {
   width: 100%;
   display: flex;
@@ -524,11 +524,11 @@ body.dark-mode #scrollToTopBtn img {
   cursor: pointer;
   transition: background-color 0.3s ease;
   }
-  
+
   .sidebar-hoverable:hover {
   background-color: #e3e3e383;
   }
-  
+
   .sidebar-item img {
   width: 25px;
   height: 25px;
@@ -537,13 +537,13 @@ body.dark-mode #scrollToTopBtn img {
 
   }
 
-  
+
   #pfp-l {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   }
-  
+
   #lftlogo {
   height: 42px;
   width: 115px;
@@ -556,18 +556,18 @@ body.dark-mode #scrollToTopBtn img {
   {
     opacity: 0.7;
   }
-  
+
   #lftlogo:hover {
   background-color: transparent;
   box-shadow: none;
   }
-  
+
   /* Optional: Adjust size of bottom icons */
   .sidebar-bottom img {
   width: 25px;
   height: 25px;
   }
-  
+
   /* Optional: Add margins for the bottom items to have more space from the top section */
   .sidebar-bottom .sidebar-item {
   margin-top: 12px;
@@ -2120,7 +2120,7 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   position: fixed;
   top: 0;
   left: 72px;
-  width: 400px;
+  width: 356px;
   height: 100%;
   background: #fff;
   border-top-right-radius: 3%;
@@ -2136,9 +2136,28 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
   pointer-events: none;
 }
 
-.search-filter{
-margin-bottom: 10px;
-margin-left: 20px;
+#SearchFilterIcon
+{
+  position: relative;
+  top: 95px;
+  left: 115px;
+  cursor: pointer;
+}
+
+#filter-dropdown {
+    width: 285px;
+    height: 320px;
+    position: absolute;
+    display: none;
+    top: 45.4%;
+    left: 265px;
+    translate: -50% -50%;
+    background: #fff;
+    border: 1px solid lightgrey;
+    padding: 5px;
+    box-shadow: 0 0 10px 5px #0000000a;
+    border-radius: 5px;
+    z-index: 9999999999999;
 }
 
 .search-modal.active {
@@ -2146,6 +2165,7 @@ margin-left: 20px;
   opacity: 1;
   pointer-events: auto;
   animation: slideIn 0.5s ease forwards;
+
 
 }
 
@@ -2155,6 +2175,11 @@ margin-left: 20px;
   pointer-events: none;
 
 }
+
+
+
+
+
 
 
 @keyframes slideIn {

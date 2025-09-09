@@ -70,6 +70,7 @@ router.post('/createAccount', async (req, res) => {
 
 });
 
+
 //check if username is available or not
 router.post('/check-username', async (req, res) => {
     console.log("username sent:", req.body);

@@ -7,6 +7,11 @@ function gotoprofile() {
 window.location.href = '../profile/profile.html';
 } 
 
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
+console.log(localStorage.getItem('currentUser'))
+
 // loading screen
 window.addEventListener('load', () => {
   const loader = document.getElementById('loading-screen');
@@ -22,9 +27,11 @@ window.addEventListener('load', () => {
 
 
 // load posts from server
-async function loadPosts() {
+async function loadPosts(filter = null, loadtype="All") {
   try {
-    const res = await fetch('/posts/getAllPosts');
+    const currentUser = localStorage.getItem('currentUser')
+    console.log(loadtype)
+    const res = await fetch(`/posts/get${loadtype}Posts?user=${currentUser}`);
     if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
     const posts = await res.json();
     console.log('Loaded posts:', posts);
@@ -36,6 +43,12 @@ async function loadPosts() {
     }
     postsWrapper.innerHTML = ''; // ניקוי הרשימה הקיימת
 
+    // update filter icon and no-posts message
+    const noPostsMsg = document.getElementById('no-posts-message');
+    const filterBtn  = document.querySelector('.custom-filter');
+    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
+    if (filterBtn)  filterBtn.style.display  = posts.length === 0 ? 'none' : 'flex';
+    console.log(posts.length)
 
     if (!Array.isArray(posts) || posts.length === 0) {
       console.warn('No posts received from server');
@@ -148,7 +161,7 @@ async function loadPosts() {
 
 
 
-        // ✅ סימון לייק אם המשתמש כבר סימן לייק
+        //  סימון לייק אם המשתמש כבר סימן לייק
       const currentUser = localStorage.getItem("currentUser");
       if (post.likes.includes(currentUser)) {
         const likeBtn = postEl.querySelector('.like');
@@ -164,8 +177,45 @@ async function loadPosts() {
 
     });
 
-    const noPostsMsg = document.getElementById('no-posts-message');
-    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
+    if (filter)
+    {
+      if (SearchFilters.onlyPostsILiked)
+      {
+        document.querySelectorAll('.post').forEach(postEl => {
+          const likebtn = postEl.querySelector('.like');
+          if (!likebtn.classList.contains('liked'))
+          {
+            postEl.style.display = "none";
+          }
+        })
+      }
+
+
+      if (SearchFilters.filterType.Video && !SearchFilters.filterType.Image)
+          {
+            document.querySelectorAll('.post.imgtype').forEach(postEl => {
+              postEl.style.display = "none";
+            })
+          }    
+
+      if (SearchFilters.filterType.Image && !SearchFilters.filterType.Video)
+      {
+        document.querySelectorAll('.post.videotype').forEach(postEl => {
+          postEl.style.display = "none";
+        })
+      }
+
+      if (!SearchFilters.filterType.Image && !SearchFilters.filterType.Video)
+      {
+        document.querySelectorAll('.post').forEach(postEl => {
+          postEl.style.display = "none";
+        })
+      }
+  
+        
+
+    }
+    
 
     enableScrollAutoplay();
   } catch (err) {
@@ -377,7 +427,9 @@ function setupPostListeners(postEl, postData) {
 
 
 
-document.addEventListener('DOMContentLoaded', loadPosts);
+document.addEventListener('DOMContentLoaded', () => {
+  loadPosts();
+})
 
 function enableScrollAutoplay() {
   const videos = document.querySelectorAll('video');
@@ -630,6 +682,50 @@ const toggleBtn = document.getElementById("search-toggle");
 const modal = document.getElementById("search-modal");
 const closeBtn = document.getElementById("close-search");
 const sidebarLeft = document.querySelector(".sidebar-left");
+const filtersDropdown = document.getElementById("filter-dropdown");
+
+
+//open/close search filters
+function OpenSerchFilters()
+{
+  if (filtersDropdown.style.display == "none")
+  {
+    filtersDropdown.style.display = "block";
+  }
+  else
+  {
+    filtersDropdown.style.display = "none";
+
+  }
+}
+
+//Filter click listener
+const SearchFilters = {
+    onlyPostsILiked: false,
+    filterType: {Video: true, Image: true},
+}
+
+document.getElementById("onlyPostsILiked").addEventListener("click", () => {
+  SearchFilters.onlyPostsILiked = !SearchFilters.onlyPostsILiked;
+  loadPosts(SearchFilters);
+})
+
+document.getElementById("filterVideo").addEventListener("click", () => {
+  SearchFilters.filterType.Video = !SearchFilters.filterType.Video;
+  loadPosts(SearchFilters);
+
+})
+
+document.getElementById("filterImage").addEventListener("click", () => {
+  SearchFilters.filterType.Image = !SearchFilters.filterType.Image;
+  loadPosts(SearchFilters);
+
+})
+
+
+
+
+
 
 const animationDuration = 500; // זמן האנימציה במילישניות (0.5 שניות)
 
@@ -645,9 +741,12 @@ toggleBtn.addEventListener("click", () => {
 
 closeBtn.addEventListener("click", () => {
   sidebarLeft.classList.remove("sidebar--collapsed");
+  document.getElementById("filter-dropdown").style.display = "none"
+
 
   modal.classList.remove("active");
   modal.classList.add("closing");
+
 
   setTimeout(() => {
     modal.classList.remove("closing");
@@ -660,6 +759,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const recentSection = modal.querySelector('.recent-section');
   const searchInput = modal.querySelector('.search-input');
   const filterRadios = modal.querySelectorAll('input[name="filter"]');
+  filterRadios.forEach( (radio) => {
+    radio.addEventListener('click', () => {
+      const loadType = radio.value === 'any' ? 'All' : 'Friends'
+      loadPosts(null, loadType)
+    })
+  })
 
   // מחיקת פריט ספציפי - עם עצירת התפשטות האירוע
   recentSection.addEventListener('click', (e) => {
@@ -677,14 +782,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // חיפוש לפי פילטר
-  searchInput.addEventListener('input', () => {
+    searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase().trim();
-    const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value || 'username';
 
     // --- חיפוש במשתמשים (recent-item)
     const items = recentSection.querySelectorAll('.recent-item');
     items.forEach(item => {
-      if (selectedFilter === 'username') {
+      if (false) {
         const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
         const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
         const textToSearch = username + ' ' + name;
@@ -709,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
       const description = shortText + " " + fullText;
 
-      if (selectedFilter === 'description') {
+      if (true) {
         const isMatch = description.includes(query);
         
         if (isMatch) {
@@ -790,9 +894,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const isClickInside =
       searchModal.contains(event.target) ||
       searchToggle.contains(event.target) ||
-      sidebar.contains(event.target);
+      sidebar.contains(event.target) || 
+      document.getElementById("filter-dropdown").contains(event.target)
+      ;
 
     if (!isClickInside && searchModal.style.display === "flex") {
+
       searchModal.style.display = "none";
       sidebar.classList.remove("sidebar--collapsed");
       logoImg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";

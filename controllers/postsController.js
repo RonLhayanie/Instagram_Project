@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const postsModel = require('./../models/postsModel');
+const usersModel = require('./../models/usersModel');
+
 const multer = require('multer');
 const path = require('path');
 
@@ -79,12 +81,14 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 
 
 
-// Get all posts
-router.get('/getAllPosts', async (req, res) => {
+// Get friends posts
+router.get('/getFriendsPosts', async (req, res) => {
   try {
-    const posts = await postsModel.getAllPosts({ sort: { date: 1 } });
-    console.log(posts);
     const currentUser = req.query.user; // מגיע מהלקוח
+
+    // try to load friends posts
+    let posts = await postsModel.getFriendsPosts(currentUser);
+    console.log('final posts', posts);
 
     if (currentUser) {
       posts.forEach(p => {
@@ -99,7 +103,27 @@ router.get('/getAllPosts', async (req, res) => {
   }
 });
 
+// Get all posts
+router.get('/getAllPosts', async (req, res) => {
+  try {
+    const currentUser = req.query.user; // מגיע מהלקוח
 
+    // try to load friends posts
+    let posts = await postsModel.getAllPosts(currentUser);
+    console.log('final posts', posts);
+
+    if (currentUser) {
+      posts.forEach(p => {
+        p.liked = (p.likes || []).includes(currentUser);
+      });
+    }
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 // Get post by ID 
@@ -241,5 +265,89 @@ router.post('/:id/toggle-like', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+
+
+
+// מניח שהמשתמש מחובר ו`currentUser` מגיע מ־localStorage בצד לקוח
+router.get('/getFollowing', async (req, res) => {
+  const currentUser = req.query.user;
+  if (!currentUser) return res.status(400).json({ error: "Missing user" });
+
+  const userData = await usersModel.findByUsername(currentUser);
+  res.json(userData?.following || []);
+});
+
+router.get('/getFollowers', async (req, res) => {
+  const currentUser = req.query.user;
+  if (!currentUser) return res.status(400).json({ error: "Missing user" });
+
+  const userData = await usersModel.findByUsername(currentUser);
+  res.json(userData?.followers || []);
+});
+
+
+// Get filtered posts
+router.get('/getFilteredPosts', async (req, res) => {
+  try {
+    const currentUser = req.query.user;
+    const { liked, type, following, followers } = req.query;
+
+    if (!currentUser) {
+      return res.status(400).json({ error: "Missing currentUser" });
+    }
+
+    // --------------------
+    // 1️⃣ בניית סינון מונגו לפי liked ו-type
+    // --------------------
+    let filter = {};
+    if (liked === 'true') {
+      filter.likes = { $in: [currentUser] };
+    }
+    if (type && (type === 'video' || type === 'image')) {
+      filter.type = type;
+    }
+
+    // --------------------
+    // 2️⃣ סינון לפי אנשים (following / followers)
+    // --------------------
+    let usernames = [];
+
+    if (following === 'true') {
+      const userData = await usersModel.findByUsername(currentUser);
+      usernames = userData?.following || [];
+    }
+
+    if (followers === 'true') {
+      const userData = await usersModel.findByUsername(currentUser);
+      const followerUsers = userData?.followers || [];
+      usernames = [...new Set([...usernames, ...followerUsers])]; // איחוד
+    }
+
+    if (usernames.length > 0) {
+      filter.username = { $in: usernames };
+    }
+
+    // --------------------
+    // 3️⃣ שליפת הפוסטים מהמונגו
+    // --------------------
+    const posts = await postsModel.getFilteredPosts(filter);
+
+    // הוספת שדה liked לכל פוסט
+    posts.forEach(p => {
+      p.liked = (p.likes || []).includes(currentUser);
+    });
+
+    res.json(posts);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error', details: err.message });
+  }
+});
+
+
+
 
 module.exports = router;
