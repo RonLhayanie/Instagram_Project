@@ -6,7 +6,7 @@ app.use(express.urlencoded({ limit: '200mb', extended: true }));
 const usersRouter   = require('./controllers/usersController')
 const chatsRouter   = require('./controllers/chatsController')
 const postsRouter   = require('./controllers/postsController')
-const weatherRouter = require('./controllers/weatherController');
+const weatherRouter = require('./controllers/weatherController')
 
 
 const path = require('path')
@@ -28,4 +28,4 @@ app.get('/', (req, res) => {
     res.redirect('login/login.html')
 })
 
-app.listen(3000)
+app.listen(3000);

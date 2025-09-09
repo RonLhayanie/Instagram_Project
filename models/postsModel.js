@@ -126,6 +126,13 @@ async function deletePost(postId) {
   }
 }
 
+async function UpdatePostText(postId, newText) {
+    await collection.updateOne(
+      { _id: new ObjectId(postId) },
+      { $set: {text:newText } }
+    );
+}
+
 
 
 
@@ -163,8 +170,9 @@ module.exports = {
   toggleLike,
   findById,
   update,
+  deletePost,
+  UpdatePostText,
   getFilteredPosts,
-  deletePost
 };
 
 

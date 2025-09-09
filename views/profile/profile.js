@@ -16,7 +16,9 @@ function EditProfile()
     window.location.href = "editProfile.html";
 }
 
-
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
 
 
 
@@ -476,7 +478,7 @@ async function loadProfile()
         const res = await fetch(`/users/getByUsername/${encodeURIComponent(username)}`);        
         console.log(res);
         if (!res.ok) throw new Error("User not found");
-        const user = await res.json();
+        const user = await res.json();  
 
         //Getting the data from Mongo
         document.getElementById("ProfileUsername").innerText = user.username;

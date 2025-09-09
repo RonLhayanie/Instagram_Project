@@ -14,10 +14,9 @@ function goToProfile()
     window.location.href = "profile.html";
 }
 
-
-
-
-
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
 
 // CHAR COUNTER FOR TEXTAREAS
 const textareas = document.querySelectorAll(".changeInputs");

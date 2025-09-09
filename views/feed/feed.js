@@ -7,6 +7,11 @@ function gotoprofile() {
 window.location.href = '../profile/profile.html';
 } 
 
+// no access without currentUser
+if(!localStorage.getItem('currentUser'))
+    window.location.href = '../login/login.html'
+console.log(localStorage.getItem('currentUser'))
+
 // loading screen
 window.addEventListener('load', () => {
   const loader = document.getElementById('loading-screen');
@@ -22,10 +27,11 @@ window.addEventListener('load', () => {
 
 
 // load posts from server
-async function loadPosts(filter = null) {
+async function loadPosts(filter = null, loadtype="All") {
   try {
     const currentUser = localStorage.getItem('currentUser')
-    const res = await fetch(`/posts/getAllPosts?user=${currentUser}`);
+    console.log(loadtype)
+    const res = await fetch(`/posts/get${loadtype}Posts?user=${currentUser}`);
     if (!res.ok) throw new Error(`Failed to fetch posts: ${res.status}`);
     const posts = await res.json();
     console.log('Loaded posts:', posts);
@@ -37,6 +43,10 @@ async function loadPosts(filter = null) {
     }
     postsWrapper.innerHTML = ''; // ניקוי הרשימה הקיימת
 
+    // update filter icon and no-posts message
+    const noPostsMsg = document.getElementById('no-posts-message');
+    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
+    console.log(posts.length)
 
     if (!Array.isArray(posts) || posts.length === 0) {
       console.warn('No posts received from server');
@@ -108,7 +118,7 @@ async function loadPosts(filter = null) {
           </button>
           <div class="more-menu" style="display: none;">
             <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
-            <img class="edit-post-icon" src="https://img.icons8.com/?size=48&id=dvZ3QGGN2K9v&format=png 1x, https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
+            <img class="edit-post-icon" src="https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
           </div>
         </div>
         ${mediaHtml}
@@ -165,7 +175,6 @@ async function loadPosts(filter = null) {
 
     });
 
-
     if (filter)
     {
       if (SearchFilters.onlyPostsILiked)
@@ -205,9 +214,6 @@ async function loadPosts(filter = null) {
 
     }
     
-
-    const noPostsMsg = document.getElementById('no-posts-message');
-    if (noPostsMsg) noPostsMsg.style.display = posts.length === 0 ? 'block' : 'none';
 
     enableScrollAutoplay();
   } catch (err) {
@@ -273,19 +279,31 @@ function setupPostListeners(postEl, postData) {
 
   const currentUser = localStorage.getItem("currentUser");
   deleteIcon.addEventListener('click', async () => {
+    
     try {
       const res = await fetch(`/posts/${postId}?user=${encodeURIComponent(currentUser)}`, {
         method: 'DELETE'
       });
-      if (!res.ok) throw new Error('Failed to delete post');
+      if (!res.ok) throw new Error('Failed to delete post');{
+      showToast(document.getElementById('toast-delete'));
       postEl.remove();
+      }
       // עדכון מרג'ין לפי סוג הפוסט
-      updateSidebarMargin(postData.type === 'text' ? -260 : -670);
+       updateSidebarMarginDelete(0);
     } catch (err) {
       console.error('Error deleting post:', err);
       alert('Failed to delete post. Please try again.');
     }
   });
+
+    function updateSidebarMarginDelete(distance) {
+  const sidebarRight = document.querySelector('.sidebar-right');
+  const newMargin = leftSidebarOffset + ((imagePostsCount-1) * 670);
+  sidebarRight.style.marginTop = `${newMargin}px`;
+  console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
+}
+
+  
 
 
   // כפתור תגובות (פתיחת מודל)
@@ -407,7 +425,9 @@ function setupPostListeners(postEl, postData) {
 
 
 
-document.addEventListener('DOMContentLoaded', loadPosts);
+document.addEventListener('DOMContentLoaded', () => {
+  loadPosts();
+})
 
 function enableScrollAutoplay() {
   const videos = document.querySelectorAll('video');
@@ -725,11 +745,15 @@ closeBtn.addEventListener("click", () => {
   modal.classList.remove("active");
   modal.classList.add("closing");
 
-
+  const filterDrop = document.getElementById("filter-dropdown");
   setTimeout(() => {
     modal.classList.remove("closing");
     modal.style.display = "none";  // להסתיר רק אחרי האנימציה
   }, animationDuration);
+  filterDrop.style.display = "none";
+  filterDrop.classList.add("hidden")
+   filterDrop.classList.remove("active");
+
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -737,6 +761,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const recentSection = modal.querySelector('.recent-section');
   const searchInput = modal.querySelector('.search-input');
   const filterRadios = modal.querySelectorAll('input[name="filter"]');
+
+
+
+  filterRadios.forEach( (radio) => {
+    radio.addEventListener('click', () => {
+      const loadType = radio.value === 'any' ? 'All' : 'Friends'
+      console.log(loadType);
+      loadPosts(null, loadType)
+    })
+  })
+  
 
   // מחיקת פריט ספציפי - עם עצירת התפשטות האירוע
   recentSection.addEventListener('click', (e) => {
@@ -754,15 +789,27 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // חיפוש לפי פילטר
-  searchInput.addEventListener('input', () => {
+    searchInput.addEventListener('input', () => {
     const query = searchInput.value.toLowerCase().trim();
-    const selectedFilter = Array.from(filterRadios).find(r => r.checked)?.value;
+
+    // --- חיפוש במשתמשים (recent-item)
+    const items = recentSection.querySelectorAll('.recent-item');
+    items.forEach(item => {
+      if (false) {
+        const username = item.querySelector('.m_username')?.textContent.toLowerCase() || "";
+        const name = item.querySelector('.m_name')?.textContent.toLowerCase() || "";
+        const textToSearch = username + ' ' + name;
+
+        item.style.display = textToSearch.includes(query) ? "" : "none";
+      } else {
+        item.style.display = "";
+      }
+    });
 
     // --- חיפוש בפוסטים בלבד
     const posts = document.querySelectorAll('.posts-wrapper .post');
     const storiesContainer = document.querySelector('.stories-container'); // שמירה על הסטורייס
     const sidebarRight = document.querySelector('.sidebar-right'); // שמירה על הסיידבאר הימני
-    const cfilter = document.querySelector('.custom-filter');
     let anyVisible = false;
     let hiddenCount = 0;
     let firstMatch = null;
@@ -772,7 +819,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const fullText = post.querySelector('.full-text')?.textContent.toLowerCase() || "";
       const description = shortText + " " + fullText;
 
-      if (selectedFilter === 'description') {
+      if (true) {
         const isMatch = description.includes(query);
         
         if (isMatch) {
@@ -845,25 +892,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   closeSearch.addEventListener("click", () => {
     searchModal.style.display = "none";
+    filterDrop.style.display = "none";
     sidebar.classList.remove("sidebar--collapsed");
     logoImg.src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png"
   });
 
   document.addEventListener("click", (event) => {
-    const isClickInside =
-      searchModal.contains(event.target) ||
-      searchToggle.contains(event.target) ||
-      sidebar.contains(event.target) || 
-      document.getElementById("filter-dropdown").contains(event.target)
-      ;
+  const isClickInside =
+    searchModal.contains(event.target) ||
+    searchToggle.contains(event.target) ||
+    sidebar.contains(event.target) ||
+    document.getElementById("filter-dropdown").contains(event.target);
 
-    if (!isClickInside && searchModal.style.display === "flex") {
-
+  if (!isClickInside) {
+    if (searchModal.style.display === "flex") {
       searchModal.style.display = "none";
-      sidebar.classList.remove("sidebar--collapsed");
-      logoImg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";
     }
-  });
+
+    if (filterDrop.style.display === "block" || filterDrop.style.display === "flex") {
+      filterDrop.style.display = "none";
+      filterDrop.classList.add("hidden");
+      filterDrop.classList.remove("active");
+    }
+
+    sidebar.classList.remove("sidebar--collapsed");
+    logoImg.src =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/840px-Instagram_logo.svg.png";
+  }
+});
   
 /// comment feature
 
@@ -1467,64 +1523,6 @@ function showToast(toastElement) {
   }, 1500);
 }
 
-// document.querySelectorAll('.send-comment').forEach(button => {
-//   button.addEventListener('click',async () => {
-//     const commentInput = button.closest('.comment-input');
-//     const textarea = commentInput.querySelector('textarea');
-//     const text = textarea.value.trim();
-//     if (!text) return;
-
-//     const modal = document.querySelector('.comment-modal');
-//     const postId = modal.getAttribute('data-post-id'); // משייך לפוסט פתוח
-
-//     const commentsList = modal.querySelector('.comments-list');
-//     const writingIndicator = modal.querySelector('.comment-item.writing');
-
-
-//     const username =  localStorage.getItem('currentUser');
-//     const userProfilePic = await avatarFetch(username);
-
-    
-//     const commentEl = document.createElement('div');
-//     commentEl.className = 'comment-item';
-//     commentEl.innerHTML = `
-//       <img src="${userProfilePic}" alt="${username}" class="comment-avatar">
-//       <div class="comment-content">
-//         <span class="comment-username">${username}</span>
-//         <span class="comment-text">${text}</span>
-//       </div>
-//     `;
-
-//     // commentsList.prepend(writingIndicator);
-//     commentsList.appendChild(commentEl);
-
-//     // שמירה במבנה תגובות
-//     if (!commentData[postId]) {
-//       commentData[postId] = [];
-//     }
-//     commentData[postId].unshift({
-//       username,
-//       avatar: userProfilePic,
-//       text
-//     });
-
-//     // איפוס התיבה
-//     textarea.value = "";
-//     textarea.dispatchEvent(new Event('input'));
-// // עדכון טקסט view comments
-// const viewComments = window.currentPostInModal?.querySelector('.view-comments-text');
-// if (viewComments) {
-//   const match = viewComments.textContent.match(/\d+/);
-//   const base = match ? parseInt(match[0], 10) : 0;
-//   const total = base + 1;
-
-//   viewComments.textContent = `View all ${total} comments`;
-// }
-
-//     const toastComment = document.getElementById('toast-comment');
-//     showToast(toastComment);
-//   });
-// });
 
 document.querySelectorAll('.post-button').forEach(postBtn => {
   postBtn.addEventListener('click', () => {
@@ -2386,7 +2384,7 @@ createModal.querySelector('#submit-new-post').addEventListener('click', () => {
 });
 
 
-let leftSidebarOffset = -3200;
+let leftSidebarOffset = -12550;
 let textPostsCount = 0; 
 let imagePostsCount = 0; 
 let videoPostsCount = 0; 
@@ -2565,26 +2563,111 @@ function updateSidebarMargin(distance) {
   console.log('🔧 עדכון מרג\'ין לסיידבאר השמאלי:', newMargin + 'px');
 }
 
-// // פונקציות עזר
-// function updateCommentsCount(post) {
-//   const postId = post.id;
-//   const commentsCountSpan = post.querySelector('.comments-count') || post.querySelector('.view-comments-text');
-//   const count = (commentData2[postId] || []).length;
-//   if (commentsCountSpan) {
-//     commentsCountSpan.textContent = count > 0 ? `${count} comments` : '0 comments';
-//   }
-// }
 
-// function updateViewCommentsText(post) {
-//   const postId = post.id;
-//   const viewCommentsText = post.querySelector('.view-comments-text');
-//   const count = (commentData2[postId] || []).length;
-//   if (viewCommentsText) {
-//     viewCommentsText.textContent = `View all ${count} comment${count !== 1 ? 's' : ''}`;
-//   }
-// }
 
-// }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Script loaded, attaching click listener');
+
+  document.addEventListener('click', async (e) => {
+    const editIcon = e.target.closest('.edit-post-icon');
+    if (!editIcon) return;
+    console.log('Edit icon clicked:', editIcon);
+    const postEl = editIcon.closest('.post');
+    if (!postEl) return;
+    const moreMenu = postEl.querySelector('.more-menu');
+    moreMenu.style.display = 'none';  
+
+    const postTextEl = postEl.querySelector('.post-text');
+    if (!postTextEl) return;
+
+    const shortTextEl = postTextEl.querySelector('.short-text');
+    if (!shortTextEl) return;
+
+    const originalText = shortTextEl.textContent;
+
+    // אם כבר בעריכה, לא לפתוח שוב
+    if (postTextEl.querySelector('.edit-btns-inline')) return;
+
+    // הפיכת ה-short-text לעריכה inline
+    shortTextEl.contentEditable = true;
+    shortTextEl.focus();
+    shortTextEl.style.outline = 'none'; // מבטל את הבורדר השחור
+
+    // העברת הסמן לסוף הטקסט
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(shortTextEl);
+    range.collapse(false); // false = סוף הטקסט
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    // כפתורים inline
+    const btnContainer = document.createElement('span');
+    btnContainer.className = 'edit-btns-inline';
+    btnContainer.style.marginLeft = '80px';
+
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save';
+    saveBtn.className = 'save-edit-btn';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.className = 'cancel-edit-btn';
+
+    btnContainer.appendChild(saveBtn);
+    btnContainer.appendChild(cancelBtn);
+    shortTextEl.parentNode.appendChild(btnContainer);
+
+    // ביטול עריכה
+    cancelBtn.addEventListener('click', () => {
+      shortTextEl.textContent = originalText;
+      shortTextEl.contentEditable = false;
+      shortTextEl.style.borderBottom = 'none';
+      btnContainer.remove();
+    });
+
+    // שמירה והעדכון בשרת
+    saveBtn.addEventListener('click', async () => {
+      const newText = shortTextEl.textContent.trim();
+      if (!newText) {
+        alert('Text cannot be empty');
+        return;
+      }
+
+      const currentUser = localStorage.getItem('currentUser');
+      const postId = postEl.dataset.id;
+
+      try {
+        const res = await fetch(`/posts/${postId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user: currentUser, text: newText })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to update post');
+
+        // עדכון DOM
+        shortTextEl.textContent = newText.substring(0, 30) + (newText.length > 30 ? '...' : '');
+        shortTextEl.contentEditable = false;
+        shortTextEl.style.borderBottom = 'none';
+        btnContainer.remove();
+
+        const fullTextEl = postTextEl.querySelector('.full-text');
+        if (fullTextEl) fullTextEl.textContent = newText;
+
+        console.log('Post updated successfully');
+        showToast(document.getElementById('toast-edit'));
+      } catch (err) {
+        console.error('Error updating post:', err);
+        alert('Failed to update post');
+      }
+    });
+  });
+});
+
 
 function setupPostEvents(postElement) {
   const postId = postElement.id;
@@ -2634,13 +2717,22 @@ function setupPostEvents(postElement) {
     e.stopPropagation();
     moreMenu.style.display = moreMenu.style.display === 'block' ? 'none' : 'block';
   });
+
   deleteIcon.addEventListener('click', () => {
+    showToast(document.getElementById('toast-delete'));
     const postToDelete = deleteIcon.closest('.post');
     if (postToDelete) {
       postToDelete.remove();
       // עדכון מונים (imagePostsCount / textPostsCount) אם רלוונטי
     }
   });
+
+ // מאזינים לכל לחיצות על עיפרון בתוך הפיד
+// Event delegation ל-edit-post-icon
+
+
+
+
 
   // הוספת תגובה מהפיד
   const addCommentBox = postElement.querySelector('.add-comment-box');
@@ -2707,6 +2799,7 @@ function createPost({ username, avatar, image, likes, text, comments, time, date
       </button>
       <div class="more-menu" style="display: none;">
         <img class="delete-post-icon" src="https://img.icons8.com/?size=512&id=1942&format=png" alt="Delete">
+            <img class="edit-post-icon" src="https://img.icons8.com/?size=96&id=dvZ3QGGN2K9v&format=png" alt="Edit">
       </div>
     </div>
     ${
@@ -2752,7 +2845,6 @@ function createPost({ username, avatar, image, likes, text, comments, time, date
       </div>
     </div>
   `;
-
   return post;
 }
 
@@ -2786,30 +2878,9 @@ function updateRightSidebarClass(currentType) {
     return;
   }
 
-  // הסרת כל הקלאסים הקשורים להצגה והסתרה
-  rsidebar.classList.remove('hide-0', 'hide-1', 'hide-2', 'hide-3plus');
-  rsidebar.classList.remove('show-text', 'show-image', 'show-video', 'show-all');
-  rsidebar.style.marginTop = ''; // איפוס המרג'ין
-
-  // הוספת הקלאס המתאים לפי סוג הפוסט
-  switch (currentType) {
-    case 'text':
-      rsidebar.classList.add('show-text');
-      break;
-    case 'image':
-      rsidebar.classList.add('show-image');
-      break;
-    case 'video':
-      rsidebar.classList.add('show-video');
-      break;
-    case 'all':
-    default:
-      rsidebar.classList.add('show-all');
-      break;
-  }
 
   // עדכון המרג'ין
-    const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop) || 0; // ערך ברירת מחדל
+    const baseMargin = parseInt(window.getComputedStyle(rsidebar).marginTop); 
     let adjustedMargin;
 
 
@@ -2827,7 +2898,7 @@ function updateRightSidebarClass(currentType) {
       ((textPostsCount || 0) * 260) +
       ((videoPostsCount || 0) * 670)
     );
-    adjustedMargin = baseMargin - offset; // שימוש ב-baseMargin כדי לשמור על מרג'ין דינמי
+    adjustedMargin = baseMargin - offset;
     rsidebar.style.marginTop = `${adjustedMargin}px`;
     console.log(`📊 עדכון מרג'ין עבור ${currentType}: ${adjustedMargin}px (תמונות: ${imagePostsCount || 0}, טקסט: ${textPostsCount || 0}, וידאו: ${videoPostsCount || 0}, הפחתה: ${offset}px)`);
   } else {
@@ -2893,7 +2964,7 @@ document.addEventListener('click', function (e) {
   if (e.target.classList.contains('delete-post-icon')) {
     const post = e.target.closest('.post');
     post.remove();
-    console.log('🗑️ פוסט נמחק');
+    console.log('🗑️ Post deleted succsessfully ');
   }
 });
 

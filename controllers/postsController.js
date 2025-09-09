@@ -107,8 +107,8 @@ router.post('/createPost', upload.single('media'), async (req, res) => {
 
 
 
-// Get all posts
-router.get('/getAllPosts', async (req, res) => {
+// Get friends posts
+router.get('/getFriendsPosts', async (req, res) => {
   try {
     const currentUser = req.query.user; // מגיע מהלקוח
 
@@ -129,10 +129,30 @@ router.get('/getAllPosts', async (req, res) => {
   }
 });
 
+// Get all posts
+router.get('/getAllPosts', async (req, res) => {
+  try {
+    const currentUser = req.query.user; // מגיע מהלקוח
+
+    // try to load friends posts
+    let posts = await postsModel.getAllPosts(currentUser);
+    console.log('final posts', posts);
+
+    if (currentUser) {
+      posts.forEach(p => {
+        p.liked = (p.likes || []).includes(currentUser);
+      });
+    }
+
+    res.json(posts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
-
-// Get post by ID (לטעינת תגובות)
+// Get post by ID 
 router.get('/:id', async (req, res) => {
   try {
     const postId = req.params.id;
@@ -192,6 +212,30 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   } 
 });
+
+// Edit a post's text
+router.put('/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { user, text } = req.body;
+
+    if (!ObjectId.isValid(postId)) {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
+    const post = await postsModel.findById(postId);
+    if (!post) return res.status(404).json({ error: 'Post not found' });
+    if (post.username !== user) return res.status(403).json({ error: 'You can only edit your own posts' });
+
+    await postsModel.UpdatePostText(postId, text);
+    res.json({ message: 'Post updated successfully' });
+
+  } catch (err) {
+    console.error('Error updating post:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 // Add a comment to a post
 router.post('/:id/add-comment', async (req, res) => {

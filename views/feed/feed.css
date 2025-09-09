@@ -94,9 +94,12 @@
     }   
 
 
-    body.dark-mode .sidebar-item #pfp-l {
+    body.dark-mode .sidebar-item #pfp-l{
       filter: invert(0);
     }
+    body.dark-mode .edit-post-icon{
+      filter: invert(1);
+    } 
     
 
 
@@ -119,7 +122,7 @@ body.dark-mode #scrollToTopBtn {
     ,body.dark-mode .input-field
     ,body.dark-mode .upload-options input[type="url"]
     ,body.dark-mode .location-suggestions
-    ,body.dark-mode .confirmation-modal
+    ,body.dark-mode .confirmation-modal,body.dark-mode #filter-dropdown
   {
     background-color:rgb(32, 32, 32) ;
     border-color: #ececec;
@@ -831,13 +834,56 @@ body.dark-mode #scrollToTopBtn img {
 
 
 
+.cancel-edit-btn {
+  background: #e53935;     
+  color: #fff;           
+  border: none;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+.cancel-edit-btn:hover {
+  background: #c62828;   
+}
+.cancel-edit-btn:active {
+  transform: scale(0.96);
+}
 
+
+.save-edit-btn {
+  background: #1e88e5;   
+  color: #fff;             
+  border: none;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.save-edit-btn:hover {
+  background: #1565c0;    
+}
+
+.save-edit-btn:active {
+  transform: scale(0.96);
+}
+
+.edit-btns-inline {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 20px;      
+} 
 
 
 #toast-message,
-#toast-comment {
+#toast-comment,#toast-delete,#toast-edit {
   position: fixed;
-  bottom: 80px; /* מעל התפריט התחתון */
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.8);
@@ -885,7 +931,7 @@ body.dark-mode #scrollToTopBtn img {
     gap: 25px;
     /* אין top ואין transform */
     margin-left: 72%;
-    margin-top: -3200px;
+    margin-top: -12550px;
   }
 
     .sidebar-right.hide-0 {
@@ -1326,7 +1372,7 @@ cursor: pointer;
 
 .user-name {
   font-size: 14px;
-  margin-left: 10px; /* מזיז את השם ימינה */
+  margin-left: 5px;
   font-weight: 500;
   color: #000000;
 }
@@ -2112,6 +2158,15 @@ height: 0; /* מונע הגלילה מעבר לאלמנט הזה */
     box-shadow: 0 0 10px 5px #0000000a;
     border-radius: 5px;
     z-index: 9999999999999;
+}
+
+#filter-dropdown .filterHeader{
+    font-size: 30px;
+    font-weight: 600;
+    padding: 10px;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .search-modal.active {
@@ -3049,32 +3104,9 @@ font-weight: 600;
 }
 
 
-.filter-icon {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
 
-.dropdown {
-  display: none;
-  position: absolute;
-  left: 40px;
-  top: 0;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 5px;
-  z-index: 999;
-}
-
-.dropdown-option {
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.dropdown-option:hover {
-  background-color: #f0f0f0;
+.search-filter{
+margin-left: 35px;
 }
 
 .more-menu {
@@ -3098,6 +3130,18 @@ font-weight: 600;
 }
 
 .delete-post-icon:hover {
+  transform: scale(1.1);
+}
+
+.edit-post-icon {
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  pointer-events: auto;
+}
+
+.edit-post-icon:hover {
   transform: scale(1.1);
 }
 

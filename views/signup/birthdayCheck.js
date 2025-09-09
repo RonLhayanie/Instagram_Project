@@ -1,4 +1,8 @@
 
+// no access without currentUser
+if(!localStorage.getItem('signupData'))
+    window.location.href = '../login/login.html'
+
 //insert dates to select from
 function populateDateOptions() 
 {

@@ -80,9 +80,12 @@
 <!--Search by type-->
 <div class="search-filter" >
   <label>
+    <input type="radio" name="filter" value="any" checked>
+    Any Posts
+  </label>
   <label style="margin-left: 15px;">
-    <input type="radio" name="filter" value="description" checked>
-    Search post description
+    <input type="radio" name="filter" value="friends">
+    Only Friends Posts
   </label>
 </div>
 
@@ -97,6 +100,140 @@
       <a id="clearAll" href="#"></a>
     </div>
 
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/1.jpg" />
+      <div class="recent-text">
+        <span class="m_username">amit_ben_giat</span>
+        <span class="m_name">Amit Ben-Giat</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/2.jpg" />
+      <div class="recent-text">
+        <span class="m_username">liron_cohen</span>
+        <span class="m_name">Liron Cohen</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/3.jpg" />
+      <div class="recent-text">
+        <span class="m_username">yonatan_d</span>
+        <span class="m_name">Yonatan Dahan</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/4.jpg" />
+      <div class="recent-text">
+        <span class="m_username">noga_levi</span>
+        <span class="m_name">Noga Levi</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/5.jpg" />
+      <div class="recent-text">
+        <span class="m_username">david_shapira</span>
+        <span class="m_name">David Shapira</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/6.jpg" />
+      <div class="recent-text">
+        <span class="m_username">talya_m</span>
+        <span class="m_name">Talya M.</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/7.jpg" />
+      <div class="recent-text">
+        <span class="m_username">shai_gil</span>
+        <span class="m_name">Shai Gil</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/8.jpg" />
+      <div class="recent-text">
+        <span class="m_username">orly_p</span>
+        <span class="m_name">Orly Peretz</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/9.jpg" />
+      <div class="recent-text">
+        <span class="m_username">maor_shopen333</span>
+        <span class="m_name">Maor Shopen</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/10.jpg" />
+      <div class="recent-text">
+        <span class="m_username">aya_katz</span>
+        <span class="m_name">Aya Katz</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/11.jpg" />
+      <div class="recent-text">
+        <span class="m_username">dani_lev</span>
+        <span class="m_name">Dani Lev</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/12.jpg" />
+      <div class="recent-text">
+        <span class="m_username">moran_s</span>
+        <span class="m_name">Moran Shaked</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/13.jpg" />
+      <div class="recent-text">
+        <span class="m_username">erez_b</span>
+        <span class="m_name">Erez Barak</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/women/14.jpg" />
+      <div class="recent-text">
+        <span class="m_username">shira_cohen</span>
+        <span class="m_name">Shira Cohen</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
+
+    <div class="recent-item">
+      <img src="https://randomuser.me/api/portraits/men/15.jpg" />
+      <div class="recent-text">
+        <span class="m_username">yossi_t</span>
+        <span class="m_name">Yossi Tamir</span>
+      </div>
+      <span class="remove">✕</span>
+    </div>
   </div>
 
 
@@ -278,15 +415,7 @@
       <div class="posts-wrapper" >
 
               
-                  <div class="custom-filter">
-      <img src="https://img.icons8.com/?size=100&id=21637&format=png" alt="filter icon" class="filter-icon">
-      <div class="dropdown">
-        <div class="dropdown-option" data-type="all">All</div>
-        <div class="dropdown-option" data-type="text">Text</div>
-        <div class="dropdown-option" data-type="image">Image</div>
-        <div class="dropdown-option" data-type="video">Video</div>
-      </div>
-    </div>  
+
 
     <div class="posts-list">
       <!-- Posts will be dynamically inserted here -->
@@ -712,7 +841,7 @@
 
 
   <div class="hidden" id="filter-dropdown">
-        <h2>Filters</h2>
+        <h2 class="filterHeader">Filters</h2>
         <div class="dropdown-content">
     
             <div class="filter-group">
@@ -751,6 +880,8 @@
   <!-- jump messages -->
   <div id="toast-message" class="toast-hidden">Message sent!</div>
   <div id="toast-comment" class="toast-hidden">Comment posted!</div>
+  <div id="toast-delete" class="toast-hidden">Post deleted!</div>
+  <div id="toast-edit" class="toast-hidden">Post updated succsesfully!</div>
     </div>
   </div>
   <script src="feed.js"></script>
